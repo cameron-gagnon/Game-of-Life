@@ -157,7 +157,7 @@ $(function () {
                 return false;
             }
     }
-
+// finish doing the first
 
     /**
      * Requires: grid is a 2d array
