@@ -151,12 +151,9 @@ $(function () {
      *         bounds of the grid, returns false otherwise.
      */
     function validPosition(row, col){
-            if (row < $("#grid").width() and col < $("#grid").height()){
-                return true;
-            } else {
-                return false;
-            }
+
     }
+
 
     /**
      * Requires: grid is a 2d array
@@ -165,7 +162,7 @@ $(function () {
      *          also sets the xPosition and yPosition data members of each Cell
      *          object to match its x and y coordinates on the HTML canvas.
      */
-    function populateGameGrid(grid){ //JACK
+    function populateGameGrid(grid){
 
     }
 
@@ -177,7 +174,7 @@ $(function () {
      * Effects: Counts the number of live neighbors for
      *          the cell at row,col in grid and returns the count.
      */
-    function countLiveNeighbors(grid, row, col){ //JACK
+    function countLiveNeighbors(grid, row, col){
 
     }
 
@@ -188,7 +185,7 @@ $(function () {
      * Modifies: grid
      * Effects: Updates the liveNeighbors data member of each cell in grid
      */
-    function updateLiveNeighbors(grid) { //MIAO
+    function updateLiveNeighbors(grid) {
 
     }
 
@@ -201,7 +198,7 @@ $(function () {
      *          Remember, that, after updating the state of the cell in grid that
      *          you also need to draw the change to the HTML canvas using getCanvas()
      */
-    function updateCells(grid){ //MIAO
+    function updateCells(grid){
 
     }
 
@@ -214,7 +211,7 @@ $(function () {
      *          move forward, all cells should count the number of live neighbors 
      *          they have before proceeding to change the state of all cells.
      */
-    function evolveStep(grid){ //CAMERON
+    function evolveStep(grid){
 
     }
 
@@ -248,7 +245,7 @@ $(function () {
      *          row and col parameters represent the top left corner of the pattern
      *          that should be drawn.  You will use getCanvas() to update the canvas
      */
-    function drawPattern(patternName, grid, row, col) { //CAMERON
+    function drawPattern(patternName, grid, row, col) {
 
     }
 
@@ -270,7 +267,7 @@ $(function () {
      *          right most cell on the canvas (if that square is supposed to be
      *          colored). 
      */
-    function drawStillLife(patternName, grid, row, col) { //NIKITA
+    function drawStillLife(patternName, grid, row, col) {
 
     }
 
@@ -293,7 +290,7 @@ $(function () {
      *          right most cell on the canvas (if that square is supposed to be
      *          colored). 
      */
-    function drawOscillator(patternName, grid, row, col) { //NIKITA
+    function drawOscillator(patternName, grid, row, col) {
         
     }
 
@@ -314,7 +311,7 @@ $(function () {
      *          right most cell on the canvas (if that square is supposed to be
      *          colored). 
      */
-    function drawSpaceship(patternName, grid, row, col) { //up for grabs
+    function drawSpaceship(patternName, grid, row, col) {
 
     }
 
