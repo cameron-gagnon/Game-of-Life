@@ -158,6 +158,7 @@ $(function () {
             }
     }
 
+
     /**
      * Requires: grid is a 2d array
      * Modifies: grid
@@ -314,7 +315,7 @@ $(function () {
      *          right most cell on the canvas (if that square is supposed to be
      *          colored). 
      */
-    function drawSpaceship(patternName, grid, row, col) { //up for grabs
+    function drawSpaceship(patternName, grid, row, col) { //UP FOR GRABS
 
     }
 
