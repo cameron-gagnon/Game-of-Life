@@ -151,7 +151,7 @@ $(function () {
      *         bounds of the grid, returns false otherwise.
      */
     function validPosition(row, col){
-            if (row < $("#grid").width() and col < $("#grid").height()){
+            if (row < $("#grid").width() && col < $("#grid").height()){
                 return true;
             } else {
                 return false;
