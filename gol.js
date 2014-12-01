@@ -207,50 +207,49 @@ $(function () {
      *          you also need to draw the change to the HTML canvas using getCanvas()
      */
     function updateCells(grid){ // MIAO
-        var update_canvas = getCanvas();
+        var new_canvas = getCanvas();
         for (var i = 0; i < NUM_ROWS; i += CELL_SIZE) {
             for (var j = 0; j < NUM_COLS; j += CELL_SIZE) {
+
+                // update dead and fillStyle for each ceil
+
                 var num = grid[i][j].liveNeighbors;
-                if (grid[i][j].fillStyle === "white"){
-                    switch (num){
-                        case 0:
-                        case 1:
-                            grid[i][j].dead = true;
-                            grid[i][j].fillStyle = CELL_DEAD_COLOR;
-                            update_canvas.fillStyle = grid[i][j].fillStyle;
-                            update_canvas.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
-                            break;
-                        default:
+                // check ir ceil is not activated
+                if (grid[i][j].fillStyle === "white") {
+                    if (num === 1 || num === 0){
+                        grid[i][j].dead = true;
+                        grid[i][j].fillStyle = CELL_DEAD_COLOR;
+                    }                       
                 }
+                // check is ceil is alive
                 else if (!grid[i][j].dead){
                     switch (num){
                         case 0:
                         case 1:
                             grid[i][j].dead = true;
                             grid[i][j].fillStyle = CELL_DEAD_COLOR;
-                            update_canvas.fillStyle = grid[i][j].fillStyle;
-                            update_canvas.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
                             break;
                         case 2:
                         case 3:
                             grid[i][j].dead = false;
                             grid[i][j].fillStyle = CELL_ALIVE_COLOR;
-                            update_canvas.fillStyle = grid[i][j].fillStyle;
-                            update_canvas.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
                             break;
                         default:
                             grid[i][j].dead = true;
                             grid[i][j].fillStyle = CELL_DEAD_COLOR;
-                            update_canvas.fillStyle = grid[i][j].fillStyle;
-                            update_canvas.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
                     }
                 }
+                // check for ceil if it is dead
                 else if (num === 3){
                     grid[i][j].dead = false;
                     grid[i][j].fillStyle = CELL_ALIVE_COLOR;
-                    update_canvas.fillStyle = grid[i][j].fillStyle;
-                    update_canvas.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
                 }
+
+                // show each ceil update on HTML canvus
+                new_canvas.fillStyle = grid[i][j].fillStyle;
+                new_canvas.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
+
+
             }
         }
 
