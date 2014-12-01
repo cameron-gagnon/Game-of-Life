@@ -166,7 +166,14 @@ $(function () {
      *          also sets the xPosition and yPosition data members of each Cell
      *          object to match its x and y coordinates on the HTML canvas.
      */
-    function populateGameGrid(grid){ //JACK
+
+    function populateGameGrid(grid){
+        gameGrid = new Cell();
+        var new_canvas = new getCanvas();
+        new_canvas.xPosition = grid.xPosition;
+        new_canvas.yPosition = grid.yPosition;
+
+
 
     }
 
@@ -178,8 +185,25 @@ $(function () {
      * Effects: Counts the number of live neighbors for
      *          the cell at row,col in grid and returns the count.
      */
-    function countLiveNeighbors(grid, row, col){ //JACK
+    function countLiveNeighbors(grid, row, col) {
+        for (var i = row - 1; i <= row + 1; i++) {
+            for (var j = col - 1; j <= col + 1; j++) {
+          
 
+                if (validPosition(i, j) 
+                    && grid[i][j].dead === false) {
+                    var count = 0;
+                    count ++;
+                    if (grid[row][col].dead === false && count > 0) {
+                        count = count - 1;
+                    }
+                    
+                }
+            }
+        }
+ 
+        return count;
+    
     }
 
 
