@@ -211,30 +211,45 @@ $(function () {
         for (var i = 0; i < NUM_ROWS; i += CELL_SIZE) {
             for (var j = 0; j < NUM_COLS; j += CELL_SIZE) {
                 var num = grid[i][j].liveNeighbors;
-                if (!grid[i][j].dead){
+                if (grid[i][j].fillStyle === "white"){
                     switch (num){
                         case 0:
                         case 1:
                             grid[i][j].dead = true;
-                            update_canvas.fillStyle = CELL_DEAD_COLOR;
-                            update.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
+                            grid[i][j].fillStyle = CELL_DEAD_COLOR;
+                            update_canvas.fillStyle = grid[i][j].fillStyle;
+                            update_canvas.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
+                            break;
+                        default:
+                }
+                else if (!grid[i][j].dead){
+                    switch (num){
+                        case 0:
+                        case 1:
+                            grid[i][j].dead = true;
+                            grid[i][j].fillStyle = CELL_DEAD_COLOR;
+                            update_canvas.fillStyle = grid[i][j].fillStyle;
+                            update_canvas.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
                             break;
                         case 2:
                         case 3:
                             grid[i][j].dead = false;
-                            update_canvas.fillStyle = CELL_ALIVE_COLOR;
-                            update.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
+                            grid[i][j].fillStyle = CELL_ALIVE_COLOR;
+                            update_canvas.fillStyle = grid[i][j].fillStyle;
+                            update_canvas.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
                             break;
                         default:
                             grid[i][j].dead = true;
-                            update_canvas.fillStyle = CELL_DEAD_COLOR;
-                            update.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
+                            grid[i][j].fillStyle = CELL_DEAD_COLOR;
+                            update_canvas.fillStyle = grid[i][j].fillStyle;
+                            update_canvas.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
                     }
                 }
                 else if (num === 3){
                     grid[i][j].dead = false;
-                    update_canvas.fillStyle = CELL_ALIVE_COLOR;
-                    update.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
+                    grid[i][j].fillStyle = CELL_ALIVE_COLOR;
+                    update_canvas.fillStyle = grid[i][j].fillStyle;
+                    update_canvas.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
                 }
             }
         }
