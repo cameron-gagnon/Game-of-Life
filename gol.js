@@ -216,7 +216,10 @@ $(function () {
      *          they have before proceeding to change the state of all cells.
      */
     function evolveStep(grid){ //CAMERON
-
+    		for (var i = 0; i < grid.canvasWidth; i++) {
+    			for (var i = 0; i < grid.canvasHeight; i++) {
+    		  		if (grid[i][j] === )
+    		};
     }
 
 
