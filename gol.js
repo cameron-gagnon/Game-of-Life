@@ -108,6 +108,7 @@ $(function () {
     // Effects: Uses evolveStep to draw the next step of evolution on the HTML
     //          canvas (and updates gameGrid to reflect that same state).  Will
     //          continue to run the game at GENERATION_INTERVAL * 1000 milliseconds
+
     function runGoL() {
         if (!isRunning) {
             return;
@@ -126,7 +127,6 @@ $(function () {
     $("#stop-game").click(function() {
         isRunning = false;
     });
-
 
     initializeWebpage();
 
@@ -171,16 +171,19 @@ $(function () {
         for (var i = 0; i < NUM_ROWS; i += 1) {
             for (var j = 0; j < NUM_COLS; j += 1) {
                 grid[i][j] = new Cell();
+                grid[i][j].xPosition = j*10;
+                grid[i][j].yPosition = i*10;
             }
         }
         
-        for (var w = 0; w < NUM_ROWS; w += CELL_SIZE) {
+        /*for (var w = 0; w < NUM_ROWS; w += CELL_SIZE) {
             for (var r = 0; r < NUM_COLS; r += CELL_SIZE) {
                 var new_canvas = new getCanvas();
-                new_canvas.xPosition = r;
+                new_ca.xPosition = r;
                 new_canvas.yPosition = w;
             }
         }
+        */
     
     }
 
@@ -256,10 +259,10 @@ $(function () {
                     grid[i][j].dead = false;
                     grid[i][j].fillStyle = CELL_ALIVE_COLOR;
                 }
-
+                alert("update cells");
                 // show each ceil update on HTML canvus
                 new_canvas.fillStyle = grid[i][j].fillStyle;
-                new_canvas.fillRect(grid[i]*CELL_SIZE, grid[j]*CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                new_canvas.fillRect(grid[i][j].xPosition, grid[i][j].yPosition, CELL_SIZE, CELL_SIZE);
 
 
             }
