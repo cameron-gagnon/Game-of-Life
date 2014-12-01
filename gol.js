@@ -151,7 +151,7 @@ $(function () {
      *         bounds of the grid, returns false otherwise.
      */
     function validPosition(row, col){
-            if (row < $("#grid").width() and col < $("#grid").height()){
+            if (row < $("#grid").width() && col < $("#grid").height()){
                 return true;
             } else {
                 return false;
@@ -166,7 +166,7 @@ $(function () {
      *          also sets the xPosition and yPosition data members of each Cell
      *          object to match its x and y coordinates on the HTML canvas.
      */
-    function populateGameGrid(grid){
+    function populateGameGrid(grid){ //JACK
 
     }
 
@@ -178,7 +178,7 @@ $(function () {
      * Effects: Counts the number of live neighbors for
      *          the cell at row,col in grid and returns the count.
      */
-    function countLiveNeighbors(grid, row, col){
+    function countLiveNeighbors(grid, row, col){ //JACK
 
     }
 
@@ -189,15 +189,13 @@ $(function () {
      * Modifies: grid
      * Effects: Updates the liveNeighbors data member of each cell in grid
      */
-    function updateLiveNeighbors(grid) {
+    function updateLiveNeighbors(grid) { // MIAO
         for (var i = 0; i < NUM_ROWS; i += CELL_SIZE) {
             for (var j = 0; j < NUM_COLS; j += CELL_SIZE) {
                 grid[i][j].liveNeighbors = countLiveNeighbors(grid,i,j);
             }
         }
 
-
-    }
 
 
     /*
@@ -208,7 +206,7 @@ $(function () {
      *          Remember, that, after updating the state of the cell in grid that
      *          you also need to draw the change to the HTML canvas using getCanvas()
      */
-    function updateCells(grid){
+    function updateCells(grid){ // MIAO
         var update_canvas = getCanvas();
         for (var i = 0; i < NUM_ROWS; i += CELL_SIZE) {
             for (var j = 0; j < NUM_COLS; j += CELL_SIZE) {
@@ -243,9 +241,7 @@ $(function () {
 
                 
 
-                
-
-    }
+            
 
 
     /*
@@ -256,7 +252,7 @@ $(function () {
      *          move forward, all cells should count the number of live neighbors 
      *          they have before proceeding to change the state of all cells.
      */
-    function evolveStep(grid){
+    function evolveStep(grid){ //CAMERON
 
     }
 
@@ -290,7 +286,7 @@ $(function () {
      *          row and col parameters represent the top left corner of the pattern
      *          that should be drawn.  You will use getCanvas() to update the canvas
      */
-    function drawPattern(patternName, grid, row, col) {
+    function drawPattern(patternName, grid, row, col) { //CAMERON
 
     }
 
@@ -312,51 +308,53 @@ $(function () {
      *          right most cell on the canvas (if that square is supposed to be
      *          colored). 
      */
-     function drawStillLife(patternName, grid, row, col) { //NIKITA
-        if (patternName == "Block") {
-            drawBlock(grid, row, col);
-        }
 
-        if (patternName == "Beehive") {
-            var cells = [[row, col + 1],
-                        [row, col + 2],
-                        [row + 1; col],
-                        [row + 1; col + 3],
-                        [row + 2; col + 1],
-                        [row + 2, col + 2]];
-            var size = 6;
-            for (var i = 0; i < size; i++){
-                drawPoint(grid, cells[i, 0], cells[i, 1]);
-            }
-        }
+    function drawStillLife(patternName, grid, row, col) { //NIKITA
+		if (patternName == "Block") {
+			drawBlock(grid, row, col);
+		}
 
-        if (patternName == "Loaf") {
-            var cells = [[row, col + 1],
-                        [row, col + 2],
-                        [row + 1; col],
-                        [row + 1; col + 3],
-                        [row + 2; col + 1],
-                        [row + 2, col + 3],
-                        [row + 3, col + 2]];
-            var size = 7;
-            for (var i = 0; i < size; i++){
-                drawPoint(grid, cells[i, 0], cells[i, 1]);
-            }
-        }
+		if (patternName == "Beehive") {
+			var cells = [[row, col + 1],
+						[row, col + 2],
+						[row + 1; col],
+						[row + 1; col + 3],
+						[row + 2; col + 1],
+						[row + 2, col + 2]];
+			var size = 6;
+			for (var i = 0; i < size; i++){
+				drawPoint(grid, cells[i, 0], cells[i, 1]);
+			}
+		}
 
-        if (patternName == "Boat") {
-            var cells = [[row, col],
-                        [row, col + 1],
-                        [row + 1; col],
-                        [row + 1; col + 2],
-                        [row + 2; col + 1]];
-            var size = 5;
-            for (var i = 0; i < size; i++){
-                drawPoint(grid, cells[i, 0], cells[i, 1]);
-            }
-        }
+		if (patternName == "Loaf") {
+			var cells = [[row, col + 1],
+						[row, col + 2],
+						[row + 1; col],
+						[row + 1; col + 3],
+						[row + 2; col + 1],
+						[row + 2, col + 3],
+						[row + 3, col + 2]];
+			var size = 7;
+			for (var i = 0; i < size; i++){
+				drawPoint(grid, cells[i, 0], cells[i, 1]);
+			}
+		}
 
-        updateLiveNeighbors(grid);
+		if (patternName == "Boat") {
+			var cells = [[row, col],
+						[row, col + 1],
+						[row + 1; col],
+						[row + 1; col + 2],
+						[row + 2; col + 1]];
+			var size = 5;
+			for (var i = 0; i < size; i++){
+				drawPoint(grid, cells[i, 0], cells[i, 1]);
+			}
+		}
+
+		updateLiveNeighbors(grid);
+
     }
 
 
