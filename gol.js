@@ -151,7 +151,7 @@ $(function () {
      *         bounds of the grid, returns false otherwise.
      */
     function validPosition(row, col){
-            if (row < $("#grid").width() && col < $("#grid").height()){
+            if (row < $("grid").width() && col < $("grid").height()){
                 return true;
             } else {
                 return false;
@@ -253,10 +253,10 @@ $(function () {
      *          they have before proceeding to change the state of all cells.
      */
     function evolveStep(grid){ //CAMERON
-    		for (var i = 0; i < grid.canvasWidth; i++) {
-    			for (var i = 0; i < grid.canvasHeight; i++) {
-    		  		if (grid[i][j] === )
-    		};
+    		populateGameGrid(grid); //not right
+    		updateLiveNeighbors(grid);
+    		updateCells(grid);
+
     }
 
 
