@@ -309,7 +309,17 @@ $(function () {
      *          that should be drawn.  You will use getCanvas() to update the canvas
      */
     function drawPattern(patternName, grid, row, col) { //CAMERON
-
+		if (patternName == "Block" || patternName == "Beehive" ||
+			patternName == "Loaf" || patternName == "Boat") {
+			drawStillLife(patternName, grid, row, col);
+		}
+		if (patternName == "Blinker" ||patternName == "Toad" ||
+     		patternName == "Beacon" || patternName == "Pulsar") {
+     		drawOscillator(patternName, grid, row, col);
+     	}
+     	if (patternName == "Glider" || patternName == "Lwss") {
+     		drawSpaceship(patternName, grid, row, col);
+     	}
     }
 
 
@@ -340,9 +350,9 @@ $(function () {
             //positions of the cells in the structure
 			var cells = [[row, col + 1],
 						[row, col + 2],
-						[row + 1; col],
-						[row + 1; col + 3],
-						[row + 2; col + 1],
+						[row + 1, col],
+						[row + 1, col + 3],
+						[row + 2, col + 1],
 						[row + 2, col + 2]];
 			var size = 6;
 			for (var i = 0; i < size; i += 1){
@@ -353,9 +363,9 @@ $(function () {
 		if (patternName == "Loaf") {
 			var cells = [[row, col + 1],
 						[row, col + 2],
-						[row + 1; col],
-						[row + 1; col + 3],
-						[row + 2; col + 1],
+						[row + 1, col],
+						[row + 1, col + 3],
+						[row + 2, col + 1],
 						[row + 2, col + 3],
 						[row + 3, col + 2]];
 			var size = 7;
@@ -367,9 +377,9 @@ $(function () {
 		if (patternName == "Boat") {
 			var cells = [[row, col],
 						[row, col + 1],
-						[row + 1; col],
-						[row + 1; col + 2],
-						[row + 2; col + 1]];
+						[row + 1, col],
+						[row + 1, col + 2],
+						[row + 2, col + 1]];
 			var size = 5;
 			for (var i = 0; i < size; i += 1){
 				drawPoint(grid, cells[i, 0], cells[i, 1]);
@@ -416,9 +426,9 @@ $(function () {
         if (patternName == "Pulsar") {
             var cells = [[0, 2],
                         [0, 8],
-                        [5; 2],
-                        [5; 8],
-                        [7; 2],
+                        [5, 2],
+                        [5, 8],
+                        [7, 2],
                         [7, 8],
                         [12, 2],
                         [12, 8]];
