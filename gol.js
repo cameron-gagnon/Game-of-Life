@@ -150,8 +150,8 @@ $(function () {
      * Efects: Returns true if row and col are within
      *         bounds of the grid, returns false otherwise.
      */
-    function validPosition(row, col){
-            if (row < NUM_ROWS && col < NUM_COLS && row >= 0 && col >= 0){
+    function validPosition(row, col) {
+            if (row < NUM_ROWS && col < NUM_COLS && row >= 0 && col >= 0) {
                 return true;
             } else {
                 return false;
@@ -167,24 +167,14 @@ $(function () {
      *          object to match its x and y coordinates on the HTML canvas.
      */
 
-    function populateGameGrid(grid){
+    function populateGameGrid(grid) {
         for (var i = 0; i < NUM_ROWS; i += 1) {
             for (var j = 0; j < NUM_COLS; j += 1) {
                 grid[i][j] = new Cell();
-                grid[i][j].xPosition = j*10;
-                grid[i][j].yPosition = i*10;
+                grid[i][j].xPosition = j * CELL_SIZE;
+                grid[i][j].yPosition = i * CELL_SIZE;
             }
-        }
-        
-        /*for (var w = 0; w < NUM_ROWS; w += CELL_SIZE) {
-            for (var r = 0; r < NUM_COLS; r += CELL_SIZE) {
-                var new_canvas = new getCanvas();
-                new_ca.xPosition = r;
-                new_canvas.yPosition = w;
-            }
-        }
-        */
-    
+        }    
     }
 
 
@@ -200,7 +190,7 @@ $(function () {
         for (var i = row - 1; i <= row + 1; i += 1) {
             for (var j = col - 1; j <= col + 1; j += 1) {
                 if (validPosition(i, j)) {
-                    if (!grid[i][j].dead){
+                    if (!grid[i][j].dead) {
                         count = count + 1;
                     }                  
                 }
@@ -222,7 +212,7 @@ $(function () {
      * Modifies: grid
      * Effects: Updates the liveNeighbors data member of each cell in grid
      */
-    function updateLiveNeighbors(grid) { // MIAO
+    function updateLiveNeighbors(grid) {
         for (var i = 0; i < NUM_ROWS; i += 1) {
             for (var j = 0; j < NUM_COLS; j += 1) {
                 grid[i][j].liveNeighbors = countLiveNeighbors(grid,i,j);
@@ -239,7 +229,7 @@ $(function () {
      *          Remember, that, after updating the state of the cell in grid that
      *          you also need to draw the change to the HTML canvas using getCanvas()
      */
-    function updateCells(grid){ // MIAO
+    function updateCells(grid) {
         updateLiveNeighbors(grid); // update neighbour
         var new_canvas = getCanvas();
         for (var i = 0; i < NUM_ROWS; i += 1) {
@@ -249,17 +239,17 @@ $(function () {
 
                 var num = grid[i][j].liveNeighbors;
 
-                // check is ceil is alive
-                if ((!grid[i][j].dead) && ((num != 2) && (num != 3))){
+                // check if cell is alive
+                if ((!grid[i][j].dead) && ((num != 2) && (num != 3))) {
                     grid[i][j].dead = true;
                     grid[i][j].fillStyle = CELL_DEAD_COLOR;
                 }
-                // check for ceil if it is dead
-                else if (num === 3){
+                // check for cell if it is dead
+                else if (num === 3) {
                     grid[i][j].dead = false;
                     grid[i][j].fillStyle = CELL_ALIVE_COLOR;
                 }
-                // show each ceil update on HTML canvus
+                // show each cell update on HTML canvus
                 new_canvas.fillStyle = grid[i][j].fillStyle;
                 new_canvas.fillRect(grid[i][j].xPosition, grid[i][j].yPosition, CELL_SIZE, CELL_SIZE);
 
@@ -281,7 +271,7 @@ $(function () {
      *          move forward, all cells should count the number of live neighbors 
      *          they have before proceeding to change the state of all cells.
      */
-    function evolveStep(grid){
+    function evolveStep(grid) {
     		updateCells(grid);    //updates the grid!
     }
 
@@ -315,16 +305,16 @@ $(function () {
      *          row and col parameters represent the top left corner of the pattern
      *          that should be drawn.  You will use getCanvas() to update the canvas
      */
-    function drawPattern(patternName, grid, row, col) { //CAMERON
-		if (patternName == "Block" || patternName == "Beehive" ||
-			patternName == "Loaf" || patternName == "Boat") {
+    function drawPattern(patternName, grid, row, col) {
+		if (patternName === "Block" || patternName === "Beehive" ||
+			patternName === "Loaf" || patternName === "Boat") {
 			drawStillLife(patternName, grid, row, col);
 		}
-		if (patternName == "Blinker" ||patternName == "Toad" ||
-     		patternName == "Beacon" || patternName == "Pulsar") {
+		if (patternName === "Blinker" ||patternName === "Toad" ||
+     		patternName === "Beacon" || patternName === "Pulsar") {
      		drawOscillator(patternName, grid, row, col);
      	}
-     	if (patternName == "Glider" || patternName == "LWSS") {
+     	if (patternName === "Glider" || patternName === "LWSS") {
      		drawSpaceship(patternName, grid, row, col);
      	}
     }
@@ -348,12 +338,12 @@ $(function () {
      *          colored). 
      */
 
-    function drawStillLife(patternName, grid, row, col) { //NIKITA
-		if (patternName == "Block") {
+    function drawStillLife(patternName, grid, row, col) {
+		if (patternName === "Block") {
 			drawBlock(grid, row, col);
 		}
 
-		if (patternName == "Beehive") {
+		if (patternName === "Beehive") {
             //positions of the cells in the structure
 			var cells = [[row, col + 1],
 						[row, col + 2],
@@ -362,12 +352,12 @@ $(function () {
 						[row + 2, col + 1],
 						[row + 2, col + 2]];
 			var size = 6;
-			for (var i = 0; i < size; i += 1){
+			for (var i = 0; i < size; i += 1) {
 				drawPoint(grid, cells[i][0], cells[i][1]);
 			}
 		}
 
-		if (patternName == "Loaf") { //didn't work
+		if (patternName === "Loaf") {
 			var cells = [[row, col + 1],
 						[row, col + 2],
 						[row + 1, col],
@@ -376,19 +366,19 @@ $(function () {
 						[row + 2, col + 3],
 						[row + 3, col + 2]];
 			var size = 7;
-			for (var i = 0; i < size; i += 1){
+			for (var i = 0; i < size; i += 1) {
 				drawPoint(grid, cells[i][0], cells[i][1]);
 			}
 		}
 
-		if (patternName == "Boat") { //didn't work
+		if (patternName === "Boat") {
 			var cells = [[row, col],
 						[row, col + 1],
 						[row + 1, col],
 						[row + 1, col + 2],
 						[row + 2, col + 1]];
 			var size = 5;
-			for (var i = 0; i < size; i += 1){
+			for (var i = 0; i < size; i += 1) {
 				drawPoint(grid, cells[i][0], cells[i][1]);
 			}
 		}
@@ -415,22 +405,22 @@ $(function () {
      *          right most cell on the canvas (if that square is supposed to be
      *          colored). 
      */
-    function drawOscillator(patternName, grid, row, col) { //NIKITA
-        if (patternName == "Blinker") {
+    function drawOscillator(patternName, grid, row, col) {
+        if (patternName === "Blinker") {
             drawHorLine(grid, row + 1, col);
         }
 
-        if (patternName == "Toad") {
+        if (patternName === "Toad") {
             drawHorLine(grid, row + 1, col + 1);
             drawHorLine(grid, row + 2, col);
         }
 
-        if (patternName == "Beacon") {
+        if (patternName === "Beacon") {
             drawBlock(grid, row, col);
             drawBlock(grid, row + 2, col + 2);
         }
 
-        if (patternName == "Pulsar") { //almost worked
+        if (patternName === "Pulsar") {
             var cells = [[0, 2],
                         [0, 8],
                         [5, 2],
@@ -467,13 +457,13 @@ $(function () {
      *          right most cell on the canvas (if that square is supposed to be
      *          colored). 
      */
-    function drawSpaceship(patternName, grid, row, col) { //UP FOR GRABS
-        if (patternName == "Glider") {
+    function drawSpaceship(patternName, grid, row, col) {
+        if (patternName === "Glider") {
             drawPoint(grid, row, col + 1);
             drawPoint(grid, row + 1, col + 2);
             drawHorLine(grid, row + 2, col);
         }
-        if (patternName == "LWSS") {
+        if (patternName === "LWSS") {
             drawPoint(grid, row, col);
             drawPoint(grid, row + 2, col);
             drawPoint(grid, row, col + 3);
@@ -486,21 +476,21 @@ $(function () {
 
 
     function drawHorLine(grid, row, col) { 
-        for (var j = col; j <= col + 2; j += 1){
+        for (var j = col; j <= col + 2; j += 1) {
                 drawPoint(grid, row, j);
             }
 
     }
 
     function drawVerLine(grid, row, col) { 
-        for (var i = row; i <= row + 2; i += 1){
+        for (var i = row; i <= row + 2; i += 1) {
                 drawPoint(grid, i, col);
             }
     }
 
     function drawBlock(grid, row, col) {
-        for (var i = row; i <= row + 1; i += 1){
-                for (var j = col; j <= col + 1; j += 1){
+        for (var i = row; i <= row + 1; i += 1) {
+                for (var j = col; j <= col + 1; j += 1) {
                     drawPoint(grid, i, j);
                 }   
         }
@@ -513,7 +503,7 @@ $(function () {
         }
     }
 
-    function staticUpdateCells(grid){
+    function staticUpdateCells(grid) {
         var new_canvas = getCanvas();
         for (var i = 0; i < NUM_ROWS; i += 1) {
             for (var j = 0; j < NUM_COLS; j += 1) {
