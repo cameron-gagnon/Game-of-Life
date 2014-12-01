@@ -168,10 +168,20 @@ $(function () {
      */
 
     function populateGameGrid(grid){
-        gameGrid = new Cell();
-        var new_canvas = new getCanvas();
-        new_canvas.xPosition = grid.xPosition;
-        new_canvas.yPosition = grid.yPosition;
+        for (var i = 0; i < NUM_ROWS; i += 1) {
+            for (var j = 0; j < NUM_COLS; j += 1) {
+                grid[i][j] = new Cell();
+            }
+        }
+        
+        for (var w = 0; w < NUM_ROWS; w += CELL_SIZE) {
+            for (var r = 0; r < NUM_COLS; r += CELL_SIZE) {
+                var new_canvas = new getCanvas();
+                new_canvas.xPosition = r;
+                new_canvas.yPosition = w;
+            }
+        }
+        
 
 
 
@@ -186,14 +196,14 @@ $(function () {
      *          the cell at row,col in grid and returns the count.
      */
     function countLiveNeighbors(grid, row, col) {
-        for (var i = row - 1; i <= row + 1; i++) {
-            for (var j = col - 1; j <= col + 1; j++) {
+        for (var i = row - 1; i <= row + 1; i += 1) {
+            for (var j = col - 1; j <= col + 1; j += 1) {
           
 
                 if (validPosition(i, j) 
                     && grid[i][j].dead === false) {
                     var count = 0;
-                    count ++;
+                    count = count + 1;
                     if (grid[row][col].dead === false && count > 0) {
                         count = count - 1;
                     }
@@ -291,7 +301,7 @@ $(function () {
      *          they have before proceeding to change the state of all cells.
      */
     function evolveStep(grid){ //CAMERON
-
+            
     }
 
 
