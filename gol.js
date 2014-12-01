@@ -285,10 +285,7 @@ $(function () {
 						[row + 2, col + 2]];
 			var size = 6;
 			for (var i = 0; i < size; i++){
-				if (validPosition(cells[i, 0],cells[i, 1])) {
-					grid[cells[i, 0]][cells[i, 1]].fillStyle = "green";
-					grid[cells[i, 0]][cells[i, 1]].dead = false;
-				}
+				drawPoint(grid, cells[i, 0], cells[i, 1]);
 			}
 		}
 
@@ -302,10 +299,7 @@ $(function () {
 						[row + 3, col + 2]];
 			var size = 7;
 			for (var i = 0; i < size; i++){
-				if (validPosition(cells[i, 0],cells[i, 1])) {
-					grid[cells[i, 0]][cells[i, 1]].fillStyle = "green";
-					grid[cells[i, 0]][cells[i, 1]].dead = false;
-				}
+				drawPoint(grid, cells[i, 0], cells[i, 1]);
 			}
 		}
 
@@ -317,10 +311,7 @@ $(function () {
 						[row + 2; col + 1]];
 			var size = 5;
 			for (var i = 0; i < size; i++){
-				if (validPosition(cells[i, 0],cells[i, 1])) {
-					grid[cells[i, 0]][cells[i, 1]].fillStyle = "green";
-					grid[cells[i, 0]][cells[i, 1]].dead = false;
-				}
+				drawPoint(grid, cells[i, 0], cells[i, 1]);
 			}
 		}
 
@@ -383,30 +374,29 @@ $(function () {
 
     function drawHorLine(grid, row, col) { 
         for (var j = col; j <= col + 2; j++){
-               if (validPosition(row, j)) {
-                        grid[row][j].fillStyle = "green";
-                        grid[row][j].dead = false;
-                    } 
+                drawPoint(grid, row, j);
             }
+
     }
 
     function drawVerLine(grid, row, col) { 
         for (var i = col; i <= row + 2; i++){
-               if (validPosition(i, col)) {
-                        grid[i][col].fillStyle = "green";
-                        grid[i][col].dead = false;
-                    } 
+                drawPoint(grid, i, col);
             }
     }
 
     function drawBlock(grid, row, col) {
         for (var i = row; i <= row + 1; i++){
                 for (var j = col; j <= col + 1; j++){
-                    if (validPosition(i, j)) {
-                        grid[i][j].fillStyle = "green";
-                        grid[i][j].dead = false;
-                    }
+                    drawPoint(grid, i, j);
                 }   
+        }
+    }
+
+    function drawPoint(grid, row, col) {
+        if (validPosition(row, col)) {
+            grid[row][col].fillStyle = "green";
+            grid[row][col].dead = false;
         }
     }
 
@@ -429,29 +419,14 @@ $(function () {
      */
     function drawSpaceship(patternName, grid, row, col) { //UP FOR GRABS
         if (patternName == "Glider") {
-            if (validPosition(row, col + 1)) {
-                        grid[row][col + 1].fillStyle = "green";
-                        grid[row][col + 1].dead = false;
-            }
-            if (validPosition(row + 1, col + 2)) {
-                        grid[row + 1][col + 2].fillStyle = "green";
-                        grid[row + 1][col + 2].dead = false;
-            }
+            drawPoint(grid, row, col + 1);
+            drawPoint(grid, row + 1, col + 2);
             drawHorLine(grid, row + 2, col);
         }
         if (patternName == "Lwss") {
-            if (validPosition(row, col)) {
-                        grid[row][col].fillStyle = "green";
-                        grid[row][col].dead = false;
-            }
-            if (validPosition(row + 2, col)) {
-                        grid[row + 2][col].fillStyle = "green";
-                        grid[row + 2][col].dead = false;
-            }
-            if (validPosition(row, col + 3)) {
-                        grid[row][col + 3].fillStyle = "green";
-                        grid[row][col + 3].dead = false;
-            }
+            drawPoint(grid, row, col);
+            drawPoint(grid, row + 2, col);
+            drawPoint(grid, row, col + 3);
             drawHorLine(grid, row + 3, col + 1);
             drawVerLine(grid, row + 1, col + 4);
 
