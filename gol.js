@@ -151,7 +151,7 @@ $(function () {
      *         bounds of the grid, returns false otherwise.
      */
     function validPosition(row, col){
-            if (row < $("grid").width() && col < $("grid").height()){
+            if (row < NUM_ROWS && col < NUM_COLS && row >= 0 && col >= 0){
                 return true;
             } else {
                 return false;
@@ -181,10 +181,7 @@ $(function () {
                 new_canvas.yPosition = w;
             }
         }
-        
-
-
-
+    
     }
 
 
@@ -196,20 +193,19 @@ $(function () {
      *          the cell at row,col in grid and returns the count.
      */
     function countLiveNeighbors(grid, row, col) {
+        var count = 0;
         for (var i = row - 1; i <= row + 1; i += 1) {
             for (var j = col - 1; j <= col + 1; j += 1) {
-          
-
-                if (validPosition(i, j) 
-                    && grid[i][j].dead === false) {
-                    var count = 0;
-                    count = count + 1;
-                    if (grid[row][col].dead === false && count > 0) {
-                        count = count - 1;
-                    }
-                    
+                if (validPosition(i, j)) {
+                    if (!grid[i][j].dead){
+                        count = count + 1;
+                    }                  
                 }
             }
+        }
+
+        if (!grid[row][col].dead) {
+            count = count - 1;
         }
  
         return count;
@@ -229,7 +225,7 @@ $(function () {
                 grid[i][j].liveNeighbors = countLiveNeighbors(grid,i,j);
             }
         }
-
+    }
 
 
     /*
@@ -268,6 +264,7 @@ $(function () {
 
             }
         }
+    }
 
                 
 
@@ -292,7 +289,7 @@ $(function () {
      * is set to true, drawPattern will always be called with row == 6 and col == 6,
      * otherwise it will be called with a random, valid value for row and col
      */
-    var TEST_DRAW_PATTERN = false;
+    var TEST_DRAW_PATTERN = true;
 
 
     /*
@@ -537,4 +534,4 @@ $(function () {
 
 
 
- });
+});
