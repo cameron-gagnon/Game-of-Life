@@ -272,12 +272,8 @@ $(function () {
      *          move forward, all cells should count the number of live neighbors 
      *          they have before proceeding to change the state of all cells.
      */
-     var blah = 0;
-    function evolveStep(grid){ //CAMERON
-        if (blah === 0){
-    		populateGameGrid(grid);   //sets canvas to all white cells
-        }
-    		updateCells(grid);        //
+    function evolveStep(grid){
+    		updateCells(grid);    //updates the grid!
 
     }
 
