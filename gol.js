@@ -312,8 +312,51 @@ $(function () {
      *          right most cell on the canvas (if that square is supposed to be
      *          colored). 
      */
-    function drawStillLife(patternName, grid, row, col) {
+     function drawStillLife(patternName, grid, row, col) { //NIKITA
+        if (patternName == "Block") {
+            drawBlock(grid, row, col);
+        }
 
+        if (patternName == "Beehive") {
+            var cells = [[row, col + 1],
+                        [row, col + 2],
+                        [row + 1; col],
+                        [row + 1; col + 3],
+                        [row + 2; col + 1],
+                        [row + 2, col + 2]];
+            var size = 6;
+            for (var i = 0; i < size; i++){
+                drawPoint(grid, cells[i, 0], cells[i, 1]);
+            }
+        }
+
+        if (patternName == "Loaf") {
+            var cells = [[row, col + 1],
+                        [row, col + 2],
+                        [row + 1; col],
+                        [row + 1; col + 3],
+                        [row + 2; col + 1],
+                        [row + 2, col + 3],
+                        [row + 3, col + 2]];
+            var size = 7;
+            for (var i = 0; i < size; i++){
+                drawPoint(grid, cells[i, 0], cells[i, 1]);
+            }
+        }
+
+        if (patternName == "Boat") {
+            var cells = [[row, col],
+                        [row, col + 1],
+                        [row + 1; col],
+                        [row + 1; col + 2],
+                        [row + 2; col + 1]];
+            var size = 5;
+            for (var i = 0; i < size; i++){
+                drawPoint(grid, cells[i, 0], cells[i, 1]);
+            }
+        }
+
+        updateLiveNeighbors(grid);
     }
 
 
@@ -335,8 +378,67 @@ $(function () {
      *          right most cell on the canvas (if that square is supposed to be
      *          colored). 
      */
-    function drawOscillator(patternName, grid, row, col) {
-        
+    function drawOscillator(patternName, grid, row, col) { //NIKITA
+        if (patternName == "Blinker") {
+            drawHorLine(grid, row + 1, col);
+        }
+
+        if (patternName == "Toad") {
+            drawHorLine(grid, row + 1, col + 1);
+            drawHorLine(grid, row + 2, col);
+        }
+
+        if (patternName == "Beacon") {
+            drawBlock(grid, row, col);
+            drawBlock(grid, row + 2, col + 2);
+        }
+
+        if (patternName == "Pulsar") {
+            var cells = [[0, 2],
+                        [0, 8],
+                        [5; 2],
+                        [5; 8],
+                        [7; 2],
+                        [7, 8],
+                        [12, 2],
+                        [12, 8]];
+            var size = 8;
+
+            for (var i = 0; i < size; i++) {
+                drawHorLine(grid, row + cells[i][0], col + cells[i][1]);
+                drawVerLine(grid, row + cells[i][1], col + cells[i][0]);
+            }
+        }
+
+        updateLiveNeighbors(grid);
+    }
+
+    function drawHorLine(grid, row, col) { 
+        for (var j = col; j <= col + 2; j++){
+                drawPoint(grid, row, j);
+            }
+
+    }
+
+    function drawVerLine(grid, row, col) { 
+        for (var i = col; i <= row + 2; i++){
+                drawPoint(grid, i, col);
+            }
+    }
+
+    function drawBlock(grid, row, col) {
+        for (var i = row; i <= row + 1; i++){
+                for (var j = col; j <= col + 1; j++){
+                    drawPoint(grid, i, j);
+                }   
+        }
+    }
+
+    function drawPoint(grid, row, col) {
+        if (validPosition(row, col)) {
+            grid[row][col].fillStyle = "green";
+            grid[row][col].dead = false;
+        }
     }
 
 
@@ -356,10 +458,22 @@ $(function () {
      *          right most cell on the canvas (if that square is supposed to be
      *          colored). 
      */
-    function drawSpaceship(patternName, grid, row, col) {
+    function drawSpaceship(patternName, grid, row, col) { //UP FOR GRABS
+        if (patternName == "Glider") {
+            drawPoint(grid, row, col + 1);
+            drawPoint(grid, row + 1, col + 2);
+            drawHorLine(grid, row + 2, col);
+        }
+        if (patternName == "Lwss") {
+            drawPoint(grid, row, col);
+            drawPoint(grid, row + 2, col);
+            drawPoint(grid, row, col + 3);
+            drawHorLine(grid, row + 3, col + 1);
+            drawVerLine(grid, row + 1, col + 4);
 
+        }
+        updateLiveNeighbors(grid);
     }
-
 
 
 
