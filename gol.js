@@ -307,7 +307,17 @@ $(function () {
      *          that should be drawn.  You will use getCanvas() to update the canvas
      */
     function drawPattern(patternName, grid, row, col) { //CAMERON
-
+		if (patternName == "Block" || patternName == "Beehive" ||
+			patternName == "Loaf" || patternName == "Boat") {
+			drawStillLife(patternName, grid, row, col);
+		}
+		if (patternName == "Blinker" ||patternName == "Toad" ||
+     		patternName == "Beacon" || patternName == "Pulsar") {
+     		drawOscillator(patternName, grid, row, col);
+     	}
+     	if (patternName == "Glider" || patternName == "Lwss") {
+     		drawSpaceship(patternName, grid, row, col);
+     	}
     }
 
 
