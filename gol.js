@@ -190,6 +190,12 @@ $(function () {
      * Effects: Updates the liveNeighbors data member of each cell in grid
      */
     function updateLiveNeighbors(grid) {
+        for (var i = 0; i < NUM_ROWS; i += CELL_SIZE) {
+            for (var j = 0; j < NUM_COLS; j += CELL_SIZE) {
+                grid[i][j].liveNeighbors = countLiveNeighbors(grid,i,j);
+            }
+        }
+
 
     }
 
@@ -203,6 +209,41 @@ $(function () {
      *          you also need to draw the change to the HTML canvas using getCanvas()
      */
     function updateCells(grid){
+        var update_canvas = getCanvas();
+        for (var i = 0; i < NUM_ROWS; i += CELL_SIZE) {
+            for (var j = 0; j < NUM_COLS; j += CELL_SIZE) {
+                var num = grid[i][j].liveNeighbors;
+                if (!grid[i][j].dead){
+                    switch (num){
+                        case 0:
+                        case 1:
+                            grid[i][j].dead = true;
+                            update_canvas.fillStyle = CELL_DEAD_COLOR;
+                            update.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
+                            break;
+                        case 2:
+                        case 3:
+                            grid[i][j].dead = false;
+                            update_canvas.fillStyle = CELL_ALIVE_COLOR;
+                            update.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
+                            break;
+                        default:
+                            grid[i][j].dead = true;
+                            update_canvas.fillStyle = CELL_DEAD_COLOR;
+                            update.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
+                    }
+                }
+                else if (num === 3){
+                    grid[i][j].dead = false;
+                    update_canvas.fillStyle = CELL_ALIVE_COLOR;
+                    update.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
+                }
+            }
+        }
+
+                
+
+                
 
     }
 
