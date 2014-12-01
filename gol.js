@@ -267,9 +267,8 @@ $(function () {
      *          they have before proceeding to change the state of all cells.
      */
     function evolveStep(grid){ //CAMERON
-    		populateGameGrid(grid); //not right
-    		updateLiveNeighbors(grid);
-    		updateCells(grid);
+    		populateGameGrid(grid);   //sets canvas to all white cells
+    		updateCells(grid);        //
 
     }
 
