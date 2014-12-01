@@ -223,8 +223,8 @@ $(function () {
      * Effects: Updates the liveNeighbors data member of each cell in grid
      */
     function updateLiveNeighbors(grid) { // MIAO
-        for (var i = 0; i < NUM_ROWS; i += CELL_SIZE) {
-            for (var j = 0; j < NUM_COLS; j += CELL_SIZE) {
+        for (var i = 0; i < NUM_ROWS; i += 1) {
+            for (var j = 0; j < NUM_COLS; j += 1) {
                 grid[i][j].liveNeighbors = countLiveNeighbors(grid,i,j);
             }
         }
@@ -259,7 +259,6 @@ $(function () {
                     grid[i][j].dead = false;
                     grid[i][j].fillStyle = CELL_ALIVE_COLOR;
                 }
-                alert("update cells");
                 // show each ceil update on HTML canvus
                 new_canvas.fillStyle = grid[i][j].fillStyle;
                 new_canvas.fillRect(grid[i][j].xPosition, grid[i][j].yPosition, CELL_SIZE, CELL_SIZE);
@@ -292,7 +291,7 @@ $(function () {
      * is set to true, drawPattern will always be called with row == 6 and col == 6,
      * otherwise it will be called with a random, valid value for row and col
      */
-    var TEST_DRAW_PATTERN = true;
+    var TEST_DRAW_PATTERN = false;
 
 
     /*
@@ -325,7 +324,7 @@ $(function () {
      		patternName == "Beacon" || patternName == "Pulsar") {
      		drawOscillator(patternName, grid, row, col);
      	}
-     	if (patternName == "Glider" || patternName == "Lwss") {
+     	if (patternName == "Glider" || patternName == "LWSS") {
      		drawSpaceship(patternName, grid, row, col);
      	}
     }
@@ -364,11 +363,11 @@ $(function () {
 						[row + 2, col + 2]];
 			var size = 6;
 			for (var i = 0; i < size; i += 1){
-				drawPoint(grid, cells[i, 0], cells[i, 1]);
+				drawPoint(grid, cells[i][0], cells[i][1]);
 			}
 		}
 
-		if (patternName == "Loaf") {
+		if (patternName == "Loaf") { //didn't work
 			var cells = [[row, col + 1],
 						[row, col + 2],
 						[row + 1, col],
@@ -378,11 +377,11 @@ $(function () {
 						[row + 3, col + 2]];
 			var size = 7;
 			for (var i = 0; i < size; i += 1){
-				drawPoint(grid, cells[i, 0], cells[i, 1]);
+				drawPoint(grid, cells[i][0], cells[i][1]);
 			}
 		}
 
-		if (patternName == "Boat") {
+		if (patternName == "Boat") { //didn't work
 			var cells = [[row, col],
 						[row, col + 1],
 						[row + 1, col],
@@ -390,11 +389,11 @@ $(function () {
 						[row + 2, col + 1]];
 			var size = 5;
 			for (var i = 0; i < size; i += 1){
-				drawPoint(grid, cells[i, 0], cells[i, 1]);
+				drawPoint(grid, cells[i][0], cells[i][1]);
 			}
 		}
 
-		updateCells(grid);
+        staticUpdateCells(grid);
     }
 
 
@@ -431,7 +430,7 @@ $(function () {
             drawBlock(grid, row + 2, col + 2);
         }
 
-        if (patternName == "Pulsar") {
+        if (patternName == "Pulsar") { //almost worked
             var cells = [[0, 2],
                         [0, 8],
                         [5, 2],
@@ -448,35 +447,7 @@ $(function () {
             }
         }
 
-        updateCells(grid);
-    }
-
-    function drawHorLine(grid, row, col) { 
-        for (var j = col; j <= col + 2; j += 1){
-                drawPoint(grid, row, j);
-            }
-
-    }
-
-    function drawVerLine(grid, row, col) { 
-        for (var i = col; i <= row + 2; i += 1){
-                drawPoint(grid, i, col);
-            }
-    }
-
-    function drawBlock(grid, row, col) {
-        for (var i = row; i <= row + 1; i += 1){
-                for (var j = col; j <= col + 1; j += 1){
-                    drawPoint(grid, i, j);
-                }   
-        }
-    }
-
-    function drawPoint(grid, row, col) {
-        if (validPosition(row, col)) {
-            grid[row][col].fillStyle = CELL_ALIVE_COLOR;
-            grid[row][col].dead = false;
-        }
+        staticUpdateCells(grid);
     }
 
 
@@ -502,7 +473,7 @@ $(function () {
             drawPoint(grid, row + 1, col + 2);
             drawHorLine(grid, row + 2, col);
         }
-        if (patternName == "Lwss") {
+        if (patternName == "LWSS") {
             drawPoint(grid, row, col);
             drawPoint(grid, row + 2, col);
             drawPoint(grid, row, col + 3);
@@ -510,9 +481,47 @@ $(function () {
             drawVerLine(grid, row + 1, col + 4);
 
         }
-        updateCells(grid);
+        staticUpdateCells(grid);
     }
 
+
+    function drawHorLine(grid, row, col) { 
+        for (var j = col; j <= col + 2; j += 1){
+                drawPoint(grid, row, j);
+            }
+
+    }
+
+    function drawVerLine(grid, row, col) { 
+        for (var i = row; i <= row + 2; i += 1){
+                drawPoint(grid, i, col);
+            }
+    }
+
+    function drawBlock(grid, row, col) {
+        for (var i = row; i <= row + 1; i += 1){
+                for (var j = col; j <= col + 1; j += 1){
+                    drawPoint(grid, i, j);
+                }   
+        }
+    }
+
+    function drawPoint(grid, row, col) {
+        if (validPosition(row, col)) {
+            grid[row][col].fillStyle = CELL_ALIVE_COLOR;
+            grid[row][col].dead = false;
+        }
+    }
+
+    function staticUpdateCells(grid){
+        var new_canvas = getCanvas();
+        for (var i = 0; i < NUM_ROWS; i += 1) {
+            for (var j = 0; j < NUM_COLS; j += 1) {
+                new_canvas.fillStyle = grid[i][j].fillStyle;
+                new_canvas.fillRect(grid[i][j].xPosition, grid[i][j].yPosition, CELL_SIZE, CELL_SIZE);
+            }
+        }
+    }
 
 
 
