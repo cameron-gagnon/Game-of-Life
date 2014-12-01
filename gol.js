@@ -272,7 +272,59 @@ $(function () {
      *          colored). 
      */
     function drawStillLife(patternName, grid, row, col) { //NIKITA
+		if (patternName == "Block") {
+			drawBlock(grid, row, col);
+		}
 
+		if (patternName == "Beehive") {
+			var cells = [[row, col + 1],
+						[row, col + 2],
+						[row + 1; col],
+						[row + 1; col + 3],
+						[row + 2; col + 1],
+						[row + 2, col + 2]];
+			var size = 6;
+			for (var i = 0; i < size; i++){
+				if (validPosition(cells[i, 0],cells[i, 1])) {
+					grid[cells[i, 0]][cells[i, 1]].fillStyle = "green";
+					grid[cells[i, 0]][cells[i, 1]].dead = false;
+				}
+			}
+		}
+
+		if (patternName == "Loaf") {
+			var cells = [[row, col + 1],
+						[row, col + 2],
+						[row + 1; col],
+						[row + 1; col + 3],
+						[row + 2; col + 1],
+						[row + 2, col + 3],
+						[row + 3, col + 2]];
+			var size = 7;
+			for (var i = 0; i < size; i++){
+				if (validPosition(cells[i, 0],cells[i, 1])) {
+					grid[cells[i, 0]][cells[i, 1]].fillStyle = "green";
+					grid[cells[i, 0]][cells[i, 1]].dead = false;
+				}
+			}
+		}
+
+		if (patternName == "Boat") {
+			var cells = [[row, col],
+						[row, col + 1],
+						[row + 1; col],
+						[row + 1; col + 2],
+						[row + 2; col + 1]];
+			var size = 5;
+			for (var i = 0; i < size; i++){
+				if (validPosition(cells[i, 0],cells[i, 1])) {
+					grid[cells[i, 0]][cells[i, 1]].fillStyle = "green";
+					grid[cells[i, 0]][cells[i, 1]].dead = false;
+				}
+			}
+		}
+
+		updateLiveNeighbors(grid);
     }
 
 
@@ -295,7 +347,67 @@ $(function () {
      *          colored). 
      */
     function drawOscillator(patternName, grid, row, col) { //NIKITA
-        
+        if (patternName == "Blinker") {
+            drawHorLine(grid, row + 1, col);
+        }
+
+        if (patternName == "Toad") {
+            drawHorLine(grid, row + 1, col + 1);
+            drawHorLine(grid, row + 2, col);
+        }
+
+        if (patternName == "Beacon") {
+            drawBlock(grid, row, col);
+            drawBlock(grid, row + 2, col + 2);
+        }
+
+        if (patternName == "Pulsar") {
+            var cells = [[0, 2],
+                        [0, 8],
+                        [5; 2],
+                        [5; 8],
+                        [7; 2],
+                        [7, 8],
+                        [12, 2],
+                        [12, 8]];
+            var size = 8;
+
+            for (var i = 0; i < size; i++) {
+                drawHorLine(grid, row + cells[i][0], col + cells[i][1]);
+                drawVerLine(grid, row + cells[i][1], col + cells[i][0]);
+            }
+        }
+
+        updateLiveNeighbors(grid);
+    }
+
+    function drawHorLine(grid, row, col) { 
+        for (var j = col; j <= col + 2; j++){
+               if (validPosition(row, j)) {
+                        grid[row][j].fillStyle = "green";
+                        grid[row][j].dead = false;
+                    } 
+            }
+    }
+
+    function drawVerLine(grid, row, col) { 
+        for (var i = col; i <= row + 2; i++){
+               if (validPosition(i, col)) {
+                        grid[i][col].fillStyle = "green";
+                        grid[i][col].dead = false;
+                    } 
+            }
+    }
+
+    function drawBlock(grid, row, col) {
+        for (var i = row; i <= row + 1; i++){
+                for (var j = col; j <= col + 1; j++){
+                    if (validPosition(i, j)) {
+                        grid[i][j].fillStyle = "green";
+                        grid[i][j].dead = false;
+                    }
+                }   
+        }
     }
 
 
@@ -316,7 +428,35 @@ $(function () {
      *          colored). 
      */
     function drawSpaceship(patternName, grid, row, col) { //UP FOR GRABS
+        if (patternName == "Glider") {
+            if (validPosition(row, col + 1)) {
+                        grid[row][col + 1].fillStyle = "green";
+                        grid[row][col + 1].dead = false;
+            }
+            if (validPosition(row + 1, col + 2)) {
+                        grid[row + 1][col + 2].fillStyle = "green";
+                        grid[row + 1][col + 2].dead = false;
+            }
+            drawHorLine(grid, row + 2, col);
+        }
+        if (patternName == "Lwss") {
+            if (validPosition(row, col)) {
+                        grid[row][col].fillStyle = "green";
+                        grid[row][col].dead = false;
+            }
+            if (validPosition(row + 2, col)) {
+                        grid[row + 2][col].fillStyle = "green";
+                        grid[row + 2][col].dead = false;
+            }
+            if (validPosition(row, col + 3)) {
+                        grid[row][col + 3].fillStyle = "green";
+                        grid[row][col + 3].dead = false;
+            }
+            drawHorLine(grid, row + 3, col + 1);
+            drawVerLine(grid, row + 1, col + 4);
 
+        }
+        updateLiveNeighbors(grid);
     }
 
 
