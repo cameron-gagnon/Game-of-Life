@@ -163,6 +163,12 @@ $(function () {
      *          object to match its x and y coordinates on the HTML canvas.
      */
     function populateGameGrid(grid){
+        gameGrid = new Cell();
+        var new_canvas = new getCanvas();
+        new_canvas.xPosition = grid.xPosition;
+        new_canvas.yPosition = grid.yPosition;
+
+
 
     }
 
@@ -176,6 +182,16 @@ $(function () {
      */
     function countLiveNeighbors(grid, row, col){
 
+        for (var i = row - 2; i < row + 1; i++){
+            for (var j = col - 2; j < col + 1; j++){
+                if (grid[i][j].dead === true){
+                    var count++;
+
+                }
+            }
+        }
+        return count;
+    
     }
 
 
