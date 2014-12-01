@@ -151,7 +151,11 @@ $(function () {
      *         bounds of the grid, returns false otherwise.
      */
     function validPosition(row, col){
-
+            if (row < $("#grid").width() && col < $("#grid").height()){
+                return true;
+            } else {
+                return false;
+            }
     }
 
 
@@ -162,6 +166,7 @@ $(function () {
      *          also sets the xPosition and yPosition data members of each Cell
      *          object to match its x and y coordinates on the HTML canvas.
      */
+
     function populateGameGrid(grid){
         gameGrid = new Cell();
         var new_canvas = new getCanvas();
@@ -180,16 +185,23 @@ $(function () {
      * Effects: Counts the number of live neighbors for
      *          the cell at row,col in grid and returns the count.
      */
-    function countLiveNeighbors(grid, row, col){
+    function countLiveNeighbors(grid, row, col) {
+        for (var i = row - 1; i <= row + 1; i++) {
+            for (var j = col - 1; j <= col + 1; j++) {
+          
 
-        for (var i = row - 2; i < row + 1; i++){
-            for (var j = col - 2; j < col + 1; j++){
-                if (grid[i][j].dead === true){
-                    var count++;
-
+                if (validPosition(i, j) 
+                    && grid[i][j].dead === false) {
+                    var count = 0;
+                    count ++;
+                    if (grid[row][col].dead === false && count > 0) {
+                        count = count - 1;
+                    }
+                    
                 }
             }
         }
+ 
         return count;
     
     }
@@ -201,9 +213,13 @@ $(function () {
      * Modifies: grid
      * Effects: Updates the liveNeighbors data member of each cell in grid
      */
-    function updateLiveNeighbors(grid) {
+    function updateLiveNeighbors(grid) { // MIAO
+        for (var i = 0; i < NUM_ROWS; i += CELL_SIZE) {
+            for (var j = 0; j < NUM_COLS; j += CELL_SIZE) {
+                grid[i][j].liveNeighbors = countLiveNeighbors(grid,i,j);
+            }
+        }
 
-    }
 
 
     /*
@@ -214,9 +230,56 @@ $(function () {
      *          Remember, that, after updating the state of the cell in grid that
      *          you also need to draw the change to the HTML canvas using getCanvas()
      */
-    function updateCells(grid){
+    function updateCells(grid){ // MIAO
+        var new_canvas = getCanvas();
+        for (var i = 0; i < NUM_ROWS; i += CELL_SIZE) {
+            for (var j = 0; j < NUM_COLS; j += CELL_SIZE) {
 
-    }
+                // update dead and fillStyle for each ceil
+
+                var num = grid[i][j].liveNeighbors;
+                // check ir ceil is not activated
+                if (grid[i][j].fillStyle === "white") {
+                    if (num === 1 || num === 0){
+                        grid[i][j].dead = true;
+                        grid[i][j].fillStyle = CELL_DEAD_COLOR;
+                    }                       
+                }
+                // check is ceil is alive
+                else if (!grid[i][j].dead){
+                    switch (num){
+                        case 0:
+                        case 1:
+                            grid[i][j].dead = true;
+                            grid[i][j].fillStyle = CELL_DEAD_COLOR;
+                            break;
+                        case 2:
+                        case 3:
+                            grid[i][j].dead = false;
+                            grid[i][j].fillStyle = CELL_ALIVE_COLOR;
+                            break;
+                        default:
+                            grid[i][j].dead = true;
+                            grid[i][j].fillStyle = CELL_DEAD_COLOR;
+                    }
+                }
+                // check for ceil if it is dead
+                else if (num === 3){
+                    grid[i][j].dead = false;
+                    grid[i][j].fillStyle = CELL_ALIVE_COLOR;
+                }
+
+                // show each ceil update on HTML canvus
+                new_canvas.fillStyle = grid[i][j].fillStyle;
+                new_canvas.fillRect(grid[i], grid[j], CELL_SIZE, CELL_SIZE);
+
+
+            }
+        }
+
+                
+
+            
 
 
     /*
@@ -227,7 +290,7 @@ $(function () {
      *          move forward, all cells should count the number of live neighbors 
      *          they have before proceeding to change the state of all cells.
      */
-    function evolveStep(grid){
+    function evolveStep(grid){ //CAMERON
 
     }
 
@@ -261,7 +324,7 @@ $(function () {
      *          row and col parameters represent the top left corner of the pattern
      *          that should be drawn.  You will use getCanvas() to update the canvas
      */
-    function drawPattern(patternName, grid, row, col) {
+    function drawPattern(patternName, grid, row, col) { //CAMERON
 
     }
 
@@ -283,7 +346,52 @@ $(function () {
      *          right most cell on the canvas (if that square is supposed to be
      *          colored). 
      */
-    function drawStillLife(patternName, grid, row, col) {
+
+    function drawStillLife(patternName, grid, row, col) { //NIKITA
+		if (patternName == "Block") {
+			drawBlock(grid, row, col);
+		}
+
+		if (patternName == "Beehive") {
+			var cells = [[row, col + 1],
+						[row, col + 2],
+						[row + 1; col],
+						[row + 1; col + 3],
+						[row + 2; col + 1],
+						[row + 2, col + 2]];
+			var size = 6;
+			for (var i = 0; i < size; i++){
+				drawPoint(grid, cells[i, 0], cells[i, 1]);
+			}
+		}
+
+		if (patternName == "Loaf") {
+			var cells = [[row, col + 1],
+						[row, col + 2],
+						[row + 1; col],
+						[row + 1; col + 3],
+						[row + 2; col + 1],
+						[row + 2, col + 3],
+						[row + 3, col + 2]];
+			var size = 7;
+			for (var i = 0; i < size; i++){
+				drawPoint(grid, cells[i, 0], cells[i, 1]);
+			}
+		}
+
+		if (patternName == "Boat") {
+			var cells = [[row, col],
+						[row, col + 1],
+						[row + 1; col],
+						[row + 1; col + 2],
+						[row + 2; col + 1]];
+			var size = 5;
+			for (var i = 0; i < size; i++){
+				drawPoint(grid, cells[i, 0], cells[i, 1]);
+			}
+		}
+
+		updateLiveNeighbors(grid);
 
     }
 
@@ -306,8 +414,67 @@ $(function () {
      *          right most cell on the canvas (if that square is supposed to be
      *          colored). 
      */
-    function drawOscillator(patternName, grid, row, col) {
-        
+    function drawOscillator(patternName, grid, row, col) { //NIKITA
+        if (patternName == "Blinker") {
+            drawHorLine(grid, row + 1, col);
+        }
+
+        if (patternName == "Toad") {
+            drawHorLine(grid, row + 1, col + 1);
+            drawHorLine(grid, row + 2, col);
+        }
+
+        if (patternName == "Beacon") {
+            drawBlock(grid, row, col);
+            drawBlock(grid, row + 2, col + 2);
+        }
+
+        if (patternName == "Pulsar") {
+            var cells = [[0, 2],
+                        [0, 8],
+                        [5; 2],
+                        [5; 8],
+                        [7; 2],
+                        [7, 8],
+                        [12, 2],
+                        [12, 8]];
+            var size = 8;
+
+            for (var i = 0; i < size; i++) {
+                drawHorLine(grid, row + cells[i][0], col + cells[i][1]);
+                drawVerLine(grid, row + cells[i][1], col + cells[i][0]);
+            }
+        }
+
+        updateLiveNeighbors(grid);
+    }
+
+    function drawHorLine(grid, row, col) { 
+        for (var j = col; j <= col + 2; j++){
+                drawPoint(grid, row, j);
+            }
+
+    }
+
+    function drawVerLine(grid, row, col) { 
+        for (var i = col; i <= row + 2; i++){
+                drawPoint(grid, i, col);
+            }
+    }
+
+    function drawBlock(grid, row, col) {
+        for (var i = row; i <= row + 1; i++){
+                for (var j = col; j <= col + 1; j++){
+                    drawPoint(grid, i, j);
+                }   
+        }
+    }
+
+    function drawPoint(grid, row, col) {
+        if (validPosition(row, col)) {
+            grid[row][col].fillStyle = "green";
+            grid[row][col].dead = false;
+        }
     }
 
 
@@ -327,10 +494,22 @@ $(function () {
      *          right most cell on the canvas (if that square is supposed to be
      *          colored). 
      */
-    function drawSpaceship(patternName, grid, row, col) {
+    function drawSpaceship(patternName, grid, row, col) { //UP FOR GRABS
+        if (patternName == "Glider") {
+            drawPoint(grid, row, col + 1);
+            drawPoint(grid, row + 1, col + 2);
+            drawHorLine(grid, row + 2, col);
+        }
+        if (patternName == "Lwss") {
+            drawPoint(grid, row, col);
+            drawPoint(grid, row + 2, col);
+            drawPoint(grid, row, col + 3);
+            drawHorLine(grid, row + 3, col + 1);
+            drawVerLine(grid, row + 1, col + 4);
 
+        }
+        updateLiveNeighbors(grid);
     }
-
 
 
 
