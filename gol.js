@@ -447,7 +447,7 @@ $(function () {
      *           grid is a 2d array of Cell objects,
      *           patternName is one of the following:
      *              "Glider"
-     *              "Lwss"
+     *              "LWSS"
      * Modifies: grid and the HTML canvas
      * Effects: Draws patternName to the HTML canvas.  row and col represent the
      *          top left corner of the pattern that is to be drawn. This function
@@ -474,7 +474,17 @@ $(function () {
         staticUpdateCells(grid);
     }
 
-
+    /*
+    * Requires: grid is a 2d array of cells
+    * Modifies: grid and HTML Canvas
+    * Effects:  Fills in one cell at a time with alive color on the HTML Canvas. 
+    *           row is the row where the color will be filled in at with
+    *           col increasing each iteration to create a horizontal line.
+    *           Maximum cells this function changes is three as this
+    *           function is only called when needing to write multiples
+    *           of three cells.
+    *           
+    */
     function drawHorLine(grid, row, col) { 
         for (var j = col; j <= col + 2; j += 1) {
                 drawPoint(grid, row, j);
@@ -482,12 +492,31 @@ $(function () {
 
     }
 
+    /*
+    * Requires: grid is a 2d array of cells
+    * Modifies: grid and HTML Canvas
+    * Effects:  Fills in one cell at a time with alive color on the HTML Canvas. 
+    *           col is the row where the color will be filled in at with
+    *           row increasing each iteration to create a vertical line.
+    *           Maximum cells this function changes is three as this
+    *           function is only called when needing to write multiples
+    *           of three cells.
+    *           
+    */
     function drawVerLine(grid, row, col) { 
         for (var i = row; i <= row + 2; i += 1) {
                 drawPoint(grid, i, col);
             }
     }
 
+    /*
+    * Requires: grid is a 2d array of cells
+    * Modifies: grid and HTML Canvas
+    * Effects:  Fills in one cell at a time with alive color on the HTML Canvas. 
+    *           Creates a square block pattern of size 2 x 2 with the upperleft
+    *           corner being the starting spot.
+    *           
+    */
     function drawBlock(grid, row, col) {
         for (var i = row; i <= row + 1; i += 1) {
                 for (var j = col; j <= col + 1; j += 1) {
@@ -495,7 +524,15 @@ $(function () {
                 }   
         }
     }
-
+    
+    /*
+    * Requires: grid is a 2d array of cells
+    * Modifies: grid and HTML Canvas
+    * Effects:  Checks to see if row and col are within the grid,
+    *           and if they are, proceeds to fill in a single cell with 
+    *           the alive color at the given row and col coordinates.
+    *
+    */
     function drawPoint(grid, row, col) {
         if (validPosition(row, col)) {
             grid[row][col].fillStyle = CELL_ALIVE_COLOR;
