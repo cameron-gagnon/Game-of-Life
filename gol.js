@@ -306,6 +306,7 @@ $(function () {
      *          that should be drawn.  You will use getCanvas() to update the canvas
      */
     function drawPattern(patternName, grid, row, col) {
+        //check what is the type of the pattern an then call corresponding function
 		if (patternName === "Block" || patternName === "Beehive" ||
 			patternName === "Loaf" || patternName === "Boat") {
 			drawStillLife(patternName, grid, row, col);
@@ -344,7 +345,7 @@ $(function () {
 		}
 
 		if (patternName === "Beehive") {
-            //positions of the cells in the structure
+            //array contains coordinates of the alive cells in the structure
 			var cells = [[row, col + 1],
 						[row, col + 2],
 						[row + 1, col],
@@ -358,6 +359,7 @@ $(function () {
 		}
 
 		if (patternName === "Loaf") {
+            //array contains coordinates of the alive cells in the structure
 			var cells = [[row, col + 1],
 						[row, col + 2],
 						[row + 1, col],
@@ -372,6 +374,7 @@ $(function () {
 		}
 
 		if (patternName === "Boat") {
+            //array contains coordinates of the alive cells in the structure
 			var cells = [[row, col],
 						[row, col + 1],
 						[row + 1, col],
@@ -383,6 +386,7 @@ $(function () {
 			}
 		}
 
+        //draw the structure on the canvas
         staticUpdateCells(grid);
     }
 
@@ -421,6 +425,15 @@ $(function () {
         }
 
         if (patternName === "Pulsar") {
+            /* the pattern that consists only of horizontal 
+             * and vertical lines is implemented
+             *
+             * the array contains coordinates of the leftmost points of
+             * horizontal lines relative to the start point
+             * the structure is symmetrical, so the inverted coordinates
+             * ( (x,y) inverted becomes (y,x) ) are the uppermost points
+             * of vertical lines relative to the start point
+             */
             var cells = [[0, 2],
                         [0, 8],
                         [5, 2],
@@ -437,6 +450,7 @@ $(function () {
             }
         }
 
+        //draw the structure on the canvas
         staticUpdateCells(grid);
     }
 
@@ -458,6 +472,9 @@ $(function () {
      *          colored). 
      */
     function drawSpaceship(patternName, grid, row, col) {
+        /* the structures are simply described with the use of
+         * points and vertical&horizontal lines that they consist of
+         */
         if (patternName === "Glider") {
             drawPoint(grid, row, col + 1);
             drawPoint(grid, row + 1, col + 2);
@@ -471,6 +488,8 @@ $(function () {
             drawVerLine(grid, row + 1, col + 4);
 
         }
+
+        //draw the structure on the canvas
         staticUpdateCells(grid);
     }
 
@@ -540,6 +559,14 @@ $(function () {
         }
     }
 
+/*
+     * Requires: grid is a 2d array of Cell objects
+     * Modifies: HTML canvas
+     * Effects: Simply draws all of the cells on the HTML canvas based on
+     *          based on the fillStyle of each on of them
+     *          this function is static, so it doesn't check for the neighbours,
+     *          doesn't change the grid, and doesn't make an evolve step
+     */
     function staticUpdateCells(grid) {
         var new_canvas = getCanvas();
         for (var i = 0; i < NUM_ROWS; i += 1) {
