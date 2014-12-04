@@ -151,6 +151,7 @@ $(function () {
      *         bounds of the grid, returns false otherwise.
      */
     function validPosition(row, col) {
+            //set boundary
             if (row < NUM_ROWS && col < NUM_COLS && row >= 0 && col >= 0) {
                 return true;
             } else {
@@ -167,37 +168,21 @@ $(function () {
      *          object to match its x and y coordinates on the HTML canvas.
      */
 
-<<<<<<< HEAD
-    function populateGameGrid(grid){
 
-        //initialize each index of the grid
-=======
     function populateGameGrid(grid) {
->>>>>>> 1e2498c61c1c6fd4d47159e1c787e4707b5b3acd
+
         for (var i = 0; i < NUM_ROWS; i += 1) {
             for (var j = 0; j < NUM_COLS; j += 1) {
+                //fills all grid with initial cells
                 grid[i][j] = new Cell();
+                //x position match x coordinates
                 grid[i][j].xPosition = j * CELL_SIZE;
+                //y position match y coordinates
                 grid[i][j].yPosition = i * CELL_SIZE;
             }
-<<<<<<< HEAD
-        }
-        
-        //sets the xPosition and yPosition
-        for (var w = 0; w < NUM_ROWS; w += CELL_SIZE) {
-            for (var r = 0; r < NUM_COLS; r += CELL_SIZE) {
-                var new_canvas = new getCanvas();
-                new_canvas.xPosition = r;
-                new_canvas.yPosition = w;
-            }
-        }
-        
 
-
-
-=======
         }    
->>>>>>> 1e2498c61c1c6fd4d47159e1c787e4707b5b3acd
+
     }
 
 
@@ -209,38 +194,24 @@ $(function () {
      *          the cell at row,col in grid and returns the count.
      */
     function countLiveNeighbors(grid, row, col) {
-<<<<<<< HEAD
-
-        //go through cells's neighbors
-        for (var i = row - 1; i <= row + 1; i += 1) {
-            for (var j = col - 1; j <= col + 1; j += 1) {
-                //check if the position in the boundary
-                if (validPosition(i, j) 
-                    && grid[i][j].dead === false) {
-                    //count the live neighbors
-                    var count = 0;
-                    count = count + 1;
-                    }
-                    
-=======
         var count = 0;
+        //go through neighbors
         for (var i = row - 1; i <= row + 1; i += 1) {
             for (var j = col - 1; j <= col + 1; j += 1) {
+                //check boundary
                 if (validPosition(i, j)) {
+                    //count
                     if (!grid[i][j].dead) {
                         count = count + 1;
                     }                  
->>>>>>> 1e2498c61c1c6fd4d47159e1c787e4707b5b3acd
                 }
             }
+        }
         //avoid the check points to be count 
         if (!grid[row][col].dead) {
             count = count - 1;
         }
-
-        if (!grid[row][col].dead) {
-            count = count - 1;
-        }
+        
  
         return count;
     
@@ -254,6 +225,7 @@ $(function () {
      * Effects: Updates the liveNeighbors data member of each cell in grid
      */
     function updateLiveNeighbors(grid) {
+        //go through all grid points
         for (var i = 0; i < NUM_ROWS; i += 1) {
             for (var j = 0; j < NUM_COLS; j += 1) {
                 grid[i][j].liveNeighbors = countLiveNeighbors(grid,i,j);
@@ -641,9 +613,6 @@ $(function () {
 
 
 
-<<<<<<< HEAD
- }
- );
-=======
+
 });
->>>>>>> 1e2498c61c1c6fd4d47159e1c787e4707b5b3acd
+
