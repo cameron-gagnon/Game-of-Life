@@ -8,7 +8,7 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 22%;
+    margin-top: 12%;
     border: 1px solid #aaa;
     background-color: white;
     position: relative;
@@ -32,5 +32,6 @@
 
 h2 {
 	color: white;
-	
+	font-size: 50px;
+	background-color: #000000;
 }
