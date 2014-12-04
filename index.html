@@ -20,40 +20,53 @@
         <link type="text/css" rel="stylesheet" href="styles.css" />
 	</head>
 	
-    <body class="container">
-        <h2>EECS 183: Conway's Game of Life</h2>
-        
-        <canvas id="grid" height="400px" width="700px"></canvas>
-        
-        <div id="button-wrapper">
-            <button id="still-life-btn">Draw Still life</button>
-            <form>
-                <select id="still-life-select">
-                    <option value="Block" selected>Block</option>
-                    <option value="Beehive" >Beehive</option>
-                    <option value="Loaf" >Loaf</option>
-                    <option value="Boat" >Boat</option>
-                </select>
-            </form>
-            <button id="oscillator-btn">Draw Oscillator</button>
-            <form>
-                <select id="oscillator-select">
-                    <option value="Blinker" selected>Blinker</option>
-                    <option value="Toad" >Toad</option>
-                    <option value="Beacon" >Beacon</option>
-                    <option value="Pulsar" >Pulsar</option>
-                </select>
-            </form>
-            <button id="spaceship-btn">Draw Spaceship</button>
-            <form>
-                <select id="spaceship-select">
-                    <option value="Glider" selected>Glider</option>
-                    <option value="LWSS" >LWSS</option>
-                </select>
-            </form>
+    <body>
+    <img id="img" class="container-fluid" src="a-life.gif" alt="Game of Life" class="img-responsive">
+        <div class="container-fluid">
 
-            <button id="start-game">Start</button>
-            <button id="stop-game">Stop</button>
+            <div class="col-md-6"id="title">EECS 183: Conway's Game of Life</div>
+            
+                <!--<img id="img" src="a-life.gif" alt="Game of Life">-->
+                <canvas id="grid" height="480px" width="720px"></canvas>
+            
+            <div id="button-wrapper">
+                <button id="still-life-btn">Draw Still life</button>
+                <form>
+                    <select id="still-life-select">
+                        <option value="Block" selected>Block</option>
+                        <option value="Beehive" >Beehive</option>
+                        <option value="Loaf" >Loaf</option>
+                        <option value="Boat" >Boat</option>
+                    </select>
+                </form>
+                <button id="oscillator-btn">Draw Oscillator</button>
+                <form>
+                    <select id="oscillator-select">
+                        <option value="Blinker" selected>Blinker</option>
+                        <option value="Toad" >Toad</option>
+                        <option value="Beacon" >Beacon</option>
+                        <option value="Pulsar" >Pulsar</option>
+                    </select>
+                </form>
+                <button id="spaceship-btn">Draw Spaceship</button>
+                <form>
+                    <select id="spaceship-select">
+                        <option value="Glider" selected>Glider</option>
+                        <option value="LWSS" >LWSS</option>
+                    </select>
+                </form>
+                <button id="gen-int-btn">Set Generation Interval</button>
+                <form>
+                    <select id="gen-int-select">
+                        <option value="Slow">Slow</option>
+                        <option value="Med">Med</option>
+                        <option value="Fast">Fast</option>
+                    </select>
+                </form>
+
+                <button id="start-game">Start</button>
+                <button id="stop-game">Stop</button>
+            </div>
         </div>
 	</body>
 </html>
