@@ -168,12 +168,15 @@ $(function () {
      */
 
     function populateGameGrid(grid){
+
+        //initialize each index of the grid
         for (var i = 0; i < NUM_ROWS; i += 1) {
             for (var j = 0; j < NUM_COLS; j += 1) {
                 grid[i][j] = new Cell();
             }
         }
         
+        //sets the xPosition and yPosition
         for (var w = 0; w < NUM_ROWS; w += CELL_SIZE) {
             for (var r = 0; r < NUM_COLS; r += CELL_SIZE) {
                 var new_canvas = new getCanvas();
@@ -196,20 +199,23 @@ $(function () {
      *          the cell at row,col in grid and returns the count.
      */
     function countLiveNeighbors(grid, row, col) {
+
+        //go through cells's neighbors
         for (var i = row - 1; i <= row + 1; i += 1) {
             for (var j = col - 1; j <= col + 1; j += 1) {
-          
-
+                //check if the position in the boundary
                 if (validPosition(i, j) 
                     && grid[i][j].dead === false) {
+                    //count the live neighbors
                     var count = 0;
                     count = count + 1;
-                    if (grid[row][col].dead === false && count > 0) {
-                        count = count - 1;
                     }
                     
                 }
             }
+        //avoid the check points to be count 
+        if (!grid[row][col].dead) {
+            count = count - 1;
         }
  
         return count;
@@ -543,4 +549,5 @@ $(function () {
 
 
 
- });
+ }
+ );
