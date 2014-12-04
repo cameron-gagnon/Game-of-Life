@@ -151,6 +151,7 @@ $(function () {
      *         bounds of the grid, returns false otherwise.
      */
     function validPosition(row, col) {
+            //set boundary
             if (row < NUM_ROWS && col < NUM_COLS && row >= 0 && col >= 0) {
                 return true;
             } else {
@@ -167,14 +168,21 @@ $(function () {
      *          object to match its x and y coordinates on the HTML canvas.
      */
 
+
     function populateGameGrid(grid) {
+
         for (var i = 0; i < NUM_ROWS; i += 1) {
             for (var j = 0; j < NUM_COLS; j += 1) {
+                //fills all grid with initial cells
                 grid[i][j] = new Cell();
+                //x position match x coordinates
                 grid[i][j].xPosition = j * CELL_SIZE;
+                //y position match y coordinates
                 grid[i][j].yPosition = i * CELL_SIZE;
             }
+
         }    
+
     }
 
 
@@ -187,19 +195,23 @@ $(function () {
      */
     function countLiveNeighbors(grid, row, col) {
         var count = 0;
+        //go through neighbors
         for (var i = row - 1; i <= row + 1; i += 1) {
             for (var j = col - 1; j <= col + 1; j += 1) {
+                //check boundary
                 if (validPosition(i, j)) {
+                    //count
                     if (!grid[i][j].dead) {
                         count = count + 1;
                     }                  
                 }
             }
         }
-
+        //avoid the check points to be count 
         if (!grid[row][col].dead) {
             count = count - 1;
         }
+        
  
         return count;
     
@@ -213,6 +225,7 @@ $(function () {
      * Effects: Updates the liveNeighbors data member of each cell in grid
      */
     function updateLiveNeighbors(grid) {
+        //go through all grid points
         for (var i = 0; i < NUM_ROWS; i += 1) {
             for (var j = 0; j < NUM_COLS; j += 1) {
                 grid[i][j].liveNeighbors = countLiveNeighbors(grid,i,j);
@@ -599,6 +612,7 @@ $(function () {
     }
 
 
+<<<<<<< HEAD
     // Requires: Nothing
     // Modifies: GENERATION_INTERVAL value
     // Effects: The onClick listener for the various speeds of the generation intervals.
@@ -617,3 +631,9 @@ $(function () {
             }
         });
 });
+=======
+
+
+});
+
+>>>>>>> 798a381eb479875a4edccde9752786433b291624
