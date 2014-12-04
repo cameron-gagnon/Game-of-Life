@@ -612,7 +612,6 @@ $(function () {
     }
 
 
-<<<<<<< HEAD
     // Requires: Nothing
     // Modifies: GENERATION_INTERVAL value
     // Effects: The onClick listener for the various speeds of the generation intervals.
@@ -631,9 +630,3 @@ $(function () {
             }
         });
 });
-=======
-
-
-});
-
->>>>>>> 798a381eb479875a4edccde9752786433b291624
