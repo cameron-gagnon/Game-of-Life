@@ -4,11 +4,11 @@ $(function () {
      *********************************************************/
 
     var CELL_SIZE = 10, // each cell will be 10 pixels x 10 pixels
-        CELL_ALIVE_COLOR = "#2ecc71",
+        CELL_ALIVE_COLOR = "#FFFF00",
         CELL_DEAD_COLOR = "#e74c3c",
-        GENERATION_INTERVAL = 0.5
-        NUM_COLS = 70,
-        NUM_ROWS = 40,
+        GENERATION_INTERVAL = .5
+        NUM_COLS = 72,
+        NUM_ROWS = 48,
         gameGrid = new Array(NUM_ROWS);
 
 
@@ -20,7 +20,7 @@ $(function () {
         this.yPosition = 0;
         
         // represents the fillStyle that should be used when fillRect is called
-        this.fillStyle = "white";
+        this.fillStyle = "black";
 
         // represents whether a cell is dead or alive
         this.dead = true;
@@ -62,7 +62,7 @@ $(function () {
         }
         
         // draw grid lines
-        grid.strokeStyle = "#ddd";
+        grid.strokeStyle = "#7E7E7E";
         grid.stroke();
     }
 
@@ -559,7 +559,7 @@ $(function () {
         }
     }
 
-/*
+    /*
      * Requires: grid is a 2d array of Cell objects
      * Modifies: HTML canvas
      * Effects: Simply draws all of the cells on the HTML canvas based on
@@ -599,5 +599,21 @@ $(function () {
     }
 
 
-
+    // Requires: Nothing
+    // Modifies: GENERATION_INTERVAL value
+    // Effects: The onClick listener for the various speeds of the generation intervals.
+    //          When selected it will update GENERATION_INTERVAL with the respective
+    //          speed
+    $("#gen-int-btn").click(function () {
+            var selector = $(this).attr("id");
+            selector = "#" + selector.replace("btn", "select");
+            var pattern = $(selector).val();
+            if (pattern === "Slow"){
+                GENERATION_INTERVAL = .5;
+            } else if (pattern === "Med"){
+                GENERATION_INTERVAL = .2;
+            } else if (pattern === "Fast"){
+                GENERATION_INTERVAL = .1;
+            }
+        });
 });
