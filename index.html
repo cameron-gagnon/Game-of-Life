@@ -1,9 +1,16 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html>
 	<head>
 		<meta charset="utf-8">
+        
+        <!--makes viewing on mobile devices easier and normalizes
+            the webpage for other browsers-->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<title>
+        <!--Changes the font for the title to ASAP font-family-->
+        <link href='http://fonts.googleapis.com/css?family=Asap' rel='stylesheet' type='text/css'>
+		
+        <title>
 			EECS 183 GoL
 		</title>
 
@@ -23,8 +30,8 @@
     <body>
     <img id="img" class="container-fluid" src="a-life.gif" alt="Game of Life" class="img-responsive">
         <div class="container-fluid">
-
-            <h2 class="text-center">EECS 183: Conway's Game of Life</h2>
+            <h2 >EECS 183: Conway's Game of Life</h2>
+            <div id="colorswap" class="text-center"></div>
                 <!--<img id="img" src="a-life.gif" alt="Game of Life">-->
                 <canvas id="grid" height="480px" width="720px"></canvas>
             
@@ -54,7 +61,7 @@
                         <option value="LWSS" >LWSS</option>
                     </select>
                 </form>
-                <button id="gen-int-btn">Set Generation Interval</button>
+                <button id="gen-int-btn">Set Generation Speed</button>
                 <form>
                     <select id="gen-int-select">
                         <option value="Slow">Slow</option>
