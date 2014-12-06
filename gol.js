@@ -629,6 +629,14 @@ $(function () {
         }
     }
 
+
+    /*
+    * Requires: grid is a 2d array of cells
+    * Modifies: grid and HTML Canvas
+    * Effects:  Fills in one cell at a time with infected color on the HTML Canvas. 
+    *           Creates a square block pattern of size 2 x 2 with the upperleft
+    *           corner being the starting spot.      
+    */
     function drawInfectedBlock(grid, row, col) {
         for (var i = row; i <= row + 1; i += 1) {
                 for (var j = col; j <= col + 1; j += 1) {
@@ -643,7 +651,6 @@ $(function () {
     * Effects:  Checks to see if row and col are within the grid,
     *           and if they are, proceeds to fill in a single cell with 
     *           the alive color at the given row and col coordinates.
-    *
     */
     function drawPoint(grid, row, col) {
         if (validPosition(row, col)) {
@@ -653,6 +660,13 @@ $(function () {
         }
     }
 
+    /*
+    * Requires: grid is a 2d array of cells
+    * Modifies: grid and HTML Canvas
+    * Effects:  Checks to see if row and col are within the grid,
+    *           and if they are, proceeds to fill in a single cell with 
+    *           the infected color at the given row and col coordinates.
+    */
     function drawInfectedPoint(grid, row, col) {
         if (validPosition(row, col)) {
             grid[row][col].dead = false;
