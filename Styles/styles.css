@@ -9,7 +9,7 @@
     display: block;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 12%;
+    margin-top: 3%;
     border: 1px solid #aaa;
     background-color: white;
     position: relative;
@@ -30,8 +30,12 @@
 
 #img {
 	position: absolute;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	height: 769px;
+	width: 1025px;
 	z-index: -1;
-	width: 100%;
 }
 
 h2 {
