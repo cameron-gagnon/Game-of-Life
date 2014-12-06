@@ -710,9 +710,9 @@ $(function () {
         drawGridLines();
         initArray();
         populateGameGrid(gameGrid);
-
+        initCanvas();
         // Add any necessary functionality you need for the Reach portion below here
-    }
+        }
 
 
     // Requires: Nothing
@@ -737,7 +737,6 @@ $(function () {
     // Modifies: grid, HTML canvas
     // Effects: The onClick listener to clear the canvas to all new Cells.
     $("#clear-canvas").click(function () {
-        var ctx = getCanvas();
         isRunning = false;
         populateGameGrid(gameGrid);
         updateCells(gameGrid);
@@ -749,9 +748,91 @@ $(function () {
     // Effects: Steps through the generations one at a time using
     //          an onscreen button.
     $("#next-gen").click(function () {
-        var ctx = getCanvas();
         isRunning = false;
         updateCells(gameGrid);
         drawGridLines();
     });
+
+    /*
+    * Requires: A mousedown on canvas element
+    * Modifies: HTML canvas
+    * Effects:  Applies mousedown listener function to the canvas, so 
+    *           when a user clicks on the canvas it triggers the getPosition
+    *           function.
+    */
+    function initCanvas(){
+        var canvasdraw = document.getElementById("grid");
+        canvasdraw.addEventListener("mousedown", getPosition, false);
+        canvasdraw.addEventListener("mousemove", getMovement, false);
+        canvasdraw.addEventListener("mouseup", onMouseUp, false);
+    }
+
+    /*
+    * Requires: nothing
+    * Modifies: nothing
+    * Effects:  Gives x and y coordinates of the mousedown of the user
+    *           to locate position where cell should become alive and
+    *           then draws the alive color to that cell block.
+    *
+    */
+    function userMove(event){
+        var x = new Number();
+        var y = new Number();
+
+        var canvas = document.getElementById("grid");
+        //sets mouse coords in relation to the html page
+        x = event.pageX;
+        y = event.pageY;
+
+        //subtracts horizonal and vertical offset of canvas element
+        x -= canvas.offsetLeft;
+        y -= canvas.offsetTop;
+        //rounds coordinate position down and into form usable by the
+        //html canvas
+        x = Math.floor(x / 10);
+        y = Math.floor(y / 10);
+
+        //if cell is already alive where user clicks
+        //it makes it a new cell again
+        if (gameGrid[y][x].fillStyle === CELL_ALIVE_COLOR){
+            gameGrid[y][x].fillStyle = "black";
+            gameGrid[y][x].dead = "false";
+            staticUpdateCells(gameGrid);
+            drawGridLines();
+
+        } else {
+            drawPoint(gameGrid, y, x);
+            staticUpdateCells(gameGrid);
+            drawGridLines();
+        }
+    }
+
+    // Requires: Nothing
+    // Modifies: mouseIsDown
+    // Effects:  Modifies mouseIsDown so mouseMove will begin
+    //           executing while mouse moves.           
+    function getPosition(event) {
+        mouseIsDown = true;
+        userMove(event);
+    }
+
+    // Requires: Nothing
+    // Modifies: Nothing
+    // Effects:  When mouse is pressed, it will draw to the
+    //           canvas.
+    function getMovement(event){
+        if (mouseIsDown){
+            userMove(event);
+        }
+    }
+
+    // Requires: Nothing
+    // Modifies: mouseIsDown
+    // Effects:  Modifies mouseIsDown so mouseMove no longer
+    //           executes.
+    function onMouseUp(event){
+        mouseIsDown = false;
+    }
+
+
 });
