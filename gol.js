@@ -7,6 +7,7 @@ $(function () {
         CELL_ALIVE_COLOR = "#FFFF00",
         CELL_DEAD_COLOR = "#e74c3c",
         GENERATION_INTERVAL = .1,
+        CELL_INFECTED_COLOR = "#b8008a",
         NUM_COLS = 72,
         NUM_ROWS = 48,
         gameGrid = new Array(NUM_ROWS);
@@ -27,6 +28,10 @@ $(function () {
 
         // represents the number of live neighbors this cell has
         this.liveNeighbors = 0;
+
+        this.infectedNeighbors = 0;
+
+        this.variation = "normal";
     }
     
 
@@ -195,6 +200,7 @@ $(function () {
      */
     function countLiveNeighbors(grid, row, col) {
         var count = 0;
+        var countInf = 0;
         //go through neighbors
         for (var i = row - 1; i <= row + 1; i += 1) {
             for (var j = col - 1; j <= col + 1; j += 1) {
@@ -217,6 +223,33 @@ $(function () {
     
     }
 
+    function countInfectedNeighbors(grid, row, col) {
+        var countInf = 0;
+        //go through neighbors
+        for (var i = row - 1; i <= row + 1; i += 1) {
+            for (var j = col - 1; j <= col + 1; j += 1) {
+                //check boundary
+                if (validPosition(i, j)) {
+                    //count
+                    if (!grid[i][j].dead) {
+                        if (grid[i][j].variation === "infected") {
+                            countInf = countInf + 1;
+                        }
+                    }                  
+                }
+            }
+        }
+        //avoid the check points to be count 
+        if (!grid[row][col].dead) {
+            if (grid[row][col].variation === "infected") {
+                countInf = countInf - 1;
+            }
+        }
+        
+        return countInf;
+    
+    }
+
 
 
     /*
@@ -229,6 +262,7 @@ $(function () {
         for (var i = 0; i < NUM_ROWS; i += 1) {
             for (var j = 0; j < NUM_COLS; j += 1) {
                 grid[i][j].liveNeighbors = countLiveNeighbors(grid,i,j);
+                grid[i][j].infectedNeighbors = countInfectedNeighbors(grid,i,j);
             }
         }
     }
@@ -251,16 +285,49 @@ $(function () {
                 // update dead and fillStyle for each ceil
 
                 var num = grid[i][j].liveNeighbors;
+                var inf = grid[i][j].infectedNeighbors;
 
                 // check if cell is alive
                 if ((!grid[i][j].dead) && ((num != 2) && (num != 3))) {
                     grid[i][j].dead = true;
                     grid[i][j].fillStyle = CELL_DEAD_COLOR;
+                    grid[i][j].variation = "normal";
                 }
                 // check for cell if it is dead
                 else if (num === 3) {
+                    rand = Math.floor(Math.random() * 191869) % 100;
                     grid[i][j].dead = false;
-                    grid[i][j].fillStyle = CELL_ALIVE_COLOR;
+                    if (inf === 0) {
+                        grid[i][j].fillStyle = CELL_ALIVE_COLOR;
+                    }
+                    if (inf === 1) {
+                        if (rand <= 32) {
+                            grid[i][j].variation = "infected";
+                            grid[i][j].fillStyle = CELL_INFECTED_COLOR;
+                        }
+                        else {
+                            grid[i][j].fillStyle = CELL_ALIVE_COLOR;
+                        }
+                    }
+                    if (inf === 2) {
+                        if (rand <= 65) {
+                            grid[i][j].variation = "infected";
+                            grid[i][j].fillStyle = CELL_INFECTED_COLOR;
+                        }
+                        else {
+                            grid[i][j].fillStyle = CELL_ALIVE_COLOR;
+                        }
+                    }
+                    if (inf === 3) {
+                        if (rand <= 98) {
+                            grid[i][j].variation = "infected";
+                            grid[i][j].fillStyle = CELL_INFECTED_COLOR;
+                        }
+                        else {
+                            grid[i][j].fillStyle = CELL_ALIVE_COLOR;
+                        }
+                    }
+                    
                 }
                 // show each cell update on HTML canvus
                 new_canvas.fillStyle = grid[i][j].fillStyle;
@@ -321,7 +388,8 @@ $(function () {
     function drawPattern(patternName, grid, row, col) {
         //check what is the type of the pattern an then call corresponding function
 		if (patternName === "Block" || patternName === "Beehive" ||
-			patternName === "Loaf" || patternName === "Boat") {
+			patternName === "Loaf" || patternName === "Boat" || 
+            patternName === "InfectCore") {
 			drawStillLife(patternName, grid, row, col);
 		}
 		if (patternName === "Blinker" ||patternName === "Toad" ||
@@ -398,6 +466,10 @@ $(function () {
 				drawPoint(grid, cells[i][0], cells[i][1]);
 			}
 		}
+
+        if (patternName === "InfectCore") {
+            drawInfectedBlock(grid, row, col);
+        }
 
         //draw the structure on the canvas
         staticUpdateCells(grid);
@@ -556,6 +628,14 @@ $(function () {
                 }   
         }
     }
+
+    function drawInfectedBlock(grid, row, col) {
+        for (var i = row; i <= row + 1; i += 1) {
+                for (var j = col; j <= col + 1; j += 1) {
+                    drawInfectedPoint(grid, i, j);
+                }   
+        }
+    }
     
     /*
     * Requires: grid is a 2d array of cells
@@ -567,8 +647,17 @@ $(function () {
     */
     function drawPoint(grid, row, col) {
         if (validPosition(row, col)) {
-            grid[row][col].fillStyle = CELL_ALIVE_COLOR;
             grid[row][col].dead = false;
+            grid[row][col].variation = "normal";
+            grid[row][col].fillStyle = CELL_ALIVE_COLOR;
+        }
+    }
+
+    function drawInfectedPoint(grid, row, col) {
+        if (validPosition(row, col)) {
+            grid[row][col].dead = false;
+            grid[row][col].variation = "infected";
+            grid[row][col].fillStyle = CELL_INFECTED_COLOR;
         }
     }
 
