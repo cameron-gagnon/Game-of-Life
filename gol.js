@@ -8,6 +8,13 @@ $(function () {
         CELL_DEAD_COLOR = "#e74c3c",
         GENERATION_INTERVAL = .1,
         CELL_INFECTED_COLOR = "#b8008a",
+        CELL_MINE_COLOR = "#9898b1",
+        CELL_MINE1_COLOR = "#01df01",
+        CELL_MINE2_COLOR = "#585858",
+        CELL_EXPLOSION_COLOR = "#ff9900",
+        CELL_EXPL_HOT_COLOR = "#f2f5a9",
+        EXPLOSION_RANGE = 20,
+        EXPLOSION_DELAY = 10,
         NUM_COLS = 72,
         NUM_ROWS = 48,
         gameGrid = new Array(NUM_ROWS);
@@ -32,6 +39,8 @@ $(function () {
         this.infectedNeighbors = 0;
 
         this.variation = "normal";
+
+        this.ticker = 0;
     }
     
 
@@ -213,7 +222,7 @@ $(function () {
                 }
             }
         }
-        //avoid the check points to be count 
+        //avoid the points that are being checked to be count 
         if (!grid[row][col].dead) {
             count = count - 1;
         }
@@ -286,52 +295,130 @@ $(function () {
 
                 var num = grid[i][j].liveNeighbors;
                 var inf = grid[i][j].infectedNeighbors;
+                var mine = grid[i][j].variation === "mine";
 
                 // check if cell is alive
-                if ((!grid[i][j].dead) && ((num != 2) && (num != 3))) {
-                    grid[i][j].dead = true;
-                    grid[i][j].fillStyle = CELL_DEAD_COLOR;
-                    grid[i][j].variation = "normal";
+                if (grid[i][j].variation === "explosion") {
+                    grid[i][j].ticker -= 1;
+
+                    if (grid[i][j].fillStyle === CELL_EXPL_HOT_COLOR &&
+                                            grid[i][j].ticker === 1) {
+                        grid[i][j].fillStyle = CELL_EXPLOSION_COLOR;
+                        grid[i][j].fillStyle = CELL_EXPLOSION_COLOR;
+                    }
+
+                    if (grid[i][j].ticker === 0) {
+                        grid[i][j].variation = "normal";
+                        grid[i][j].fillStyle = CELL_DEAD_COLOR;
+                    }
                 }
-                // check for cell if it is dead
-                else if (num === 3) {
-                    rand = Math.floor(Math.random() * 191869) % 100;
-                    grid[i][j].dead = false;
-                    if (inf === 0) {
-                        grid[i][j].fillStyle = CELL_ALIVE_COLOR;
+
+                if (!(mine)) {
+                    if (!(grid[i][j].dead) && ((num != 2) && (num != 3))) {
+                        grid[i][j].dead = true;
+                        grid[i][j].fillStyle = CELL_DEAD_COLOR;
+                        grid[i][j].variation = "normal";
                     }
-                    if (inf === 1) {
-                        if (rand <= 32) {
-                            grid[i][j].variation = "infected";
-                            grid[i][j].fillStyle = CELL_INFECTED_COLOR;
-                        }
-                        else {
+                    // check for cell if it is dead
+                    if (grid[i][j].dead && num === 3) {
+                        rand = Math.floor(Math.random() * 191869) % 100;
+                        grid[i][j].dead = false;
+                        if (inf === 0) {
                             grid[i][j].fillStyle = CELL_ALIVE_COLOR;
                         }
+                        if (inf === 1) {
+                            if (rand <= 32) {
+                                grid[i][j].variation = "infected";
+                                grid[i][j].fillStyle = CELL_INFECTED_COLOR;
+                            }
+                            else {
+                                grid[i][j].fillStyle = CELL_ALIVE_COLOR;
+                            }
+                        }
+                        if (inf === 2) {
+                            if (rand <= 65) {
+                                grid[i][j].variation = "infected";
+                                grid[i][j].fillStyle = CELL_INFECTED_COLOR;
+                            }
+                            else {
+                                grid[i][j].fillStyle = CELL_ALIVE_COLOR;
+                            }
+                        }
+                        if (inf === 3) {
+                            if (rand <= 98) {
+                                grid[i][j].variation = "infected";
+                                grid[i][j].fillStyle = CELL_INFECTED_COLOR;
+                            }
+                            else {
+                                grid[i][j].fillStyle = CELL_ALIVE_COLOR;
+                            }
+                        }
+                        
                     }
-                    if (inf === 2) {
-                        if (rand <= 65) {
-                            grid[i][j].variation = "infected";
-                            grid[i][j].fillStyle = CELL_INFECTED_COLOR;
+                }
+
+                if (mine) {
+                    var start = grid[i][j].ticker < EXPLOSION_DELAY;
+
+                    if (!(grid[i][j].dead) && ((num != 2) && (num != 3))) {
+                        grid[i][j].dead = true;
+                    }
+                    if (grid[i][j].dead && num === 3) {
+                        grid[i][j].dead = false;
+                    }
+
+                    if ((start) || (!(grid[i][j].dead))) {
+                        grid[i][j].ticker -= 1;
+                    }
+
+                    if (start || !grid[i][j].dead) {
+                        if (grid[i][j].ticker % 2 === 1) {
+                            grid[i][j].fillStyle = CELL_MINE1_COLOR;
                         }
                         else {
-                            grid[i][j].fillStyle = CELL_ALIVE_COLOR;
+                            grid[i][j].fillStyle = CELL_MINE2_COLOR;
                         }
                     }
-                    if (inf === 3) {
-                        if (rand <= 98) {
-                            grid[i][j].variation = "infected";
-                            grid[i][j].fillStyle = CELL_INFECTED_COLOR;
+
+                    if (grid[i][j].ticker === 0) {
+                        for (var i2 = 0; i2 < NUM_ROWS; i2 += 1) {
+                            for (var j2 = 0; j2 < NUM_COLS; j2 += 1) {
+                                var distance = Math.sqrt((i2 - i) * (i2 - i) 
+                                                + (j2 - j) * (j2 - j));
+                                if (distance <= EXPLOSION_RANGE 
+                                    && validPosition(i2, j2)) {
+                                    grid[i2][j2].variation = "explosion";
+                                    grid[i2][j2].dead = true;
+                                    grid[i2][j2].fillStyle = CELL_EXPLOSION_COLOR;
+                                    
+                                    if ((i2 > i) || ((i2 === i) && (j2 > j))) {
+                                        grid[i2][j2].ticker = 2;
+                                    }
+                                    else {
+                                        grid[i2][j2].ticker = 1;
+                                    }
+                                    
+                                    rand1 = Math.random();
+                                    rand2 = Math.floor(Math.random() 
+                                        * 191869) % EXPLOSION_RANGE;
+                                    if (distance < rand2 && rand1 > 0.5) {
+                                        grid[i2][j2].ticker += 1;
+                                        grid[i2][j2].fillStyle = CELL_EXPL_HOT_COLOR;
+                                    }
+
+                                    new_canvas.fillStyle = grid[i2][j2].fillStyle;
+                                    new_canvas.fillRect(grid[i2][j2].xPosition, 
+                                        grid[i2][j2].yPosition, CELL_SIZE, CELL_SIZE);
+                                } 
+                            }
                         }
-                        else {
-                            grid[i][j].fillStyle = CELL_ALIVE_COLOR;
-                        }
+                        updateLiveNeighbors(grid);
                     }
-                    
                 }
                 // show each cell update on HTML canvus
                 new_canvas.fillStyle = grid[i][j].fillStyle;
-                new_canvas.fillRect(grid[i][j].xPosition, grid[i][j].yPosition, CELL_SIZE, CELL_SIZE);
+                new_canvas.fillRect(grid[i][j].xPosition, grid[i][j].yPosition, 
+                                    CELL_SIZE, CELL_SIZE);
 
 
             }
@@ -389,7 +476,7 @@ $(function () {
         //check what is the type of the pattern an then call corresponding function
 		if (patternName === "Block" || patternName === "Beehive" ||
 			patternName === "Loaf" || patternName === "Boat" || 
-            patternName === "InfectCore") {
+            patternName === "InfectCore" || patternName === "Mine") {
 			drawStillLife(patternName, grid, row, col);
 		}
 		if (patternName === "Blinker" ||patternName === "Toad" ||
@@ -469,6 +556,10 @@ $(function () {
 
         if (patternName === "InfectCore") {
             drawInfectedBlock(grid, row, col);
+        }
+
+        if (patternName === "Mine") {
+            drawMine(grid, 24, 36);
         }
 
         //draw the structure on the canvas
@@ -672,6 +763,15 @@ $(function () {
             grid[row][col].dead = false;
             grid[row][col].variation = "infected";
             grid[row][col].fillStyle = CELL_INFECTED_COLOR;
+        }
+    }
+
+    function drawMine(grid, row, col) {
+        if (validPosition(row, col)) {
+            grid[row][col].dead = true;
+            grid[row][col].variation = "mine";
+            grid[row][col].fillStyle = CELL_MINE_COLOR;
+            grid[row][col].ticker = EXPLOSION_DELAY;
         }
     }
 
