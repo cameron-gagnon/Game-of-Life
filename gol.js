@@ -13,6 +13,7 @@ $(function () {
         CELL_MINE2_COLOR = "#585858",
         CELL_EXPLOSION_COLOR = "#ff9900",
         CELL_EXPL_HOT_COLOR = "#f2f5a9",
+        CELL_PACKMAN_COLOR = "#ffee00",
         EXPLOSION_RANGE = 20,
         EXPLOSION_DELAY = 10,
         NUM_COLS = 72,
@@ -43,6 +44,7 @@ $(function () {
         this.ticker = 0;
     }
     
+
 
     // Requires: Nothing
     // Modifies: Nothing
@@ -296,6 +298,8 @@ $(function () {
                 var num = grid[i][j].liveNeighbors;
                 var inf = grid[i][j].infectedNeighbors;
                 var mine = grid[i][j].variation === "mine";
+                var packman = grid[i][j].variation === "packman" ||
+                            grid[i][j].variation === "packmanCore";
 
                 // check if cell is alive
                 if (grid[i][j].variation === "explosion") {
@@ -313,7 +317,7 @@ $(function () {
                     }
                 }
 
-                if (!(mine)) {
+                if (!(mine) && !(packman)) {
                     if (!(grid[i][j].dead) && ((num != 2) && (num != 3))) {
                         grid[i][j].dead = true;
                         grid[i][j].fillStyle = CELL_DEAD_COLOR;
@@ -415,6 +419,30 @@ $(function () {
                         updateLiveNeighbors(grid);
                     }
                 }
+
+                if (grid[i][j].variation === "packmanCore") {
+
+                    var isOpen = false;
+                    if (grid[i][j].ticker % 6 <= 2) {
+                        isOpen = true;
+                    }
+                    drawPackman(grid, i, grid[i][j].ticker, isOpen);
+                    grid[i][j].ticker += 1; 
+                    if (grid[i][j].ticker === NUM_COLS + 1) {
+                        grid[i][j].variation = "normal";
+                        grid[i][j].ticker = 0;
+                    }
+
+                    if (!(grid[i][j].dead) && ((num != 2) && (num != 3))) {
+                        grid[i][j].dead = true;
+                        grid[i][j].fillStyle = CELL_DEAD_COLOR;
+                    }
+                    if (grid[i][j].dead && num === 3) {
+                        grid[i][j].dead = false;
+                        grid[i][j].fillStyle = CELL_ALIVE_COLOR;
+                    }
+                }
+
                 // show each cell update on HTML canvus
                 new_canvas.fillStyle = grid[i][j].fillStyle;
                 new_canvas.fillRect(grid[i][j].xPosition, grid[i][j].yPosition, 
@@ -476,7 +504,8 @@ $(function () {
         //check what is the type of the pattern an then call corresponding function
 		if (patternName === "Block" || patternName === "Beehive" ||
 			patternName === "Loaf" || patternName === "Boat" || 
-            patternName === "InfectCore" || patternName === "Mine") {
+            patternName === "InfectCore" || patternName === "Mine" ||
+            patternName === "Packman") {
 			drawStillLife(patternName, grid, row, col);
 		}
 		if (patternName === "Blinker" ||patternName === "Toad" ||
@@ -560,6 +589,13 @@ $(function () {
 
         if (patternName === "Mine") {
             drawMine(grid, row, col);
+        }
+
+        if (patternName === "Packman") {
+            if (validPosition(row + 13, 0)) {
+                grid[row][0].variation = "packmanCore";
+                grid[row][0].ticker = 1;
+            }
         }
 
         //draw the structure on the canvas
@@ -773,6 +809,102 @@ $(function () {
             grid[row][col].fillStyle = CELL_MINE_COLOR;
             grid[row][col].ticker = EXPLOSION_DELAY;
         }
+    }
+
+    function drawPackman(grid, row, col, isOpen) {
+        if (isOpen) {
+            var pack = [[0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0],
+                        [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+                        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+                        [1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+                        [1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+                        [1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+                        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+                        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                        [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+                        [0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0]];
+            var size_row = 13;
+            var size_col = 13;
+            for (var i = 0; i < size_row; i += 1) {
+                for (var j = 0; j < size_col; j += 1) {
+                    if (pack[i][j] === 1) {
+                        var rowp = row + i;
+                        var colp = col + j;
+                        if (validPosition(rowp, colp)) {
+                            grid[rowp][colp].dead = true;
+                            grid[rowp][colp].variation = "packman";
+                            grid[rowp][colp].fillStyle = CELL_PACKMAN_COLOR;
+                        }
+                    }
+                    if ((pack[i][j] === 0) && 
+                        ((pack[i][j + 1] === 1 && j < 5) || (j >= 5)) || 
+                        (pack[i][j] === 1 && j === 0)) {
+                        var rowcl = row + i;
+                        var colcl = col + j;
+                        if (pack[i][j] === 1) {
+                            colcl -= 1;
+                        }
+                        if (validPosition(rowcl, colcl)) {
+                            if (grid[rowcl][colcl].variation === "packman") {
+                                grid[rowcl][colcl].dead = true;
+                                grid[rowcl][colcl].fillStyle = CELL_DEAD_COLOR;
+                                grid[rowcl][colcl].variation = "normal";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        else {
+            var pack = [[0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0],
+                        [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+                        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+                        [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+                        [0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0]];
+            var size_row = 13;
+            var size_col = 13;
+            for (var i = 0; i < size_row; i += 1) {
+                for (var j = 0; j < size_col; j += 1) {
+                    if (pack[i][j] === 1) {
+                        var rowp = row + i;
+                        var colp = col + j;
+                        if (validPosition(rowp, colp)) {
+                            grid[rowp][colp].dead = true;
+                            grid[rowp][colp].variation = "packman";
+                            grid[rowp][colp].fillStyle = CELL_PACKMAN_COLOR;
+                        }
+                    }
+                    if ((pack[i][j] === 0) && 
+                        ((pack[i][j + 1] === 1 && j < 5) || (j >= 5)) || 
+                        (pack[i][j] === 1 && j === 0)) {
+                        var rowcl = row + i;
+                        var colcl = col + j;
+                        if (pack[i][j] === 1) {
+                            colcl -= 1;
+                        }
+                        if (validPosition(rowcl, colcl)) {
+                            if (grid[rowcl][colcl].variation === "packman") {
+                                grid[rowcl][colcl].dead = true;
+                                grid[rowcl][colcl].fillStyle = CELL_DEAD_COLOR;
+                                grid[rowcl][colcl].variation = "normal";
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        staticUpdateCells(grid);
     }
 
     /*
