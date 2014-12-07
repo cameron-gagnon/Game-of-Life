@@ -559,7 +559,7 @@ $(function () {
         }
 
         if (patternName === "Mine") {
-            drawMine(grid, 24, 36);
+            drawMine(grid, row, col);
         }
 
         //draw the structure on the canvas
