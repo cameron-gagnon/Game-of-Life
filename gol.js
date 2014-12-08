@@ -109,12 +109,19 @@ $(function () {
     //          updates gameGrid to reflect that same state) at a random location on 
     //          the canvas.  In the event TEST_DRAW_PATTERN is
     //          true, it draws the pattern at row index 6 and col index 6
-    $("#still-life-btn, #oscillator-btn, #spaceship-btn").click(function () {
+    $("#still-life-btn, #oscillator-btn, #spaceship-btn, #extras-btn, #gen-int-btn").click(function () {
         var selector = $(this).attr("id");
         selector = "#" + selector.replace("btn", "select");
         var pattern = $(selector).val(),
             newRow = Math.floor(Math.random() * 191829) % NUM_ROWS,
             newCol = Math.floor(Math.random() * 8103849204) % NUM_COLS;
+        if (pattern === "Slow"){
+            GENERATION_INTERVAL = .5;
+        } else if (pattern === "Med"){
+            GENERATION_INTERVAL = .2;
+        } else if (pattern === "Fast"){
+            GENERATION_INTERVAL = .1;
+        }
         if (TEST_DRAW_PATTERN) {
             newRow = 6;
             newCol = 6;
@@ -509,9 +516,7 @@ $(function () {
     function drawPattern(patternName, grid, row, col) {
         //check what is the type of the pattern an then call corresponding function
 		if (patternName === "Block" || patternName === "Beehive" ||
-			patternName === "Loaf" || patternName === "Boat" || 
-            patternName === "InfectCore" || patternName === "Mine" ||
-            patternName === "Pacman") {
+			patternName === "Loaf" || patternName === "Boat") {
 			drawStillLife(patternName, grid, row, col);
 		}
 		if (patternName === "Blinker" ||patternName === "Toad" ||
@@ -521,6 +526,10 @@ $(function () {
      	if (patternName === "Glider" || patternName === "LWSS") {
      		drawSpaceship(patternName, grid, row, col);
      	}
+        if (patternName === "InfectCore" || patternName === "Mine" ||
+            patternName === "Pacman"){
+            drawExtra(patternName, grid, row, col);
+        }
     }
 
 
@@ -589,6 +598,27 @@ $(function () {
 			}
 		}
 
+        //draw the structure on the canvas
+        staticUpdateCells(grid);
+    }
+
+    /*
+     * Requires: 0 <= row && row < NUM_ROWS, 0 <= col && col < NUM_COLS,
+     *           grid is a 2d array of Cell objects,
+     *           patternName is one of the following:
+     *              "InfectCore"
+     *              "Mine"
+     *              "Pacman"
+     * Modifies: grid, HTML canvas
+     * Effects: Draws patternName to the HTML canvas.  row and col represent the
+     *          top left corner of the pattern that is to be drawn. This function
+     *          should draw as much of the pattern as possible without going outside
+     *          the boundaries of the canvas.  In other words, if row == 39 and
+     *          col == 69, then the only square that would be colored is the bottom
+     *          right most cell on the canvas (if that square is supposed to be
+     *          colored). 
+     */
+    function drawExtra(patternName, grid, row, col){
         if (patternName === "InfectCore") {
             drawInfectedBlock(grid, row, col);
         }
@@ -603,8 +633,6 @@ $(function () {
                 grid[row][0].ticker = 1;
             }
         }
-
-        //draw the structure on the canvas
         staticUpdateCells(grid);
     }
 
@@ -958,7 +986,7 @@ $(function () {
     // Effects: The onClick listener for the various speeds of the generation intervals.
     //          When selected it will update GENERATION_INTERVAL with the respective
     //          speed
-    $("#gen-int-btn").click(function () {
+   /* $("#gen-int-btn").click(function () {
         var selector = $(this).attr("id");
         selector = "#" + selector.replace("btn", "select");
         var pattern = $(selector).val();
@@ -969,7 +997,7 @@ $(function () {
         } else if (pattern === "Fast"){
             GENERATION_INTERVAL = .1;
         }
-    });
+    });*/
 
     // Requires: Nothing
     // Modifies: grid, HTML canvas
