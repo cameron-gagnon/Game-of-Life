@@ -628,9 +628,11 @@ $(function () {
         }
 
         if (patternName === "Pacman") {
-            if (validPosition(row + 13, 0)) {
-                grid[row][0].variation = "pacmanCore";
-                grid[row][0].ticker = 1;
+            randRow = Math.floor(Math.random() * 191879) % (NUM_ROWS - 12)
+            //check position just to be sure
+            if (validPosition(randRow, 0)) {
+                grid[randRow][0].variation = "pacmanCore";
+                grid[randRow][0].ticker = 1;
             }
         }
         staticUpdateCells(grid);
