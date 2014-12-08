@@ -30,6 +30,7 @@
 	height: 769px;
 	width: 1025px;
 	z-index: -1;
+	min-width: 780px;
 }
 
 h2 {
@@ -49,4 +50,10 @@ button {
 
 .row{
 	padding-top: 10px;
+}
+#start-game{
+	color: #00CF00;
+	font-size: 28px;
+	width: 75px;
+	height: 50px;
 }
