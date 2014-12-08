@@ -18,6 +18,12 @@ $(function () {
         EXPLOSION_DELAY = 10,
         NUM_COLS = 72,
         NUM_ROWS = 48,
+        MOUSE_IS_DOWN = false,
+        LAST_X = 0;
+        LAST_Y = 0;
+        CANVASGRID = document.getElementById("grid"),
+        CANVASOSL = CANVASGRID.offsetLeft,
+        CANVASOST = CANVASGRID.offsetTop,
         gameGrid = new Array(NUM_ROWS);
 
 
@@ -993,10 +999,39 @@ $(function () {
     *           function.
     */
     function initCanvas(){
-        var canvasdraw = document.getElementById("grid");
-        canvasdraw.addEventListener("mousedown", getPosition, false);
-        canvasdraw.addEventListener("mousemove", getMovement, false);
-        canvasdraw.addEventListener("mouseup", onMouseUp, false);
+        CANVASGRID.addEventListener("mousedown", canvasMouseDown, false);
+        CANVASGRID.addEventListener("mousemove", canvasMouseMove, false);
+        CANVASGRID.addEventListener("mouseup", canvasMouseUp, false);
+    }
+
+
+    /*
+    * Requires: mouse to be over canvas
+    * Modifies: nothing
+    * Effects: returns x and y coordinates of mouse position over canvas
+    */
+
+    function mousePos(event){
+        //sets mouse coords in relation to the html page
+
+        if (event.pageX || event.pageY){
+            x = event.pageX;
+            y = event.pageY;
+        } else if (event.clientX || event.clientY)  { //supports firefox browser
+          x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
+          y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
+        }
+
+        //subtracts horizonal and vertical offset of canvas element
+        x -= CANVASOSL;
+        y -= CANVASOST;
+
+        //rounds coordinate position down and into form usable by the
+        //html canvas
+        x = Math.floor(x / 10);
+        y = Math.floor(y / 10);
+
+        return [x, y];
     }
 
     /*
@@ -1007,35 +1042,20 @@ $(function () {
     *           then draws the alive color to that cell block.
     *
     */
-    function userMove(event){
-        var x = new Number();
-        var y = new Number();
-
-        var canvas = document.getElementById("grid");
-        //sets mouse coords in relation to the html page
-        x = event.pageX;
-        y = event.pageY;
-
-        //subtracts horizonal and vertical offset of canvas element
-        x -= canvas.offsetLeft;
-        y -= canvas.offsetTop;
-        //rounds coordinate position down and into form usable by the
-        //html canvas
-        x = Math.floor(x / 10);
-        y = Math.floor(y / 10);
-
+    function userMove(event, x, y){
         //if cell is already alive where user clicks
         //it makes it a new cell again
-        if (gameGrid[y][x].fillStyle === CELL_ALIVE_COLOR){
-            gameGrid[y][x].fillStyle = "black";
-            gameGrid[y][x].dead = "false";
-            staticUpdateCells(gameGrid);
-            drawGridLines();
-
-        } else {
-            drawPoint(gameGrid, y, x);
-            staticUpdateCells(gameGrid);
-            drawGridLines();
+        if (validPosition(y, x)){
+            if (gameGrid[y][x].fillStyle === CELL_ALIVE_COLOR){
+                gameGrid[y][x].fillStyle = "black";
+                gameGrid[y][x].dead = "false";
+                staticUpdateCells(gameGrid);
+                drawGridLines();
+            } else {
+                drawPoint(gameGrid, y, x);
+                staticUpdateCells(gameGrid);
+                drawGridLines();
+            }
         }
     }
 
@@ -1043,27 +1063,33 @@ $(function () {
     // Modifies: mouseIsDown
     // Effects:  Modifies mouseIsDown so mouseMove will begin
     //           executing while mouse moves.           
-    function getPosition(event) {
-        mouseIsDown = true;
-        userMove(event);
+    function canvasMouseDown(event) {
+        MOUSE_IS_DOWN = true;
+        var pos = mousePos(event);
+        LAST_X = pos[0];
+        LAST_y = pos[1];
+        userMove(event, pos[0], pos[1]);
     }
 
     // Requires: Nothing
     // Modifies: Nothing
-    // Effects:  When mouse is pressed, it will draw to the
+    // Effects:  When mouse is pressed and moving, it will draw to the
     //           canvas.
-    function getMovement(event){
-        if (mouseIsDown){
-            userMove(event);
+    function canvasMouseMove(event){
+        var pos = mousePos(event);
+        if (MOUSE_IS_DOWN && ((LAST_X !== pos[0]) || (LAST_Y !== pos[1]))){
+            userMove(event, pos[0], pos[1]);
+            LAST_X = pos[0];
+            LAST_Y = pos[1];
         }
     }
 
     // Requires: Nothing
     // Modifies: mouseIsDown
-    // Effects:  Modifies mouseIsDown so mouseMove no longer
+    // Effects:  Modifies mouseIsDown so canvasMouseMove no longer
     //           executes.
-    function onMouseUp(event){
-        mouseIsDown = false;
+    function canvasMouseUp(event){
+        MOUSE_IS_DOWN = false;
     }
 
 
