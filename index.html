@@ -31,52 +31,97 @@
 	
     <body>
     <img id="img"  src="a-life.gif" alt="Game of Life" class="img-responsive">
-        <div class="container-fluid">
+        <div class="container">
             <h2 >EECS 183: Conway's Game of Life</h2>
-            <div id="colorswap" class="text-center"></div>
+            <div id="gridholder" class="row">
                 <canvas id="grid" height="480px" width="720px"></canvas>
-            
-            <div id="button-wrapper">
-                <button id="still-life-btn">Draw Still life</button>
-                <form>
-                    <select id="still-life-select">
-                        <option value="Block" selected>Block</option>
-                        <option value="Beehive" >Beehive</option>
-                        <option value="Loaf" >Loaf</option>
-                        <option value="Boat" >Boat</option>
-                        <option value="InfectCore" >Infected</option>
-                        <option value="Mine" >Mine</option>
-                        <option value="Pacman" >Pacman</option>
-                    </select>
-                </form>
-                <button id="oscillator-btn">Draw Oscillator</button>
-                <form>
-                    <select id="oscillator-select">
-                        <option value="Blinker" selected>Blinker</option>
-                        <option value="Toad" >Toad</option>
-                        <option value="Beacon" >Beacon</option>
-                        <option value="Pulsar" >Pulsar</option>
-                    </select>
-                </form>
-                <button id="spaceship-btn">Draw Spaceship</button>
-                <form>
-                    <select id="spaceship-select">
-                        <option value="Glider" selected>Glider</option>
-                        <option value="LWSS" >LWSS</option>
-                    </select>
-                </form>
-                <button id="gen-int-btn">Set Generation Speed</button>
-                <form>
-                    <select id="gen-int-select">
-                        <option value="Fast">Fast</option>
-                        <option value="Med">Med</option>
-                        <option value="Slow">Slow</option>
-                    </select>
-                </form>
-                <button id="start-game">Start</button>
-                <button id="stop-game">Stop</button>
-                <button id="clear-canvas">Clear</button>
-                <button id="next-gen">Next Gen</button>
+                
+                <div id="button-wrapper">
+                    <div class="row">
+                        <div class="col-lg-1">
+                            <button id="still-life-btn">Draw Still life</button>
+                        </div>
+                        <div class="col-md-1">
+                            <form>
+                                <select id="still-life-select">
+                                    <option value="Block" selected>Block</option>
+                                    <option value="Beehive" >Beehive</option>
+                                    <option value="Loaf" >Loaf</option>
+                                    <option value="Boat" >Boat</option>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-1">
+                            <button id="oscillator-btn">Draw Oscillator</button>
+                        </div>
+                        
+                        <div class="col-md-1">
+                            <form>
+                                <select id="oscillator-select">
+                                    <option value="Blinker" selected>Blinker</option>
+                                    <option value="Toad" >Toad</option>
+                                    <option value="Beacon" >Beacon</option>
+                                    <option value="Pulsar" >Pulsar</option>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-1">
+                            <button id="spaceship-btn">Draw Spaceship</button>
+                        </div>
+                        <div class="col-md-1">
+                            <form>
+                                <select id="spaceship-select">
+                                    <option value="Glider" selected>Glider</option>
+                                    <option value="LWSS" >LWSS</option>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-1">
+                            <button id="extras">Extras</button>
+                        </div>
+                        <div class="col-md-1">
+                            <select>
+                                    <option value="InfectCore" >Infected</option>
+                                    <option value="Mine" >Mine</option>
+                                    <option value="Pacman" >Pacman</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-1">
+                            <button id="gen-int-btn">Set Generation Speed</button>
+                        </div>
+                        <div class="col-md-1">
+                            <form>
+                                <select id="gen-int-select">
+                                    <option value="Fast">Fast</option>
+                                    <option value="Med">Med</option>
+                                    <option value="Slow">Slow</option>
+                                </select>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <button id="clear-canvas">Clear</button>
+                            <button id="next-gen">Next Gen</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <button id="start-game">Start</button>
+                            <button id="stop-game">Stop</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 	</body>
