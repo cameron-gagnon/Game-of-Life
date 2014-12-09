@@ -11,6 +11,7 @@
         <link href='http://fonts.googleapis.com/css?family=Asap' rel='stylesheet' type='text/css'>
 		
 
+
         <!-- jQuery Library -->
         <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
 
@@ -18,6 +19,9 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">	
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap-theme.min.css">
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+
+        <!-- FontAwesome Library -->
+        <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
         <!-- Project JavaScript and Stylesheet Files -->
 		<script type="text/javascript" src="gol.js"></script>
@@ -32,10 +36,23 @@
     <body>
     <img id="img"  src="a-life.gif" alt="Game of Life" class="img-responsive">
         <div class="container">
-            <h2 >EECS 183: Conway's Game of Life</h2>
+            <h2>EECS 183: Conway's Game of Life</h2>
             <div id="gridholder" class="row">
-                <canvas id="grid" height="480px" width="720px"></canvas>
-                
+
+                <canvas id="grid" height="480px" width="720px">Your browser does not support the HTML5 canvas tag.</canvas>
+
+                <div class="row pull-right" id="theme-wrapper ">
+                    <div class="col-lg-2">
+                        <button id="moveStyle">
+                            <i class="fa fa-tree"></i> Let it Snow!
+                            <i class="fa fa-tree"></i>
+                        </button>
+                    </div>
+                </div>
+
+
+
+
                 <div id="button-wrapper">
                     <div class="row">
                         <div class="col-lg-1">
@@ -74,7 +91,7 @@
                             <button id="spaceship-btn">Draw Spaceship</button>
                         </div>
                         <div class="col-md-1">
-                            <form>
+                            <form style="width: 65px">
                                 <select id="spaceship-select">
                                     <option value="Glider" selected>Glider</option>
                                     <option value="LWSS" >LWSS</option>
@@ -85,14 +102,16 @@
 
                     <div class="row">
                         <div class="col-lg-1">
-                            <button id="extras-btn">Draw Extra</button>
+                            <button  id="extras-btn">Draw Extra</button>
                         </div>
                         <div class="col-md-1">
-                            <select id="extras-select">
-                                    <option value="InfectCore" >Infected</option>
-                                    <option value="Mine" >Mine</option>
-                                    <option value="Pacman" >Pacman</option>
-                            </select>
+                            <form>
+                                <select id="extras-select">
+                                        <option value="InfectCore">Infected</option>
+                                        <option value="Mine" >Mine</option>
+                                        <option value="Pacman" >Pacman</option>
+                                </select>
+                            </form>
                         </div>
                     </div>
                     <div class="row">
@@ -100,7 +119,7 @@
                             <button id="gen-int-btn">Set Generation Speed</button>
                         </div>
                         <div class="col-md-1">
-                            <form>
+                            <form style="width: 55px">
                                 <select id="gen-int-select">
                                     <option value="Fast">Fast</option>
                                     <option value="Med">Med</option>
@@ -110,15 +129,19 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-2">
+                        <div class="col-lg-1">
                             <button id="clear-canvas">Clear</button>
+                        </div>
+                        <div class="col-md-1">
                             <button id="next-gen">Next Gen</button>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-2">
+                        <div class="col-lg-1">
                             <button id="start-game">Start</button>
-                            <button id="stop-game">Stop</button>
+                        </div>
+                        <div class="col-md-1">
+                            <button id="stop-game">Stop</button>                            
                         </div>
                     </div>
                 </div>
