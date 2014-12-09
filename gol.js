@@ -510,6 +510,9 @@ $(function () {
                         if (dir === 0 || dir === 3) {
                             grid[rowDir(i,dir)][colDir(j,dir)].direction += 23;
                         }
+                        else {
+                            staticUpdateCells(grid);
+                        }
                     }
                     grid[i][j].direction = 0;
                     grid[i][j].variation = "snakeTail";
