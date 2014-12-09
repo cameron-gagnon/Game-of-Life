@@ -324,6 +324,10 @@ $(function () {
                 var snake = grid[i][j].variation === "snakeHead" ||
                             grid[i][j].variation === "snakeTail";
 
+                if (grid[i][j].userClick) {
+                    grid[i][j].userClick = false;
+                }
+
                 // check if cell is alive
                 if (grid[i][j].variation === "explosion") {
                     grid[i][j].ticker -= 1;
@@ -1167,7 +1171,7 @@ $(function () {
             if ((!gameGrid[y][x].userClick) && (gameGrid[y][x].fillStyle === CELL_ALIVE_COLOR) ){
                 gameGrid[y][x].fillStyle = CELL_DEAD_COLOR;
                 gameGrid[y][x].dead = true;
-                gameGrid[y][x].userClick = true;
+                //gameGrid[y][x].userClick = true;
                 staticUpdateCells(gameGrid);
                 drawGridLines();
             } else if (gameGrid[y][x].fillStyle === CELL_ALIVE_COLOR){
@@ -1176,6 +1180,12 @@ $(function () {
                 gameGrid[y][x].userclick = true;
                 staticUpdateCells(gameGrid);
                 drawGridLines(gameGrid);
+            } else if (!gameGrid[y][x].userClick && gameGrid[y][x].fillStyle === CELL_DEAD_COLOR) {
+                drawPoint(gameGrid, y, x);    
+                gameGrid[y][x].dead = false;            
+                //gameGrid[y][x].userClick = true;
+                staticUpdateCells(gameGrid);
+                drawGridLines();
             } else {
                 drawPoint(gameGrid, y, x);    
                 gameGrid[y][x].dead = false;            
