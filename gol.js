@@ -14,6 +14,7 @@ $(function () {
         CELL_EXPLOSION_COLOR = "#ff9900",
         CELL_EXPL_HOT_COLOR = "#f2f5a9",
         CELL_PACMAN_COLOR = "#ffee00",
+        CELL_SNAKE_COLOR = "#ffffcc"
         EXPLOSION_RANGE = 20,
         EXPLOSION_DELAY = 10,
         NUM_COLS = 72,
@@ -48,6 +49,8 @@ $(function () {
         this.variation = "normal";
 
         this.ticker = 0;
+
+        this.direction = 0;
     }
     
 
@@ -313,6 +316,8 @@ $(function () {
                 var mine = grid[i][j].variation === "mine";
                 var pacman = grid[i][j].variation === "pacman" ||
                             grid[i][j].variation === "pacmanCore";
+                var snake = grid[i][j].variation === "snakeHead" ||
+                            grid[i][j].variation === "snakeTail";
 
                 // check if cell is alive
                 if (grid[i][j].variation === "explosion") {
@@ -330,7 +335,7 @@ $(function () {
                     }
                 }
 
-                if (!(mine) && !(pacman)) {
+                if (!(mine) && !(pacman) && !snake) {
                     if (!(grid[i][j].dead) && ((num != 2) && (num != 3))) {
                         grid[i][j].dead = true;
                         grid[i][j].fillStyle = CELL_DEAD_COLOR;
@@ -344,7 +349,7 @@ $(function () {
                             grid[i][j].fillStyle = CELL_ALIVE_COLOR;
                         }
                         if (inf === 1) {
-                            if (rand <= 32) {
+                            if (rand <= 34) {
                                 grid[i][j].variation = "infected";
                                 grid[i][j].fillStyle = CELL_INFECTED_COLOR;
                             }
@@ -353,7 +358,7 @@ $(function () {
                             }
                         }
                         if (inf === 2) {
-                            if (rand <= 65) {
+                            if (rand <= 67) {
                                 grid[i][j].variation = "infected";
                                 grid[i][j].fillStyle = CELL_INFECTED_COLOR;
                             }
@@ -362,7 +367,7 @@ $(function () {
                             }
                         }
                         if (inf === 3) {
-                            if (rand <= 98) {
+                            if (rand <= 96) {
                                 grid[i][j].variation = "infected";
                                 grid[i][j].fillStyle = CELL_INFECTED_COLOR;
                             }
@@ -456,11 +461,69 @@ $(function () {
                     }
                 }
 
+                if (grid[i][j].variation === "snakeTail") {
+                    if (grid[i][j].ticker > 0) {
+                        grid[i][j].ticker -= 1;
+                    }
+                    else {
+                        grid[i][j].dead = true;
+                        grid[i][j].fillStyle = CELL_DEAD_COLOR;
+                        grid[i][j].variation = "normal";
+                    }
+                }
+
+                if (grid[i][j].variation === "snakeHead" &&
+                    grid[i][j].direction < 4) {
+                    var dir = grid[i][j].direction;
+                    var turnChance = 0.05;
+                    if ((dir === 0 && j > 9.0*NUM_COLS/10) ||
+                        (dir === 1 && i < 1.5*NUM_ROWS/10) ||
+                        (dir === 2 && j < 1.0*NUM_COLS/10) ||
+                        (dir === 3 && i > 8.5*NUM_ROWS/10)) {
+                        turnChance = 0.15;
+                    }
+                    if (Math.random() < turnChance) {
+                        var changeDir = Math.floor(Math.random() * 19185) % 2;
+                        changeDir = changeDir * 2 - 1;
+                        dir += changeDir;
+                        if (dir === 4) {
+                            dir = 0;
+                        }
+                        if (dir === -1) {
+                            dir = 3;
+                        }
+                        grid[i][j].direction = dir;
+                    }
+
+                    if (validPosition(rowDir(i,dir),colDir(j,dir))) {
+                        grid[rowDir(i,dir)][colDir(j,dir)].direction = dir;
+                        grid[rowDir(i,dir)][colDir(j,dir)].variation = 
+                                "snakeHead";
+                        grid[rowDir(i,dir)][colDir(j,dir)].ticker = 
+                                grid[i][j].ticker;
+                        grid[rowDir(i,dir)][colDir(j,dir)].fillStyle = 
+                                grid[i][j].fillStyle;
+                        if (!grid[rowDir(i,dir)][colDir(j,dir)].dead) {
+                            grid[rowDir(i,dir)][colDir(j,dir)].ticker += 1;
+                        }
+                        grid[rowDir(i,dir)][colDir(j,dir)].dead = true;
+                        if (dir === 0 || dir === 3) {
+                            grid[rowDir(i,dir)][colDir(j,dir)].direction += 23;
+                        }
+                    }
+                    grid[i][j].direction = 0;
+                    grid[i][j].variation = "snakeTail";
+                }
+
+                if (grid[i][j].variation === "snakeHead" &&
+                    grid[i][j].direction > 4) {
+                    grid[i][j].direction -= 23;
+                }
+
                 // show each cell update on HTML canvus
                 new_canvas.fillStyle = grid[i][j].fillStyle;
                 new_canvas.fillRect(grid[i][j].xPosition, grid[i][j].yPosition, 
                                     CELL_SIZE, CELL_SIZE);
-
 
             }
         }
@@ -527,7 +590,7 @@ $(function () {
      		drawSpaceship(patternName, grid, row, col);
      	}
         if (patternName === "InfectCore" || patternName === "Mine" ||
-            patternName === "Pacman"){
+            patternName === "Pacman" || patternName === "Snake"){
             drawExtra(patternName, grid, row, col);
         }
     }
@@ -628,12 +691,15 @@ $(function () {
         }
 
         if (patternName === "Pacman") {
-            randRow = Math.floor(Math.random() * 191879) % (NUM_ROWS - 12)
+            var randRow = Math.floor(Math.random() * 191879) % (NUM_ROWS - 12)
             //check position just to be sure
             if (validPosition(randRow, 0)) {
                 grid[randRow][0].variation = "pacmanCore";
                 grid[randRow][0].ticker = 1;
             }
+        }
+        if (patternName === "Snake") {
+            drawSnake(grid, row, col);
         }
         staticUpdateCells(grid);
     }
@@ -941,6 +1007,47 @@ $(function () {
             }
         }
         staticUpdateCells(grid);
+    }
+
+    function drawSnake(grid, row, col) {
+        if (validPosition(row, col)) {
+            grid[row][col].dead = true;
+            grid[row][col].variation = "snakeHead";
+            grid[row][col].fillStyle = CELL_SNAKE_COLOR;
+            grid[row][col].ticker = 2;
+            var randDir = Math.floor(Math.random() * 191829) % 4;
+            grid[row][col].direction = randDir;
+        }
+    }
+
+    function rowDir(row, dir) {
+        if (dir === 0) {
+            return row;
+        } 
+        else if (dir === 1) {
+            return row - 1;
+        }
+        else if (dir === 2) {
+            return row;
+        }
+        else {
+            return row + 1;
+        }
+    }
+
+    function colDir(col, dir) {
+        if (dir === 0) {
+            return col + 1;
+        } 
+        else if (dir === 1) {
+            return col;
+        }
+        else if (dir === 2) {
+            return col - 1;
+        }
+        else {
+            return col;
+        }
     }
 
     /*
