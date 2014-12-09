@@ -4,23 +4,37 @@
     background-color: black;
     font-family: Asap;
 }
-
+@media screen and (max-width: 992px){
+	#button-wrapper {
+		position: relative;
+		top: 0px;
+	}
+	.row {
+		display: inline-block;
+	}
+	.pull-right {
+	}
+}
 #gridholder canvas{
     display: block;
     margin-left: auto;
     margin-right: auto;
     margin-top: 3%;
     border: 1px solid #aaa;
-    background-color: white;
     position: relative;
     z-index: 20;
     background-color: black;
 }
+@media screen and (min-width: 992px){
+	#button-wrapper {
+		position: relative;
+		top: -482px;
+	} 
 
-#button-wrapper {
-	position: relative;
-	top: -482px;
-} 
+	.row {
+		padding-top: 10px;
+	}
+}
 
 #img {
 	position: absolute;
@@ -29,7 +43,7 @@
 	margin: 0 auto;
 	height: 769px;
 	width: 1025px;
-	z-index: -1;
+	z-index: -3;
 	min-width: 780px;
 }
 
@@ -46,14 +60,31 @@ button {
 	background-color: black;
 	color: white;
 	border-radius: 15px;
+	width: 80px;
 }
 
-.row{
-	padding-top: 10px;
-}
-#start-game{
+#start-game, #stop-game {
 	color: #00CF00;
 	font-size: 28px;
-	width: 75px;
 	height: 50px;
+}
+
+#moveStyle {
+	position: relative;
+	top: -482px;
+	z-index: 21;
+	width: 150px;
+	right: 25px;
+	font-size: 18px;
+	background-color: #33CC33;
+	color: #FF0000;
+	border-color: #FF0000;
+	border-width: 3px;
+}
+
+.letItSnow {
+	background-color: #33CC33;
+	color: #FF0000;
+	font-size: 14px;
+	font-weight: bold;
 }
