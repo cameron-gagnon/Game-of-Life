@@ -22,12 +22,13 @@ $(function () {
         LAST_X = 0;
         LAST_Y = 0;
         CANVASGRID = document.getElementById("grid"),
-        CANVASOSL = CANVASGRID.offsetLeft,
-        CANVASOST = CANVASGRID.offsetTop,
+        LET_IT_SNOW = "white",
+        CELL_NORMAL_COLOR = "black",
+        GRID_LINES = "#2A2A2A",
         gameGrid = new Array(NUM_ROWS);
 
 
-    // The Cusom object used to represent a cell on the HTML canvas grid
+    // The Custom object used to represent a cell on the HTML canvas grid
     // Remember, datamembers of a JS Object are all public
     function Cell() {
         // (xPosition,yPosition) represents the top left pixel of this cell on the canvas 
@@ -35,7 +36,7 @@ $(function () {
         this.yPosition = 0;
         
         // represents the fillStyle that should be used when fillRect is called
-        this.fillStyle = "black";
+        this.fillStyle = CELL_NORMAL_COLOR;
 
         // represents whether a cell is dead or alive
         this.dead = true;
@@ -48,6 +49,8 @@ $(function () {
         this.variation = "normal";
 
         this.ticker = 0;
+
+        this.userClick = false;
     }
     
 
@@ -84,7 +87,7 @@ $(function () {
         }
         
         // draw grid lines
-        grid.strokeStyle = "#2A2A2A";
+        grid.strokeStyle = GRID_LINES;
         grid.stroke();
     }
 
@@ -149,8 +152,10 @@ $(function () {
     }
     // onClick listener for the button to start the game
     $("#start-game").click(function() {
-        isRunning = true;
-        runGoL();
+        if(!isRunning){
+            isRunning = true;
+            runGoL();
+        }
     });
     // onClick listener to stop the game
     $("#stop-game").click(function() {
@@ -982,24 +987,6 @@ $(function () {
 
 
     // Requires: Nothing
-    // Modifies: GENERATION_INTERVAL value
-    // Effects: The onClick listener for the various speeds of the generation intervals.
-    //          When selected it will update GENERATION_INTERVAL with the respective
-    //          speed
-   /* $("#gen-int-btn").click(function () {
-        var selector = $(this).attr("id");
-        selector = "#" + selector.replace("btn", "select");
-        var pattern = $(selector).val();
-        if (pattern === "Slow"){
-            GENERATION_INTERVAL = .5;
-        } else if (pattern === "Med"){
-            GENERATION_INTERVAL = .2;
-        } else if (pattern === "Fast"){
-            GENERATION_INTERVAL = .1;
-        }
-    });*/
-
-    // Requires: Nothing
     // Modifies: grid, HTML canvas
     // Effects: The onClick listener to clear the canvas to all new Cells.
     $("#clear-canvas").click(function () {
@@ -1030,17 +1017,12 @@ $(function () {
         CANVASGRID.addEventListener("mousedown", canvasMouseDown, false);
         CANVASGRID.addEventListener("mousemove", canvasMouseMove, false);
         CANVASGRID.addEventListener("mouseup", canvasMouseUp, false);
+
     }
-
-
-    /*
-    * Requires: mouse to be over canvas
-    * Modifies: nothing
-    * Effects: returns x and y coordinates of mouse position over canvas
-    */
 
     function mousePos(event){
         //sets mouse coords in relation to the html page
+        var x, y;
 
         if (event.pageX || event.pageY){
             x = event.pageX;
@@ -1049,18 +1031,14 @@ $(function () {
           x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
           y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
         }
+        var offset = $("#grid").offset();
 
-        //subtracts horizonal and vertical offset of canvas element
-        x -= CANVASOSL;
-        y -= CANVASOST;
-
-        //rounds coordinate position down and into form usable by the
-        //html canvas
-        x = Math.floor(x / 10);
-        y = Math.floor(y / 10);
+        x = Math.floor((x - offset.left) / 10);
+        y = Math.floor((y - offset.top) / 10);
 
         return [x, y];
     }
+    
 
     /*
     * Requires: nothing
@@ -1074,13 +1052,21 @@ $(function () {
         //if cell is already alive where user clicks
         //it makes it a new cell again
         if (validPosition(y, x)){
-            if (gameGrid[y][x].fillStyle === CELL_ALIVE_COLOR){
-                gameGrid[y][x].fillStyle = "black";
-                gameGrid[y][x].dead = "false";
+            if ((!gameGrid[y][x].userClick) && (gameGrid[y][x].fillStyle === CELL_ALIVE_COLOR) ){
+                gameGrid[y][x].fillStyle = CELL_DEAD_COLOR;
+                gameGrid[y][x].dead = true;
+                gameGrid[y][x].userClick = true;
                 staticUpdateCells(gameGrid);
                 drawGridLines();
+            } else if (gameGrid[y][x].fillStyle === CELL_ALIVE_COLOR){
+                gameGrid[y][x].fillStyle = CELL_NORMAL_COLOR;
+                gameGrid[y][x].dead = false;
+                gameGrid[y][x].userclick = true;
+                staticUpdateCells(gameGrid);
+                drawGridLines(gameGrid);
             } else {
-                drawPoint(gameGrid, y, x);
+                drawPoint(gameGrid, y, x);                
+                gameGrid[y][x].userClick = true;
                 staticUpdateCells(gameGrid);
                 drawGridLines();
             }
@@ -1120,5 +1106,35 @@ $(function () {
         MOUSE_IS_DOWN = false;
     }
 
+
+    // Requires: onclick event from moveStyle button
+    // Modifies: pretty much everything
+    // Effects: lettin' it snow yo
+    $("#moveStyle").click(function(){
+        $("button").addClass('letItSnow');
+        $("body").css({
+            "background-color": "white",
+            "background-image": "url('snowflake-background.gif')",
+            "z-index": "-1",
+        });
+        $("body").attr("")
+        $("h2").addClass('letItSnow');
+        $("h2").css("font-size", "50px");
+        $("canvas").addClass('letItSnow');
+        $("#img").attr('src', 'snowflake-background.gif');
+        $("#img").css('display', 'none');
+        $("#start-game, #stop-game").css('color', "#FF0000");
+        $("form, select, option").css({
+            "color": "#FF0000",
+            "background-color": "#33CC33"
+        });
+        CELL_ALIVE_COLOR = "#33CC33";
+        CELL_DEAD_COLOR = "#FF0000";
+        CELL_NORMAL_COLOR = LET_IT_SNOW;
+        GRID_LINES = "#B1EBFF";
+        populateGameGrid(gameGrid);
+        updateCells(gameGrid);
+        drawGridLines(gameGrid);
+    });
 
 });
