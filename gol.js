@@ -1172,12 +1172,13 @@ $(function () {
                 drawGridLines();
             } else if (gameGrid[y][x].fillStyle === CELL_ALIVE_COLOR){
                 gameGrid[y][x].fillStyle = CELL_NORMAL_COLOR;
-                gameGrid[y][x].dead = false;
+                gameGrid[y][x].dead = true;
                 gameGrid[y][x].userclick = true;
                 staticUpdateCells(gameGrid);
                 drawGridLines(gameGrid);
             } else {
-                drawPoint(gameGrid, y, x);                
+                drawPoint(gameGrid, y, x);    
+                gameGrid[y][x].dead = false;            
                 gameGrid[y][x].userClick = true;
                 staticUpdateCells(gameGrid);
                 drawGridLines();
