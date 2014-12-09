@@ -1226,14 +1226,13 @@ $(function () {
         $("button").addClass('letItSnow');
         $("body").css({
             "background-color": "white",
-            "background-image": "url('snowflake-background.gif')",
+            "background-image": "url('Images/snowflake-background.gif')",
             "z-index": "-1",
         });
         $("body").attr("")
         $("h2").addClass('letItSnow');
         $("h2").css("font-size", "50px");
         $("canvas").addClass('letItSnow');
-        $("#img").attr('src', 'snowflake-background.gif');
         $("#img").css('display', 'none');
         $("#start-game, #stop-game").css('color', "#FF0000");
         $("form, select, option").css({
