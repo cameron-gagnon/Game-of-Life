@@ -32,6 +32,8 @@ $(function () {
         audio.loop = true,
         gameGrid = new Array(NUM_ROWS);
 
+    var SNAKE_ID = 1;
+
 
     // The Custom object used to represent a cell on the HTML canvas grid
     // Remember, datamembers of a JS Object are all public
@@ -58,6 +60,8 @@ $(function () {
         this.userClick = false;
 
         this.direction = 0;
+
+        this.uniqID = 0;
     }
     
 
@@ -421,7 +425,9 @@ $(function () {
                                 var distance = Math.sqrt((i2 - i) * (i2 - i) 
                                                 + (j2 - j) * (j2 - j));
                                 if (distance <= EXPLOSION_RANGE 
-                                    && validPosition(i2, j2)) {
+                                    && validPosition(i2, j2) 
+                                    && !(grid[i2][j2].variation === "mine" &&
+                                        !(i === i2 && j === j2))) {
                                     grid[i2][j2].variation = "explosion";
                                     grid[i2][j2].dead = true;
                                     grid[i2][j2].fillStyle = CELL_EXPLOSION_COLOR;
@@ -445,6 +451,16 @@ $(function () {
                                     new_canvas.fillRect(grid[i2][j2].xPosition, 
                                         grid[i2][j2].yPosition, CELL_SIZE, CELL_SIZE);
                                 } 
+                                if (distance <= EXPLOSION_RANGE && 
+                                    grid[i2][j2].variation === "mine" &&
+                                    grid[i2][j2].ticker === EXPLOSION_DELAY) {
+                                    grid[i2][j2].ticker = 2;
+                                    if ((i2 > i) || ((i2 === i) && (j2 > j))) {
+                                        grid[i2][j2].ticker = 3;
+                                    }
+                                    grid[i2][j2].fillStyle = CELL_MINE2_COLOR;
+                                    staticUpdateCells(grid);
+                                }
                             }
                         }
                         updateLiveNeighbors(grid);
@@ -482,6 +498,7 @@ $(function () {
                         grid[i][j].dead = true;
                         grid[i][j].fillStyle = CELL_DEAD_COLOR;
                         grid[i][j].variation = "normal";
+                        grid[i][j].uniqID = 0;
                     }
                 }
 
@@ -493,7 +510,8 @@ $(function () {
                         (dir === 1 && i < 1.5*NUM_ROWS/10) ||
                         (dir === 2 && j < 1.0*NUM_COLS/10) ||
                         (dir === 3 && i > 8.5*NUM_ROWS/10)) {
-                        turnChance = 0.15;
+                        turnChance = Math.min(0.3, 0.13 + 
+                            1.0 * (grid[i][j].ticker) / 100);
                     }
                     if (Math.random() < turnChance) {
                         var changeDir = Math.floor(Math.random() * 19185) % 2;
@@ -508,7 +526,18 @@ $(function () {
                         grid[i][j].direction = dir;
                     }
 
-                    if (validPosition(rowDir(i,dir),colDir(j,dir))) {
+                    grid[i][j].direction = 0;
+                    grid[i][j].variation = "snakeTail";
+
+                    if (validPosition(rowDir(i,dir),colDir(j,dir)) && 
+                        !(grid[rowDir(i,dir)][colDir(j,dir)].variation 
+                                                        === "snakeHead" || 
+                          grid[rowDir(i,dir)][colDir(j,dir)].variation 
+                                                        === "snakeTail" || 
+                          grid[rowDir(i,dir)][colDir(j,dir)].variation 
+                                                        === "mine")) {
+                        grid[rowDir(i,dir)][colDir(j,dir)].uniqID = 
+                                grid[i][j].uniqID;
                         grid[rowDir(i,dir)][colDir(j,dir)].direction = dir;
                         grid[rowDir(i,dir)][colDir(j,dir)].variation = 
                                 "snakeHead";
@@ -527,13 +556,51 @@ $(function () {
                             staticUpdateCells(grid);
                         }
                     }
-                    grid[i][j].direction = 0;
-                    grid[i][j].variation = "snakeTail";
+                    else {
+                        for (var i2 = 0; i2 < NUM_ROWS; i2 += 1) {
+                            for (var j2 = 0; j2 < NUM_COLS; j2 += 1) {
+                                if (grid[i2][j2].variation === "snakeTail" &&
+                                    grid[i2][j2].uniqID === grid[i][j].uniqID) {
+                                    grid[i2][j2].variation = "snakeDeath";
+                                    grid[i2][j2].ticker = 6;
+                                    if ((i2 > i) || ((i2 === i) && (j2 >= j))) {
+                                        grid[i2][j2].ticker += 1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (validPosition(rowDir(i,dir),colDir(j,dir)) && 
+                        grid[rowDir(i,dir)][colDir(j,dir)].variation === "mine") {
+                        if ((i2 > i) || ((i2 === i) && (j2 > j))) {
+                            grid[rowDir(i,dir)][colDir(j,dir)].ticker = 2;
+                        }
+                        else {
+                            grid[rowDir(i,dir)][colDir(j,dir)].ticker = 1;
+                        }
+                    }
+
                 }
 
                 if (grid[i][j].variation === "snakeHead" &&
                     grid[i][j].direction > 4) {
                     grid[i][j].direction -= 23;
+                }
+
+                if (grid[i][j].variation === "snakeDeath") {
+                    grid[i][j].ticker -= 1;
+                    if ((grid[i][j].ticker % 2) === 0) {
+                        grid[i][j].fillStyle = CELL_SNAKE_COLOR;
+                    }
+                    else {
+                        grid[i][j].fillStyle = CELL_DEAD_COLOR;
+                    }
+                    if (grid[i][j].ticker === 0) {
+                        grid[i][j].dead = true;
+                        grid[i][j].fillStyle = CELL_DEAD_COLOR;
+                        grid[i][j].variation = "normal";
+                        grid[i][j].uniqID = 0;
+                    }
                 }
 
                 // show each cell update on HTML canvus
@@ -1033,6 +1100,8 @@ $(function () {
             grid[row][col].ticker = 2;
             var randDir = Math.floor(Math.random() * 191829) % 4;
             grid[row][col].direction = randDir;
+            grid[row][col].uniqID = SNAKE_ID;
+            SNAKE_ID += 1;
         }
     }
 
