@@ -24,8 +24,12 @@ $(function () {
         LAST_Y = 0;
         CANVASGRID = document.getElementById("grid"),
         LET_IT_SNOW = "white",
+        XMAS_GREEN = "#FF1919",
+        XMAS_RED = "#009933",
         CELL_NORMAL_COLOR = "black",
         GRID_LINES = "#2A2A2A",
+        audio = new Audio('Audio/let_it_snow.mp3'),
+        audio.loop = true,
         gameGrid = new Array(NUM_ROWS);
 
 
@@ -1165,25 +1169,27 @@ $(function () {
     *
     */
     function userMove(event, x, y){
-        //if cell is already alive where user clicks
-        //it makes it a new cell again
         if (validPosition(y, x)){
+            //sets alive cells that have not been clicked to die
+            //essentially kills cells that were created by the game and not the user
             if ((!gameGrid[y][x].userClick) && (gameGrid[y][x].fillStyle === CELL_ALIVE_COLOR) ){
                 gameGrid[y][x].fillStyle = CELL_DEAD_COLOR;
                 gameGrid[y][x].dead = true;
-                //gameGrid[y][x].userClick = true;
                 staticUpdateCells(gameGrid);
                 drawGridLines();
+            //if cell is already alive where user clicks
+            //it makes it a normal, starting cell again
             } else if (gameGrid[y][x].fillStyle === CELL_ALIVE_COLOR){
                 gameGrid[y][x].fillStyle = CELL_NORMAL_COLOR;
                 gameGrid[y][x].dead = true;
                 gameGrid[y][x].userclick = true;
                 staticUpdateCells(gameGrid);
                 drawGridLines(gameGrid);
+            //if the cell is dead and has not been clicked
+            //the cell is 
             } else if (!gameGrid[y][x].userClick && gameGrid[y][x].fillStyle === CELL_DEAD_COLOR) {
-                drawPoint(gameGrid, y, x);    
-                gameGrid[y][x].dead = false;            
-                //gameGrid[y][x].userClick = true;
+                drawPoint(gameGrid, y, x);
+                gameGrid[y][x].dead = false;
                 staticUpdateCells(gameGrid);
                 drawGridLines();
             } else {
@@ -1234,25 +1240,25 @@ $(function () {
     // Modifies: pretty much everything
     // Effects: lettin' it snow yo
     $("#moveStyle").click(function(){
-        $("button").addClass('letItSnow');
+        audio.play();
+        $(this).prop('disabled', true);
+        $(".fa-pause").show();
+        $("button, h2, canvas").addClass('letItSnow');
         $("body").css({
             "background-color": "white",
             "background-image": "url('Images/snowflake-background.gif')",
             "z-index": "-1",
         });
-        $("body").attr("")
-        $("h2").addClass('letItSnow');
         $("h2").css("font-size", "50px");
-        $("canvas").addClass('letItSnow');
-        $("#img").css('display', 'none');
-        $("#start-game, #stop-game").css('color', "#FF0000");
-        $("form, select, option").css({
-            "color": "#FF0000",
-            "background-color": "#33CC33"
+        $("#img").css("display", "none");
+        $("form, select, option, #start-game, #stop-game").css({
+            "color": XMAS_RED,
+            "background-color": XMAS_GREEN
         });
+
         CELL_SNAKE_COLOR = "black";
-        CELL_ALIVE_COLOR = "#33CC33";
-        CELL_DEAD_COLOR = "#FF0000";
+        CELL_ALIVE_COLOR = XMAS_RED;
+        CELL_DEAD_COLOR = XMAS_GREEN;
         CELL_NORMAL_COLOR = LET_IT_SNOW;
         GRID_LINES = "#B1EBFF";
         populateGameGrid(gameGrid);
@@ -1260,4 +1266,21 @@ $(function () {
         drawGridLines(gameGrid);
     });
 
+
+
+    //toggles the play pause buttons when buttons are clicked
+    function togglePlay(audioObj){
+        if(!audio.paused){
+            audioObj.pause();
+            $(".fa-play, .fa-pause").toggle("swing");
+        } else {
+            audio.play();
+            $(".fa-play, .fa-pause").toggle("swing");
+        }
+    }
+    // toggles play pause function for background music
+    // when in "let it snow!" mode
+    $(".fa-play, .fa-pause").click(function(){
+        togglePlay(audio);
+    });
 });
