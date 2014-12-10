@@ -10,6 +10,8 @@
         <!--Changes the font for the title to ASAP font-family-->
         <link href='http://fonts.googleapis.com/css?family=Asap' rel='stylesheet' type='text/css'>
 		
+        <!-- icon for thumbnail on webpage -->
+        <link rel="icon" type="image/png" href="Images/a-life.gif" />
 
 
         <!-- jQuery Library -->
@@ -36,10 +38,14 @@
     <body>
     <img id="img"  src="Images/a-life.gif" alt="Game of Life" class="img-responsive">
         <div class="container">
+        <audio id="music" src="Audio/let_it_snow.mp3" type="audio/mpeg"></audio>
             <h2>EECS 183: Conway's Game of Life</h2>
+            <i class="fa fa-pause fa-2x fa-inverse pull-right"></i>
+            <i class="fa fa-play fa-2x fa-inverse pull-right"></i>
             <div id="gridholder" class="row">
 
                 <canvas id="grid" height="480px" width="720px">Your browser does not support the HTML5 canvas tag.</canvas>
+                
 
                 <div class="row pull-right" id="theme-wrapper ">
                     <div class="col-lg-2">
