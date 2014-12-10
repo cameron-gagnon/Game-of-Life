@@ -88,3 +88,16 @@ button {
 	font-size: 14px;
 	font-weight: bold;
 }
+
+.fa-play {
+	position: relative;
+	right: 30px;
+	display: none;
+	cursor: pointer;
+}
+.fa-pause {
+	position: relative;
+	right: 30px;
+	cursor: pointer;
+	display: none;
+}
