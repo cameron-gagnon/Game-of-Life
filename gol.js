@@ -22,10 +22,10 @@ $(function () {
         MOUSE_IS_DOWN = false,
         LAST_X = 0;
         LAST_Y = 0;
-        CANVASGRID = document.getElementById("grid"),
+        //CANVASGRID = document.getElementById("grid"),
         LET_IT_SNOW = "white",
-        XMAS_GREEN = "#FF1919",
-        XMAS_RED = "#009933",
+        XMAS_GREEN = "#66FF33",
+        XMAS_RED = "#FF0000",
         CELL_NORMAL_COLOR = "black",
         GRID_LINES = "#2A2A2A",
         audio = new Audio('Audio/let_it_snow.mp3'),
@@ -1101,7 +1101,7 @@ $(function () {
         drawGridLines();
         initArray();
         populateGameGrid(gameGrid);
-        initCanvas();
+        ///initCanvas();
         // Add any necessary functionality you need for the Reach portion below here
         }
 
@@ -1129,16 +1129,12 @@ $(function () {
     /*
     * Requires: A mousedown on canvas element
     * Modifies: HTML canvas
-    * Effects:  Applies mousedown listener function to the canvas, so 
-    *           when a user clicks on the canvas it triggers the getPosition
+    * Effects:  Applies mousedown, mousemove, mouseup listener function to the canvas, so 
+    *           when a user clicks on the canvas it triggers the respective
     *           function.
     */
-    function initCanvas(){
-        CANVASGRID.addEventListener("mousedown", canvasMouseDown, false);
-        CANVASGRID.addEventListener("mousemove", canvasMouseMove, false);
-        CANVASGRID.addEventListener("mouseup", canvasMouseUp, false);
+    $("#grid").mousedown(canvasMouseDown).mousemove(canvasMouseMove).mouseup(canvasMouseUp);
 
-    }
 
     function mousePos(event){
         //sets mouse coords in relation to the html page
@@ -1241,43 +1237,49 @@ $(function () {
     // Effects: lettin' it snow yo
     $("#moveStyle").click(function(){
         audio.play();
+        isRunning = false;
         $(this).prop('disabled', true);
-        $(".fa-pause").show();
+        $(".fa-pause").css("display", "inline-block");
         $("button, h2, canvas").addClass('letItSnow');
         $("body").css({
-            "background-color": "white",
+            "background-color": "black",
             "background-image": "url('Images/snowflake-background.gif')",
-            "z-index": "-1",
         });
-        $("h2").css("font-size", "50px");
+        $("h2").css({
+            "font-size": "38px", 
+            "text-height": "1.2",
+            "padding-top": "5px",
+            "padding-bottom": "-1px"
+        });
         $("#img").css("display", "none");
         $("form, select, option, #start-game, #stop-game").css({
             "color": XMAS_RED,
             "background-color": XMAS_GREEN
         });
+        $(".reset").show();
 
         CELL_SNAKE_COLOR = "black";
-        CELL_ALIVE_COLOR = XMAS_RED;
-        CELL_DEAD_COLOR = XMAS_GREEN;
+        CELL_ALIVE_COLOR = XMAS_GREEN;
+        CELL_DEAD_COLOR = XMAS_RED;
         CELL_NORMAL_COLOR = LET_IT_SNOW;
-        GRID_LINES = "#B1EBFF";
+        GRID_LINES = "#CCFFCC";
         populateGameGrid(gameGrid);
         updateCells(gameGrid);
         drawGridLines(gameGrid);
     });
 
 
-
     //toggles the play pause buttons when buttons are clicked
     function togglePlay(audioObj){
         if(!audio.paused){
             audioObj.pause();
-            $(".fa-play, .fa-pause").toggle("swing");
+            $(".fa-play, .fa-pause").toggle("swing").css("display", "inline-block");
         } else {
             audio.play();
-            $(".fa-play, .fa-pause").toggle("swing");
+            $(".fa-play, .fa-pause").toggle("swing").css("display", "inline-block");
         }
     }
+    
     // toggles play pause function for background music
     // when in "let it snow!" mode
     $(".fa-play, .fa-pause").click(function(){
