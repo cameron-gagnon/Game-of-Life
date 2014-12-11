@@ -659,22 +659,24 @@ $(function () {
      *          row and col parameters represent the top left corner of the pattern
      *          that should be drawn.  You will use getCanvas() to update the canvas
      */
-    function drawPattern(patternName, grid, row, col) {
+    function drawPattern(patternName, grid) {
         //check what is the type of the pattern an then call corresponding function
+        newRow = Math.floor(Math.random() * 191829) % NUM_ROWS,
+        newCol = Math.floor(Math.random() * 8103849204) % NUM_COLS;
 		if (patternName === "Block" || patternName === "Beehive" ||
 			patternName === "Loaf" || patternName === "Boat") {
-			drawStillLife(patternName, grid, row, col);
+			drawStillLife(patternName, grid, newRow, newCol);
 		}
 		if (patternName === "Blinker" ||patternName === "Toad" ||
      		patternName === "Beacon" || patternName === "Pulsar") {
-     		drawOscillator(patternName, grid, row, col);
+     		drawOscillator(patternName, grid, newRow, newCol);
      	}
      	if (patternName === "Glider" || patternName === "LWSS") {
-     		drawSpaceship(patternName, grid, row, col);
+     		drawSpaceship(patternName, grid, newRow, newCol);
      	}
-        if (patternName === "InfectCore" || patternName === "Mine" ||
+        if (patternName === "Infected" || patternName === "Mine" ||
             patternName === "Pacman" || patternName === "Snake"){
-            drawExtra(patternName, grid, row, col);
+            drawExtra(patternName, grid, newRow, newCol);
         }
     }
 
@@ -765,7 +767,7 @@ $(function () {
      *          colored). 
      */
     function drawExtra(patternName, grid, row, col){
-        if (patternName === "InfectCore") {
+        if (patternName === "Infected") {
             drawInfectedBlock(grid, row, col);
         }
 
@@ -1170,7 +1172,6 @@ $(function () {
         drawGridLines();
         initArray();
         populateGameGrid(gameGrid);
-        ///initCanvas();
         // Add any necessary functionality you need for the Reach portion below here
         }
 
@@ -1185,16 +1186,34 @@ $(function () {
         drawGridLines();
     });
 
-    // Requires: Nothing
-    // Modifies: grid, HTML canvas
-    // Effects: Steps through the generations one at a time using
-    //          an onscreen button.
+    //the below jquery listeners are for the buttons
+    //to control what happened, the id's are self
+    //explanatory
     $("#next-gen").click(function () {
         isRunning = false;
         updateCells(gameGrid);
         drawGridLines();
     });
 
+    $("#draw-infected").click(function(){
+        drawPattern("Infected", gameGrid);
+        drawGridLines(gameGrid);
+    });
+
+    $("#draw-mine").click(function(){
+        drawPattern("Mine", gameGrid);
+        drawGridLines(gameGrid);
+    });
+
+    $("#draw-pacman").click(function(){
+        drawPattern("Pacman", gameGrid);
+        drawGridLines(gameGrid);
+    });
+
+    $("#draw-snake").click(function(){
+        drawPattern("Snake", gameGrid);
+        drawGridLines(gameGrid);
+    });
     /*
     * Requires: A mousedown on canvas element
     * Modifies: HTML canvas
@@ -1205,6 +1224,11 @@ $(function () {
     $("#grid").mousedown(canvasMouseDown).mousemove(canvasMouseMove).mouseup(canvasMouseUp);
 
 
+    /*
+    * Generates a random x and y coordinate to be passed to 
+    *
+    *
+    */
     function mousePos(event){
         //sets mouse coords in relation to the html page
         var x, y;
