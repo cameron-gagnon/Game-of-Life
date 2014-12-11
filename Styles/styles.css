@@ -2,38 +2,20 @@
     position: relative;
     min-width: 410px;
     background-color: black;
-    font-family: Asap;
+    font-family: "Asap";
 }
-@media screen and (max-width: 992px){
-	#button-wrapper {
-		position: relative;
-		top: 0px;
-	}
-	.row {
-		display: inline-block;
-	}
-	.pull-right {
-	}
-}
-#gridholder canvas{
+
+.row canvas{
     display: block;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 3%;
     border: 1px solid #aaa;
-    position: relative;
     z-index: 20;
     background-color: black;
 }
-@media screen and (min-width: 992px){
-	#button-wrapper {
-		position: relative;
-		top: -482px;
-	} 
 
-	.row {
-		padding-top: 10px;
-	}
+.row {
+	padding-top: 10px;
 }
 
 #img {
@@ -49,14 +31,16 @@
 
 h2 {
 	color: white;
-	font-size: 50px;
+	font-size: 40px;
 	z-index: 20;
 	background-color: black;
 	border-radius: 25px;
 	text-align: center;
+	font-family: "Dotmatrix";
+	max-width: 780px;
 }
 
-button {
+form, select, button {
 	background-color: black;
 	color: white;
 	border-radius: 15px;
@@ -70,34 +54,66 @@ button {
 }
 
 #moveStyle {
-	position: relative;
-	top: -482px;
 	z-index: 21;
-	width: 150px;
-	right: 25px;
 	font-size: 18px;
-	background-color: #33CC33;
+	background-color: #66FF33;
 	color: #FF0000;
 	border-color: #FF0000;
 	border-width: 3px;
+	width: 175px;
+	display: inline-block;
 }
 
 .letItSnow {
-	background-color: #33CC33;
+	background-color: #66FF33;
 	color: #FF0000;
 	font-size: 14px;
 	font-weight: bold;
 }
 
-.fa-play {
+.fa-play, .fa-pause {
 	position: relative;
-	right: 30px;
 	display: none;
 	cursor: pointer;
+	padding-top: 10px;
+	left: 75px;
 }
-.fa-pause {
-	position: relative;
-	right: 30px;
-	cursor: pointer;
+
+.play-pause-btn {
+	width: 150px;
+	margin: none;
+	height: 50px;
+}
+
+.center-block {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.main-canvas {
+	width: 55%;
+}
+
+#pos-button-wrapper {
+	width: 22.5%;
+}
+.button-wrapper-right {
+	width: 22.5%;
+}
+
+.no-top {
+	padding: 0px;
+}
+
+.snow-btn-wrapper {
+	margin-left: -15px;
+	padding-top: 10px;
+	margin-right: none;
+}
+
+.reset {
 	display: none;
+	position: relative;
+	left: 30px;
 }
