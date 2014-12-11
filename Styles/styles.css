@@ -112,8 +112,10 @@ form, select, button {
 	margin-right: none;
 }
 
-.reset {
+button.reset {
 	display: none;
 	position: relative;
 	left: 30px;
+	background-color: black;
+	color: white;
 }
