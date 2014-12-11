@@ -30,6 +30,7 @@ $(function () {
         GRID_LINES = "#2A2A2A",
         audio = new Audio('Audio/let_it_snow.mp3'),
         audio.loop = true,
+        time = 0,
         gameGrid = new Array(NUM_ROWS);
 
     var SNAKE_ID = 1;
@@ -162,12 +163,14 @@ $(function () {
         setTimeout(runGoL, GENERATION_INTERVAL * 1000);
     }
     // onClick listener for the button to start the game
-    $("#start-game").click(function() {
+    //MOVED CODE TO BOTTOM OF PAGE SO ANOTHER EVENT CAN BE TIED TO
+    //ONCLICK
+    /*$("#start-game").click(function() {
         if(!isRunning){
             isRunning = true;
             runGoL();
         }
-    });
+    });*/
     // onClick listener to stop the game
     $("#stop-game").click(function() {
         isRunning = false;
@@ -1333,7 +1336,7 @@ $(function () {
         isRunning = false;
         $(this).prop('disabled', true);
         $(".fa-pause").css("display", "inline-block");
-        $("button, h2, canvas").addClass('letItSnow');
+        $("button, h2, canvas, #gen-counter").addClass('letItSnow');
         $("body").css({
             "background-color": "black",
             "background-image": "url('Images/snowflake-background.gif')",
@@ -1378,4 +1381,83 @@ $(function () {
     $(".fa-play, .fa-pause").click(function(){
         togglePlay(audio);
     });
+
+
+    //creates the set output to be used by startTimer to display the correct
+    //amount of time a user has been running the game
+    function formatTime(){
+        var response = "",
+            hours = 0,
+            mins = 0,
+            secs = time;
+
+        while (secs >= 60){
+            secs -= 60;
+            mins += 1;
+        }
+
+        while (mins >= 60){
+            mins -= 60;
+            hours += 1;
+        }
+
+        if (secs == 0) {
+            secs = "";
+        } else if (secs == 1) {
+            secs += " second";
+        } else if (secs > 1) {
+            secs += " seconds";
+        }
+
+        if (mins == 0) {
+            mins = "";
+        } else if (mins == 1) {
+            mins += " minute";
+        } else if (mins > 1) {
+            mins += " minutes";
+        }
+
+        if (hours == 0) {
+            hours = "";
+        } else if (hours == 1) {
+            hours += " hour";
+        } else if (hours > 1) {
+            hours += " hours";
+        }
+
+        if (hours != ""){
+            response += hours + " ";
+        }
+
+        if (mins != ""){
+            response += mins + " ";
+        }
+
+        if (secs != ""){
+            response += secs;
+        }
+
+        return response;
+    }
+
+    function startTimer(){
+        if (isRunning){
+        time++;
+
+        var out = formatTime();
+        document.getElementById("counter").innerHTML = out;
+        var interval = setTimeout(startTimer, 1000);
+        } else {
+            clearTimeout(interval);
+        }
+    }
+
+    $("#start-game").click(function() {
+        if(!isRunning){
+            isRunning = true;
+            runGoL();
+            startTimer();
+        }
+    });
+
 });
