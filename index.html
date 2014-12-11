@@ -9,7 +9,7 @@
         <link type="text/css" rel="stylesheet" href="Styles/normalize.css" />
         <!--Changes the font for the title to ASAP font-family-->
         <link href='http://fonts.googleapis.com/css?family=Asap' rel='stylesheet' type='text/css'>
-		
+
         <!-- icon for thumbnail on webpage -->
         <link rel="icon" type="image/png" href="Images/a-life.gif" />
 
@@ -35,122 +35,136 @@
         </title>
 	</head>
 	
-    <body>
-    <img id="img"  src="Images/a-life.gif" alt="Game of Life" class="img-responsive">
-        <div class="container">
+    <body class="container-fluid">
+        <img id="img" src="Images/a-life.gif" alt="Game of Life" class="center-block">
         <audio id="music" src="Audio/let_it_snow.mp3" type="audio/mpeg"></audio>
-            <h2>EECS 183: Conway's Game of Life</h2>
-            <i class="fa fa-pause fa-2x fa-inverse pull-right"></i>
-            <i class="fa fa-play fa-2x fa-inverse pull-right"></i>
-            <div id="gridholder" class="row">
+        <div class="container-main">
+        
+            <div class="row">
+                <h2 class="center-block">EECS 183: Conway's Game of Life</h2>
+            </div>
 
-                <canvas id="grid" height="480px" width="720px">Your browser does not support the HTML5 canvas tag.</canvas>
-                
+            <div class="row">
 
-                <div class="row pull-right" id="theme-wrapper ">
-                    <div class="col-lg-2">
-                        <button id="moveStyle">
-                            <i class="fa fa-tree"></i> Let it Snow!
-                            <i class="fa fa-tree"></i>
+                <div id="pos-button-wrapper" class="col-lg-3">
+                    <div id="button-wrapper">
+                        <div class="row pull-right">
+                            <div class="col-md-6">
+                                <button id="still-life-btn">Draw Still life</button>
+                            </div>
+                            <div class="col-md-6">
+                                <form>
+                                    <select id="still-life-select">
+                                        <option value="Block" selected>Block</option>
+                                        <option value="Beehive" >Beehive</option>
+                                        <option value="Loaf" >Loaf</option>
+                                        <option value="Boat" >Boat</option>
+                                    </select>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="row pull-right">
+                            <div class="col-md-6">
+                                <button id="oscillator-btn">Draw Oscillator</button>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <form>
+                                    <select id="oscillator-select">
+                                        <option value="Blinker" selected>Blinker</option>
+                                        <option value="Toad" >Toad</option>
+                                        <option value="Beacon" >Beacon</option>
+                                        <option value="Pulsar" >Pulsar</option>
+                                    </select>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="row pull-right">
+                            <div class="col-md-6">
+                                <button id="spaceship-btn">Draw Spaceship</button>
+                            </div>
+                            <div class="col-md-6">
+                                <form>
+                                    <select id="spaceship-select">
+                                        <option value="Glider" selected>Glider</option>
+                                        <option value="LWSS" >LWSS</option>
+                                    </select>
+                                </form>
+                            </div>
+                        </div>
+
+                        
+                        <div class="row pull-right">
+                            <div class="col-md-6">
+                                <button id="gen-int-btn">Set Generation Speed</button>
+                            </div>
+                            <div class="col-md-6">
+                                <form>
+                                    <select id="gen-int-select">
+                                        <option value="Fast">Fast</option>
+                                        <option value="Med">Med</option>
+                                        <option value="Slow">Slow</option>
+                                    </select>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="row pull-right">
+                            <div class="col-md-6">
+                                <button id="clear-canvas">Clear</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button id="next-gen">Next Gen</button>
+                            </div>
+                        </div>
+                        <div class="row pull-right">
+                            <div class="col-md-6">
+                                <button id="start-game">Start</button>
+                            </div>
+                            <div class="col-md-6">
+                                <button id="stop-game">Stop</button>                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="center-block main-canvas col-lg-6">
+                    <canvas id="grid" height="480px" width="720px">Your browser does not support the HTML5 canvas tag.</canvas>
+                </div>
+
+                <div class="col-lg-2">
+                    <div id="button-wrapper-right">
+                        <div class="row">
+                            <button id="draw-infected">Draw Infected</button>
+                        </div>
+                        <div class="row">
+                            <button id="draw-mine">Draw Mine</button>
+                        </div>
+                        <div class="row">
+                            <button id="draw-pacman">Draw Pacman</button>
+                        </div>
+                        <div class="row">
+                            <button id="draw-snake">Draw Snake</button>
+                        </div>
+                        <div class="snow-btn-wrapper">
+                            <div class="let-it-snow-btn">
+                                <button id="moveStyle">
+                                    <i class="fa fa-tree"></i> Let it Snow!
+                                    <i class="fa fa-tree"></i>
+                                </button>
+                                <div class="play-pause-btn">
+                                    <i class="fa fa-pause fa-2x fa-inverse"></i>
+                                    <i class="fa fa-play fa-2x fa-inverse"></i>
+                                </div> 
+                            </div>
+                        </div>
+                        <button class="reset" onclick="window.location='index.html';">
+                            Go Home
                         </button>
                     </div>
                 </div>
-
-
-
-
-                <div id="button-wrapper">
-                    <div class="row">
-                        <div class="col-lg-1">
-                            <button id="still-life-btn">Draw Still life</button>
-                        </div>
-                        <div class="col-md-1">
-                            <form>
-                                <select id="still-life-select">
-                                    <option value="Block" selected>Block</option>
-                                    <option value="Beehive" >Beehive</option>
-                                    <option value="Loaf" >Loaf</option>
-                                    <option value="Boat" >Boat</option>
-                                </select>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-1">
-                            <button id="oscillator-btn">Draw Oscillator</button>
-                        </div>
-                        
-                        <div class="col-md-1">
-                            <form>
-                                <select id="oscillator-select">
-                                    <option value="Blinker" selected>Blinker</option>
-                                    <option value="Toad" >Toad</option>
-                                    <option value="Beacon" >Beacon</option>
-                                    <option value="Pulsar" >Pulsar</option>
-                                </select>
-                            </form>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-1">
-                            <button id="spaceship-btn">Draw Spaceship</button>
-                        </div>
-                        <div class="col-md-1">
-                            <form style="width: 65px">
-                                <select id="spaceship-select">
-                                    <option value="Glider" selected>Glider</option>
-                                    <option value="LWSS" >LWSS</option>
-                                </select>
-                            </form>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-1">
-                            <button  id="extras-btn">Draw Extra</button>
-                        </div>
-                        <div class="col-md-1">
-                            <select id="extras-select">
-                                    <option value="InfectCore" >Infected</option>
-                                    <option value="Mine" >Mine</option>
-                                    <option value="Pacman" >Pacman</option>
-                                    <option value="Snake" >Snake</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-1">
-                            <button id="gen-int-btn">Set Generation Speed</button>
-                        </div>
-                        <div class="col-md-1">
-                            <form style="width: 55px">
-                                <select id="gen-int-select">
-                                    <option value="Fast">Fast</option>
-                                    <option value="Med">Med</option>
-                                    <option value="Slow">Slow</option>
-                                </select>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-1">
-                            <button id="clear-canvas">Clear</button>
-                        </div>
-                        <div class="col-md-1">
-                            <button id="next-gen">Next Gen</button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-1">
-                            <button id="start-game">Start</button>
-                        </div>
-                        <div class="col-md-1">
-                            <button id="stop-game">Stop</button>                            
-                        </div>
-                    </div>
-                </div>
             </div>
-        </div>
+        </div>  
 	</body>
 </html>
