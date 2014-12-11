@@ -29,7 +29,7 @@
 	min-width: 780px;
 }
 
-h2 {
+.centered-el {
 	color: white;
 	font-size: 40px;
 	z-index: 20;
@@ -118,4 +118,9 @@ button.reset {
 	left: 30px;
 	background-color: black;
 	color: white;
+}
+
+p#gen-counter {
+	font-size: 16px;
+	width: 550px;
 }
