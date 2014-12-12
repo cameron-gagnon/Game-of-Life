@@ -15,14 +15,13 @@ $(function () {
         CELL_EXPL_HOT_COLOR = "#f2f5a9",
         CELL_PACMAN_COLOR = "#ffee00",
         CELL_SNAKE_COLOR = "#ffffcc"
-        EXPLOSION_RANGE = 20,
+        EXPLOSION_RANGE = 15,
         EXPLOSION_DELAY = 10,
         NUM_COLS = 72,
         NUM_ROWS = 48,
         MOUSE_IS_DOWN = false,
         LAST_X = 0;
         LAST_Y = 0;
-        //CANVASGRID = document.getElementById("grid"),
         LET_IT_SNOW = "white",
         XMAS_GREEN = "#66FF33",
         XMAS_RED = "#FF0000",
@@ -437,7 +436,7 @@ $(function () {
                     }
 
                     //start the mine if there is a cell grown on it
-                    //dicrement the ticker every generation after
+                    //decrement the ticker every generation after
                     if ((start) || (!(grid[i][j].dead))) {
                         grid[i][j].ticker -= 1;
                     }
@@ -522,7 +521,7 @@ $(function () {
                         isOpen = true;
                     }
 
-                    //draw pacman, its colunm depends
+                    //draw pacman, its column depends
                     //on ticker which is incremented every generation
                     drawPacman(grid, i, grid[i][j].ticker, isOpen);
                     grid[i][j].ticker += 1; 
@@ -638,7 +637,7 @@ $(function () {
                             }
                         }
                     }
-                    //blow up the mine if sbake hits it
+                    //blow up the mine if snake hits it
                     if (validPosition(rowDir(i,dir),colDir(j,dir)) && 
                         grid[rowDir(i,dir)][colDir(j,dir)].variation === "mine") {
                         if ((i2 > i) || ((i2 === i) && (j2 > j))) {
@@ -1433,7 +1432,7 @@ $(function () {
         isRunning = false;
         $(this).prop('disabled', true);
         $(".fa-pause").css("display", "inline-block");
-        $("button, h2, canvas, #gen-counter").addClass('letItSnow');
+        $("button, h2, canvas, #gen-counter, #explo-range").addClass('letItSnow');
         $("body").css({
             "background-color": "black",
             "background-image": "url('Images/snowflake-background.gif')",
@@ -1449,6 +1448,7 @@ $(function () {
             "color": XMAS_RED,
             "background-color": XMAS_GREEN
         });
+        $("#explo-range").addClass('letItSnow');
         $(".reset").show();
 
         CELL_SNAKE_COLOR = "black";
@@ -1556,6 +1556,7 @@ $(function () {
     }
 
     // onClick listener for the button to start the game
+    //was moved down here so it 'knew' about starTimer() function
     $("#start-game").click(function() {
         if(!isRunning){
             isRunning = true;
@@ -1564,7 +1565,8 @@ $(function () {
         }
     });
 
-    //creates 10 choices in dropdown list for extra draw patterns
+    //creates numbers 1-10 in dropdown list for number of patterns
+    //to be drawn
     function loadDropDown(){
         var dropDown = document.getElementsByClassName("dropDowns");
         for(var j = 0; j < dropDown.length; j++){
@@ -1576,6 +1578,16 @@ $(function () {
             }
         }
     }
-
+    //creates the option menus for the dropdown numbers
     $(".dropDowns").ready(loadDropDown());
+
+    //sets the explosion range for mines to be what the user inputs
+    $("#explo-range").change(function(){
+        EXPLOSION_RANGE = $(this).val();
+        if(EXPLOSION_RANGE > 30){
+            alert("Careful now. Are you sure you want to destroy the world? \
+                    Set the range to a more reasonable value and save humanity.");
+            isRunning = false;
+        }
+    })
 });
