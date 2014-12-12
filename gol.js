@@ -125,12 +125,13 @@ $(function () {
     //          updates gameGrid to reflect that same state) at a random location on 
     //          the canvas.  In the event TEST_DRAW_PATTERN is
     //          true, it draws the pattern at row index 6 and col index 6
-    $("#still-life-btn, #oscillator-btn, #spaceship-btn, #extras-btn, #gen-int-btn").click(function () {
+    $("#still-life-btn, #oscillator-btn, #spaceship-btn, #gen-int-btn").click(function () {
         var selector = $(this).attr("id");
         selector = "#" + selector.replace("btn", "select");
         var pattern = $(selector).val(),
             newRow = Math.floor(Math.random() * 191829) % NUM_ROWS,
             newCol = Math.floor(Math.random() * 8103849204) % NUM_COLS;
+
         if (pattern === "Slow"){
             GENERATION_INTERVAL = .5;
         } else if (pattern === "Med"){
@@ -142,7 +143,12 @@ $(function () {
             newRow = 6;
             newCol = 6;
         }
-        drawPattern(pattern, gameGrid, newRow, newCol);
+
+        selector = selector.replace("select", "num");
+        selector = $(selector).val();
+        for (var i = 0; i < selector; i++){
+            drawPattern(pattern, gameGrid, newRow, newCol);
+        }
         // drawPattern overwrites grid lines, therefore need to redraw them
         drawGridLines();
     });
@@ -1207,25 +1213,46 @@ $(function () {
         document.getElementById("gen-num").innerHTML = generation;
     });
 
-    $("#draw-infected").click(function(){
-        drawPattern("Infected", gameGrid);
+    $("#draw-infected-btn").click(function(){
+        var selector = $(this).attr("id");
+        selector = "#" + selector.replace("btn", "num");
+        var pattern = $(selector).val();
+        for(var i = 0; i < pattern; i++){
+            drawPattern("Infected", gameGrid);
+        }
         drawGridLines(gameGrid);
     });
 
-    $("#draw-mine").click(function(){
-        drawPattern("Mine", gameGrid);
+    $("#draw-mine-btn").click(function(){
+        var selector = $(this).attr("id");
+        selector = "#" + selector.replace("btn", "num");
+        var pattern = $(selector).val();
+        for(var i = 0; i < pattern; i++){
+            drawPattern("Mine", gameGrid);
+        }
         drawGridLines(gameGrid);
     });
 
-    $("#draw-pacman").click(function(){
-        drawPattern("Pacman", gameGrid);
+    $("#draw-pacman-btn").click(function(){
+        var selector = $(this).attr("id");
+        selector = "#" + selector.replace("btn", "num");
+        var pattern = $(selector).val();
+        for(var i = 0; i < pattern; i++){
+            drawPattern("Pacman", gameGrid);
+        }
         drawGridLines(gameGrid);
     });
 
-    $("#draw-snake").click(function(){
-        drawPattern("Snake", gameGrid);
+    $("#draw-snake-btn").click(function(){
+        var selector = $(this).attr("id");
+        selector = "#" + selector.replace("btn", "num");
+        var pattern = $(selector).val();
+        for (var i = 0; i < pattern; i++){
+            drawPattern("Snake", gameGrid);
+        }
         drawGridLines(gameGrid);
     });
+
     /*
     * Requires: A mousedown on canvas element
     * Modifies: HTML canvas
@@ -1470,11 +1497,23 @@ $(function () {
     $("#start-game").click(function() {
         if(!isRunning){
             isRunning = true;
-            runGoL();
-            startTimer();
+            runGoL(); //runs game
+            startTimer(); //keeps track of time
         }
     });
 
-    
+    //creates 10 choices in dropdown list for extra draw patterns
+    function loadDropDown(){
+        var dropDown = document.getElementsByClassName("dropDowns");
+        for(var j = 0; j < dropDown.length; j++){
+            for(var i = 0; i < 10; i++){
+                var option = document.createElement("option");
+                option.text = i + 1;
+                option.value = i + 1;
+                dropDown.item(j).add(option);
+            }
+        }
+    }
 
+    $(".dropDowns").ready(loadDropDown());
 });
