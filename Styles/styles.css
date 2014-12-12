@@ -1,6 +1,6 @@
 ﻿body {
     position: relative;
-    min-width: 410px;
+    min-width: 952px;
     background-color: black;
     font-family: "Asap";
 }
@@ -77,12 +77,12 @@ form, select, button {
 	cursor: pointer;
 	padding-top: 10px;
 	left: 75px;
+	height: 50px;
 }
 
 .play-pause-btn {
-	width: 150px;
-	margin: none;
 	height: 50px;
+	width: 100%;
 }
 
 .center-block {
@@ -92,30 +92,19 @@ form, select, button {
 }
 
 .main-canvas {
-	width: 55%;
+	width: 54.5%;
+	min-width: 720px;
+	display: inline-block;
 }
 
-#pos-button-wrapper {
-	width: 22.5%;
-}
-.button-wrapper-right {
-	width: 22.5%;
-}
-
-.no-top {
-	padding: 0px;
-}
-
-.snow-btn-wrapper {
-	margin-left: -15px;
-	padding-top: 10px;
-	margin-right: none;
+.btn-margin {
+	margin-top: 10px;
 }
 
 button.reset {
 	display: none;
 	position: relative;
-	left: 30px;
+	left: 45px;
 	background-color: black;
 	color: white;
 }
@@ -129,4 +118,22 @@ p#gen-counter {
 	font-size: 22px;
 	position: relative;
 	top: 3px;
+}
+
+.right-column, .left-column {
+	width: 22.5%;
+	display: inline-block;
+	vertical-align: top;
+}
+
+#button-wrapper-right {
+	width: 100%;
+}
+
+.dropDowns {
+	width: 42px;
+}
+
+.dropDownsLeft {
+	float: right;
 }
