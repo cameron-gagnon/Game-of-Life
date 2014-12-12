@@ -40,7 +40,7 @@
 	max-width: 780px;
 }
 
-form, select, button {
+form, select, button, input {
 	background-color: black;
 	color: white;
 	border-radius: 15px;
@@ -62,6 +62,14 @@ form, select, button {
 	border-width: 3px;
 	width: 175px;
 	display: inline-block;
+}
+
+#explo-range {
+	width: 42px;
+	position: relative;
+	left: 12px;
+	border-radius: 10px;
+	text-align: center;
 }
 
 .letItSnow {
@@ -136,4 +144,23 @@ p#gen-counter {
 
 .dropDownsLeft {
 	float: right;
+}
+
+
+#explo-text {
+	background-color: black;
+	color: white;
+	font-size: 16px;
+	width: 120px;
+	border-radius: 10px;
+	text-align: center;
+	margin-bottom: 0px;
+}
+
+.fa-warning {
+	color: red;
+}
+
+#draw-pacman-btn {
+	margin-top: 0px;
 }
