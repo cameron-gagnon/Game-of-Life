@@ -26,6 +26,7 @@ $(function () {
         LET_IT_SNOW = "white",
         XMAS_GREEN = "#66FF33",
         XMAS_RED = "#FF0000",
+        XMAS_MINE = "#00ffff",
         CELL_NORMAL_COLOR = "black",
         GRID_LINES = "#2A2A2A",
         audio = new Audio('Audio/let_it_snow.mp3'),
@@ -34,7 +35,7 @@ $(function () {
         generation = 0,
         gameGrid = new Array(NUM_ROWS);
 
-    var SNAKE_ID = 1;
+    var SNAKE_ID = 1; //to distinguish between different snakes
 
 
     // The Custom object used to represent a cell on the HTML canvas grid
@@ -57,12 +58,15 @@ $(function () {
 
         this.variation = "normal";
 
+        //multi-purpose ticker
         this.ticker = 0;
 
         this.userClick = false;
 
+        //direction in which snake is crawling
         this.direction = 0;
 
+        //for snake cells is assigned according to SNAKE_ID
         this.uniqID = 0;
     }
     
@@ -330,7 +334,8 @@ $(function () {
         for (var i = 0; i < NUM_ROWS; i += 1) {
             for (var j = 0; j < NUM_COLS; j += 1) {
 
-                // update dead and fillStyle for each ceil
+                // determine which cells should be drawn on canvas according
+                // to what is drawn on it at the moment when the function is called
 
                 var num = grid[i][j].liveNeighbors;
                 var inf = grid[i][j].infectedNeighbors;
@@ -340,11 +345,13 @@ $(function () {
                 var snake = grid[i][j].variation === "snakeHead" ||
                             grid[i][j].variation === "snakeTail";
 
+                //treat a cell that was created by clicking as a regular one 
                 if (grid[i][j].userClick) {
                     grid[i][j].userClick = false;
-                }
+                } 
 
-                // check if cell is alive
+                //turn hot explosion particles into regular ones
+                //and regular ones to dead cells
                 if (grid[i][j].variation === "explosion") {
                     grid[i][j].ticker -= 1;
 
@@ -360,13 +367,20 @@ $(function () {
                     }
                 }
 
+                // if cell is not of a special kind
+                // check if cell is alive or dead and determine
+                // whether it is infected or not
                 if (!(mine) && !(pacman) && !snake) {
+                    //kill cell if it is over/underpopulated
                     if (!(grid[i][j].dead) && ((num != 2) && (num != 3))) {
                         grid[i][j].dead = true;
                         grid[i][j].fillStyle = CELL_DEAD_COLOR;
                         grid[i][j].variation = "normal";
                     }
-                    // check for cell if it is dead
+
+                    //make cell alive if there are exactly 3 neighbors
+                    //if it has infected neighbors then it might be infected 
+                    //as well with a certain probability
                     if (grid[i][j].dead && num === 3) {
                         rand = Math.floor(Math.random() * 191869) % 100;
                         grid[i][j].dead = false;
@@ -374,7 +388,7 @@ $(function () {
                             grid[i][j].fillStyle = CELL_ALIVE_COLOR;
                         }
                         if (inf === 1) {
-                            if (rand <= 34) {
+                            if (rand <= 35) {
                                 grid[i][j].variation = "infected";
                                 grid[i][j].fillStyle = CELL_INFECTED_COLOR;
                             }
@@ -383,7 +397,7 @@ $(function () {
                             }
                         }
                         if (inf === 2) {
-                            if (rand <= 67) {
+                            if (rand <= 68) {
                                 grid[i][j].variation = "infected";
                                 grid[i][j].fillStyle = CELL_INFECTED_COLOR;
                             }
@@ -392,7 +406,7 @@ $(function () {
                             }
                         }
                         if (inf === 3) {
-                            if (rand <= 96) {
+                            if (rand <= 98) {
                                 grid[i][j].variation = "infected";
                                 grid[i][j].fillStyle = CELL_INFECTED_COLOR;
                             }
@@ -405,8 +419,10 @@ $(function () {
                 }
 
                 if (mine) {
+                    //mine is started if its ticker is smaller than the original value
                     var start = grid[i][j].ticker < EXPLOSION_DELAY;
 
+                    //mine obeys the same laws as regular cell
                     if (!(grid[i][j].dead) && ((num != 2) && (num != 3))) {
                         grid[i][j].dead = true;
                     }
@@ -414,10 +430,13 @@ $(function () {
                         grid[i][j].dead = false;
                     }
 
+                    //start the mine if there is a cell grown on it
+                    //dicrement the ticker every generation after
                     if ((start) || (!(grid[i][j].dead))) {
                         grid[i][j].ticker -= 1;
                     }
 
+                    //change mine's color to create blinking effect
                     if (start || !grid[i][j].dead) {
                         if (grid[i][j].ticker % 2 === 1) {
                             grid[i][j].fillStyle = CELL_MINE1_COLOR;
@@ -427,11 +446,14 @@ $(function () {
                         }
                     }
 
+                    //explode the mine as ticker reaches 0
                     if (grid[i][j].ticker === 0) {
                         for (var i2 = 0; i2 < NUM_ROWS; i2 += 1) {
                             for (var j2 = 0; j2 < NUM_COLS; j2 += 1) {
                                 var distance = Math.sqrt((i2 - i) * (i2 - i) 
                                                 + (j2 - j) * (j2 - j));
+                                //mine itself and every cell within the explosion range
+                                //but not the other mines is turned into explosion
                                 if (distance <= EXPLOSION_RANGE 
                                     && validPosition(i2, j2) 
                                     && !(grid[i2][j2].variation === "mine" &&
@@ -440,6 +462,9 @@ $(function () {
                                     grid[i2][j2].dead = true;
                                     grid[i2][j2].fillStyle = CELL_EXPLOSION_COLOR;
                                     
+                                    //program operates by going row by row
+                                    //so adjust to the cells that were 
+                                    //processed previously
                                     if ((i2 > i) || ((i2 === i) && (j2 > j))) {
                                         grid[i2][j2].ticker = 2;
                                     }
@@ -447,6 +472,8 @@ $(function () {
                                         grid[i2][j2].ticker = 1;
                                     }
                                     
+                                    //create hot particles of explosion
+                                    //more hot particles near to the center
                                     rand1 = Math.random();
                                     rand2 = Math.floor(Math.random() 
                                         * 191869) % EXPLOSION_RANGE;
@@ -455,14 +482,19 @@ $(function () {
                                         grid[i2][j2].fillStyle = CELL_EXPL_HOT_COLOR;
                                     }
 
+                                    //update canvas
                                     new_canvas.fillStyle = grid[i2][j2].fillStyle;
                                     new_canvas.fillRect(grid[i2][j2].xPosition, 
                                         grid[i2][j2].yPosition, CELL_SIZE, CELL_SIZE);
                                 } 
+
+                                //explosion chain reaction
+                                //activate mines within explosion range
                                 if (distance <= EXPLOSION_RANGE && 
                                     grid[i2][j2].variation === "mine" &&
                                     grid[i2][j2].ticker === EXPLOSION_DELAY) {
                                     grid[i2][j2].ticker = 2;
+                                    //adjust to row-by-row movement of program
                                     if ((i2 > i) || ((i2 === i) && (j2 > j))) {
                                         grid[i2][j2].ticker = 3;
                                     }
@@ -471,23 +503,30 @@ $(function () {
                                 }
                             }
                         }
+                        //some cells could die, so update neighbors
                         updateLiveNeighbors(grid);
                     }
                 }
 
                 if (grid[i][j].variation === "pacmanCore") {
-
+                    //pacman switches between open and notopen
+                    //every generations
                     var isOpen = false;
                     if (grid[i][j].ticker % 6 <= 2) {
                         isOpen = true;
                     }
+
+                    //draw pacman, its colunm depends
+                    //on ticker which is incremented every generation
                     drawPacman(grid, i, grid[i][j].ticker, isOpen);
                     grid[i][j].ticker += 1; 
+                    //kill pacman when the end is reached
                     if (grid[i][j].ticker === NUM_COLS + 1) {
                         grid[i][j].variation = "normal";
                         grid[i][j].ticker = 0;
                     }
 
+                    //pacman core behaves as if it a regular cell
                     if (!(grid[i][j].dead) && ((num != 2) && (num != 3))) {
                         grid[i][j].dead = true;
                         grid[i][j].fillStyle = CELL_DEAD_COLOR;
@@ -498,6 +537,8 @@ $(function () {
                     }
                 }
 
+                //decrement snake tail's ticker every generation
+                //it ticker reached 0 fill the cell
                 if (grid[i][j].variation === "snakeTail") {
                     if (grid[i][j].ticker > 0) {
                         grid[i][j].ticker -= 1;
@@ -513,7 +554,10 @@ $(function () {
                 if (grid[i][j].variation === "snakeHead" &&
                     grid[i][j].direction < 4) {
                     var dir = grid[i][j].direction;
+                    //with a certain chance snake might randomly turn
                     var turnChance = 0.05;
+                    //if snake is close to the edge of canvas the turn
+                    //chance is increase proportionally to its size
                     if ((dir === 0 && j > 9.0*NUM_COLS/10) ||
                         (dir === 1 && i < 1.5*NUM_ROWS/10) ||
                         (dir === 2 && j < 1.0*NUM_COLS/10) ||
@@ -533,10 +577,13 @@ $(function () {
                         }
                         grid[i][j].direction = dir;
                     }
-
+                    //turn this cell into a snake tail
                     grid[i][j].direction = 0;
                     grid[i][j].variation = "snakeTail";
 
+                    //copy all info from this cell into the cell that
+                    //is ahead of it according to its direction
+                    //and turn that cell into a head
                     if (validPosition(rowDir(i,dir),colDir(j,dir)) && 
                         !(grid[rowDir(i,dir)][colDir(j,dir)].variation 
                                                         === "snakeHead" || 
@@ -553,9 +600,11 @@ $(function () {
                                 grid[i][j].ticker;
                         grid[rowDir(i,dir)][colDir(j,dir)].fillStyle = 
                                 grid[i][j].fillStyle;
+                        //determine if anything was eaten
                         if (!grid[rowDir(i,dir)][colDir(j,dir)].dead) {
                             grid[rowDir(i,dir)][colDir(j,dir)].ticker += 1;
                         }
+                        //adjust to row-by-row operation of the program
                         grid[rowDir(i,dir)][colDir(j,dir)].dead = true;
                         if (dir === 0 || dir === 3) {
                             grid[rowDir(i,dir)][colDir(j,dir)].direction += 23;
@@ -564,13 +613,18 @@ $(function () {
                             staticUpdateCells(grid);
                         }
                     }
+                    //kill the snake if it reaches the border, 
+                    //a mine, or another snake
                     else {
                         for (var i2 = 0; i2 < NUM_ROWS; i2 += 1) {
                             for (var j2 = 0; j2 < NUM_COLS; j2 += 1) {
+                                //determine which snake to kill
+                                //using the SNAKE_ID
                                 if (grid[i2][j2].variation === "snakeTail" &&
                                     grid[i2][j2].uniqID === grid[i][j].uniqID) {
                                     grid[i2][j2].variation = "snakeDeath";
                                     grid[i2][j2].ticker = 6;
+                                    //adjust to row-by-row operation of the program
                                     if ((i2 > i) || ((i2 === i) && (j2 >= j))) {
                                         grid[i2][j2].ticker += 1;
                                     }
@@ -578,6 +632,7 @@ $(function () {
                             }
                         }
                     }
+                    //blow up the mine if sbake hits it
                     if (validPosition(rowDir(i,dir),colDir(j,dir)) && 
                         grid[rowDir(i,dir)][colDir(j,dir)].variation === "mine") {
                         if ((i2 > i) || ((i2 === i) && (j2 > j))) {
@@ -590,11 +645,14 @@ $(function () {
 
                 }
 
+                //adjust to row-by-row operation of the program
                 if (grid[i][j].variation === "snakeHead" &&
                     grid[i][j].direction > 4) {
                     grid[i][j].direction -= 23;
                 }
 
+                //dead snake blinks for 3 generations
+                //and then turns into dead cells 
                 if (grid[i][j].variation === "snakeDeath") {
                     grid[i][j].ticker -= 1;
                     if ((grid[i][j].ticker % 2) === 0) {
@@ -611,7 +669,7 @@ $(function () {
                     }
                 }
 
-                // show each cell update on HTML canvus
+                // show each cell's update on HTML canvus
                 new_canvas.fillStyle = grid[i][j].fillStyle;
                 new_canvas.fillRect(grid[i][j].xPosition, grid[i][j].yPosition, 
                                     CELL_SIZE, CELL_SIZE);
@@ -786,6 +844,7 @@ $(function () {
         if (patternName === "Pacman") {
             var randRow = Math.floor(Math.random() * 191879) % (NUM_ROWS - 12)
             //check position just to be sure
+            //and change nothing but its ticker and variation
             if (validPosition(randRow, 0)) {
                 grid[randRow][0].variation = "pacmanCore";
                 grid[randRow][0].ticker = 1;
@@ -1007,6 +1066,8 @@ $(function () {
     }
 
     function drawPacman(grid, row, col, isOpen) {
+        //go through one of the hardcoded matrix 
+        //and change cells according to it
         if (isOpen) {
             var pacm = [[0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0],
                         [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
@@ -1366,6 +1427,7 @@ $(function () {
         CELL_SNAKE_COLOR = "black";
         CELL_ALIVE_COLOR = XMAS_GREEN;
         CELL_DEAD_COLOR = XMAS_RED;
+        CELL_MINE1_COLOR = XMAS_MINE;
         CELL_NORMAL_COLOR = LET_IT_SNOW;
         GRID_LINES = "#CCFFCC";
         populateGameGrid(gameGrid);
