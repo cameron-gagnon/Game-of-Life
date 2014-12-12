@@ -31,6 +31,7 @@ $(function () {
         audio = new Audio('Audio/let_it_snow.mp3'),
         audio.loop = true,
         time = 0,
+        generation = 0,
         gameGrid = new Array(NUM_ROWS);
 
     var SNAKE_ID = 1;
@@ -157,10 +158,14 @@ $(function () {
         if (!isRunning) {
             return;
         }
+        //counts number of generations.
+        generation++;
         evolveStep(gameGrid);
         // evolveStep overwrites grid lines, therefore need to redraw them
         drawGridLines();
         setTimeout(runGoL, GENERATION_INTERVAL * 1000);
+        //updates generation count on webpage
+        setTimeout(document.getElementById("gen-num").innerHTML = generation, GENERATION_INTERVAL * 1000);
     }
     // onClick listener for the button to start the game
     //MOVED CODE TO BOTTOM OF PAGE SO ANOTHER EVENT CAN BE TIED TO
@@ -1187,6 +1192,8 @@ $(function () {
         populateGameGrid(gameGrid);
         updateCells(gameGrid);
         drawGridLines();
+        generation = 0;
+        document.getElementById("gen-num").innerHTML = generation;
     });
 
     //the below jquery listeners are for the buttons
@@ -1196,6 +1203,8 @@ $(function () {
         isRunning = false;
         updateCells(gameGrid);
         drawGridLines();
+        generation++;
+        document.getElementById("gen-num").innerHTML = generation;
     });
 
     $("#draw-infected").click(function(){
@@ -1362,6 +1371,9 @@ $(function () {
         populateGameGrid(gameGrid);
         updateCells(gameGrid);
         drawGridLines(gameGrid);
+
+        generation = 0;
+        document.getElementById("gen-num").innerHTML = generation;
     });
 
 
@@ -1440,6 +1452,8 @@ $(function () {
         return response;
     }
 
+    //takes return of formatTime and then adds it to the specified element
+    //also starts and stops the counter based on button clicks on page
     function startTimer(){
         if (isRunning){
         time++;
@@ -1452,6 +1466,7 @@ $(function () {
         }
     }
 
+    // onClick listener for the button to start the game
     $("#start-game").click(function() {
         if(!isRunning){
             isRunning = true;
@@ -1459,5 +1474,7 @@ $(function () {
             startTimer();
         }
     });
+
+    
 
 });
