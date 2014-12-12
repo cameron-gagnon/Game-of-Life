@@ -49,7 +49,7 @@
 
             <div class="row">
 
-                <div id="pos-button-wrapper" class="col-lg-3">
+                <div id="pos-button-wrapper" class="left-column">
                     <div id="button-wrapper">
                         <div class="row pull-right">
                             <div class="col-md-6">
@@ -57,11 +57,14 @@
                             </div>
                             <div class="col-md-6">
                                 <form>
-                                    <select id="still-life-select">
+                                    <select id="still-life-select" >
                                         <option value="Block" selected>Block</option>
                                         <option value="Beehive" >Beehive</option>
                                         <option value="Loaf" >Loaf</option>
                                         <option value="Boat" >Boat</option>
+                                    </select>
+                                    <select id="still-life-num" class="dropDowns dropDownsLeft">
+                                        
                                     </select>
                                 </form>
                             </div>
@@ -80,6 +83,9 @@
                                         <option value="Beacon" >Beacon</option>
                                         <option value="Pulsar" >Pulsar</option>
                                     </select>
+                                    <select id="oscillator-num" class="dropDowns dropDownsLeft">
+                                        
+                                    </select>
                                 </form>
                             </div>
                         </div>
@@ -93,6 +99,9 @@
                                     <select id="spaceship-select">
                                         <option value="Glider" selected>Glider</option>
                                         <option value="LWSS" >LWSS</option>
+                                    </select>
+                                    <select id="spaceship-num" class="dropDowns dropDownsLeft">
+                                        
                                     </select>
                                 </form>
                             </div>
@@ -132,26 +141,30 @@
                     </div>
                 </div>
 
-                <div class="center-block main-canvas col-lg-6">
+                <div class="center-block main-canvas">
                     <canvas id="grid" height="480px" width="720px">Your browser does not support the HTML5 canvas tag.</canvas>
                 </div>
 
-                <div class="col-lg-2">
+                <div class="right-column">
                     <div id="button-wrapper-right">
-                        <div class="row">
-                            <button id="draw-infected">Draw Infected</button>
-                        </div>
-                        <div class="row">
-                            <button id="draw-mine">Draw Mine</button>
-                        </div>
-                        <div class="row">
-                            <button id="draw-pacman">Draw Pacman</button>
-                        </div>
-                        <div class="row">
-                            <button id="draw-snake">Draw Snake</button>
-                        </div>
-                        <div class="snow-btn-wrapper">
-                            <div class="let-it-snow-btn">
+                            <button class="btn-margin" id="draw-infected-btn">Draw Infected</button>
+                                <select class="dropDowns" id="draw-infected-num">
+                                </select>
+                            <br>
+                            <button class="btn-margin" id="draw-mine-btn">Draw Mine</button>
+                                <select class="dropDowns" id="draw-mine-num">
+                                </select>
+                            <br>
+                            <button class="btn-margin" id="draw-pacman-btn">Draw Pacman</button>
+                                <select class="dropDowns" id="draw-pacman-num">
+                                </select>
+                            <br>
+                            <button class="btn-margin" id="draw-snake-btn">Draw Snake</button>
+                                <select class="dropDowns" id="draw-snake-num">
+                                </select>
+                            <br>
+                        <div class="btn-margin">
+                            <div>
                                 <button id="moveStyle">
                                     <i class="fa fa-tree"></i> Let it Snow!
                                     <i class="fa fa-tree"></i>
