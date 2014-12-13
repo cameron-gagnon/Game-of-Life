@@ -32,6 +32,10 @@ $(function () {
         audio.loop = true,
         time = 0,
         generation = 0,
+        keys = {
+            space : true
+        },
+        startedTimer = false;
         gameGrid = new Array(NUM_ROWS);
 
     var SNAKE_ID = 1; //to distinguish between different snakes
@@ -1547,15 +1551,13 @@ $(function () {
     //takes return of formatTime and then adds it to the specified element
     //also starts and stops the counter based on button clicks on page
     function startTimer(){
-        if (isRunning){
+        startedTimer = true;
         time++;
-
         var out = formatTime();
         document.getElementById("counter").innerHTML = out;
+        
         var interval = setTimeout(startTimer, 1000);
-        } else {
-            clearTimeout(interval);
-        }
+        
     }
 
     // onClick listener for the button to start the game
@@ -1564,7 +1566,9 @@ $(function () {
         if(!isRunning){
             isRunning = true;
             runGoL(); //runs game
-            startTimer(); //keeps track of time
+            if(!startedTimer){ 
+                startTimer();
+            } //keeps track of time
         }
     });
 
@@ -1597,13 +1601,20 @@ $(function () {
     //keyboard binding function to control game by keyboard input
     $(document).keydown(function(e) {
         switch(e.which) {
-            case 32: //spacebar
-                if(!isRunning){
+            case 32: //spacebar 
+                if(!keys["space"]){
+                    //if the space is false, that means it is currently being pressed and no further action
+                    //should result
+                } else if(!isRunning){
                     isRunning = true;
                     runGoL();
-                    startTimer();
+                    if (!startedTimer){
+                        startTimer();
+                    }
+                    keys["space"] = false; //sets to false because key has been pressed and not released
                 } else {
-                    isRunning = false;
+                    isRunning = false; 
+                    keys["space"] = false; //sets to false because key has been pressed and not released
                 }
                 break;
 
@@ -1626,11 +1637,20 @@ $(function () {
             case 67: // key: C
                 clear_canvas();
                 break;
-
+       
             default: return; // exit this handler for other keys
         }
+
         e.preventDefault(); // prevent the default action (scroll / move caret)
     });
 
 
+    //regulates keys pressed so that holding spacebar
+    //does not result in running the counter at a more than normal time
+    $(document).keyup(function(e) {
+        if (e.keyCode === 32) {
+            keys["space"] = true; //when the key is released it sets the value to true so that when it is
+                                  //pressed again, it will return to false until released
+        }
+    });
 });
