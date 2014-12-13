@@ -1253,25 +1253,27 @@ $(function () {
     // Requires: Nothing
     // Modifies: grid, HTML canvas
     // Effects: The onClick listener to clear the canvas to all new Cells.
-    $("#clear-canvas").click(function () {
+    function clear_canvas() {
         isRunning = false;
         populateGameGrid(gameGrid);
         updateCells(gameGrid);
         drawGridLines();
         generation = 0;
         document.getElementById("gen-num").innerHTML = generation;
-    });
+    }
+    $("#clear-canvas").click(clear_canvas);
 
     //the below jquery listeners are for the buttons
     //to control what happened, the id's are self
     //explanatory
-    $("#next-gen").click(function () {
+    function next_gen() {
         isRunning = false;
         updateCells(gameGrid);
         drawGridLines();
         generation++;
         document.getElementById("gen-num").innerHTML = generation;
-    });
+    }
+    $("#next-gen").click(next_gen);
 
     $("#draw-infected-btn").click(function(){
         var selector = $(this).attr("id");
@@ -1432,10 +1434,11 @@ $(function () {
         isRunning = false;
         $(this).prop('disabled', true);
         $(".fa-pause").css("display", "inline-block");
-        $("button, h2, canvas, #gen-counter, #explo-range").addClass('letItSnow');
+        $("button, h2, canvas, #gen-counter, #explo-range, #drawCheckText").addClass('letItSnow');
         $("body").css({
             "background-color": "black",
-            "background-image": "url('Images/snowflake-background.gif')",
+            "background-image": "url(Images/snowflake-background.gif)",
+            "background-size" : "100vw 100vh"
         });
         $("h2").css({
             "font-size": "38px", 
@@ -1589,5 +1592,45 @@ $(function () {
                     Set the range to a more reasonable value and save humanity.");
             isRunning = false;
         }
-    })
+    });
+
+    //keyboard binding function to control game by keyboard input
+    $(document).keydown(function(e) {
+        switch(e.which) {
+            case 32: //spacebar
+                if(!isRunning){
+                    isRunning = true;
+                    runGoL();
+                    startTimer();
+                } else {
+                    isRunning = false;
+                }
+                break;
+
+            case 37: // left arrowkey
+                alert("You cannot change the future of past cells! Your existence depends on it.");
+                break;
+
+            case 38: // up arrowkey
+                GENERATION_INTERVAL -= .05;
+                break;
+
+            case 39: // right arrowkey
+                next_gen();
+                break;
+
+            case 40: // down arrowkey
+                GENERATION_INTERVAL += .05;
+                break;
+
+            case 67: // key: C
+                clear_canvas();
+                break;
+
+            default: return; // exit this handler for other keys
+        }
+        e.preventDefault(); // prevent the default action (scroll / move caret)
+    });
+
+
 });
