@@ -1,6 +1,6 @@
 ﻿body {
     position: relative;
-    min-width: 952px;
+    min-width: 1360px;
     background-color: black;
     font-family: "Asap";
 }
@@ -40,7 +40,7 @@
 	max-width: 780px;
 }
 
-form, select, button, input {
+form, select, button, input, p, #drawCheck {
 	background-color: black;
 	color: white;
 	border-radius: 15px;
@@ -69,6 +69,7 @@ form, select, button, input {
 	position: relative;
 	left: 12px;
 	border-radius: 10px;
+	border-width: 1px;
 	text-align: center;
 }
 
@@ -163,4 +164,8 @@ p#gen-counter {
 
 #draw-pacman-btn {
 	margin-top: 0px;
+}
+
+#drawCheckText {
+	width: 160px;
 }
