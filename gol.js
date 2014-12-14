@@ -777,10 +777,18 @@ $(function () {
 
     function drawStillLife(patternName, grid, row, col) {
 		if (patternName === "Block") {
+            if (drawWithin) {
+                col = randX(2);
+                row = randY(2);
+            }
 			drawBlock(grid, row, col);
 		}
 
 		if (patternName === "Beehive") {
+            if (drawWithin) {
+                col = randX(4);
+                row = randY(3);
+            }
             //array contains coordinates of the alive cells in the structure
 			var cells = [[row, col + 1],
 						[row, col + 2],
@@ -796,6 +804,10 @@ $(function () {
 		}
 
 		if (patternName === "Loaf") {
+            if (drawWithin) {
+                col = randX(4);
+                row = randY(4);
+            }
             //array contains coordinates of the alive cells in the structure
 			var cells = [[row, col + 1],
 						[row, col + 2],
@@ -811,6 +823,10 @@ $(function () {
 		}
 
 		if (patternName === "Boat") {
+            if (drawWithin) {
+                col = randX(3);
+                row = randY(3);
+            }
             //array contains coordinates of the alive cells in the structure
 			var cells = [[row, col],
 						[row, col + 1],
@@ -845,6 +861,10 @@ $(function () {
      */
     function drawExtra(patternName, grid, row, col){
         if (patternName === "Infected") {
+            if (drawWithin) {
+                col = randX(2);
+                row = randY(2);
+            }
             drawInfectedBlock(grid, row, col);
         }
 
@@ -888,20 +908,38 @@ $(function () {
      */
     function drawOscillator(patternName, grid, row, col) {
         if (patternName === "Blinker") {
+            if (drawWithin) {
+                col = randX(3);
+                row = randY(3);
+            }
             drawHorLine(grid, row + 1, col);
         }
 
         if (patternName === "Toad") {
+            if (drawWithin) {
+                col = randX(4);
+                row = randY(4);
+            }
             drawHorLine(grid, row + 1, col + 1);
             drawHorLine(grid, row + 2, col);
         }
 
         if (patternName === "Beacon") {
+            if (drawWithin) {
+                col = randX(4);
+                row = randY(4);
+            }
             drawBlock(grid, row, col);
             drawBlock(grid, row + 2, col + 2);
         }
 
         if (patternName === "Pulsar") {
+            if (drawWithin) {
+                col = randX(15);
+                row = randY(15);
+                col += 1;
+                row += 1;
+            }
             /* the pattern that consists only of horizontal 
              * and vertical lines is implemented
              *
@@ -954,11 +992,19 @@ $(function () {
          * points and vertical&horizontal lines that they consist of
          */
         if (patternName === "Glider") {
+            if (drawWithin) {
+                col = randX(3);
+                row = randY(3);
+            }
             drawPoint(grid, row, col + 1);
             drawPoint(grid, row + 1, col + 2);
             drawHorLine(grid, row + 2, col);
         }
         if (patternName === "LWSS") {
+            if (drawWithin) {
+                col = randX(5);
+                row = randY(5);
+            }
             drawPoint(grid, row, col);
             drawPoint(grid, row + 2, col);
             drawPoint(grid, row, col + 3);
@@ -1015,12 +1061,6 @@ $(function () {
     *           
     */
     function drawBlock(grid, row, col) {
-        while (drawWithin && (row > 46)){ //sets range of drawing to be within bounds
-            row -= 1;
-        } 
-        while (drawWithin && (col > 70)){
-            col -= 1;
-        }
         for (var i = row; i <= row + 1; i += 1) {
             for (var j = col; j <= col + 1; j += 1) {            
                 drawPoint(grid, i, j);
@@ -1241,6 +1281,18 @@ $(function () {
             }
         }
     }
+
+    function randX(xSize) {
+        var x = Math.floor(Math.random() * 191829) % 
+                    (NUM_COLS - xSize + 1);
+        return x;
+    } 
+
+    function randY(ySize) {
+        var y = Math.floor(Math.random() * 191829) % 
+                    (NUM_ROWS - ySize + 1);
+        return y;
+    } 
 
 
 
