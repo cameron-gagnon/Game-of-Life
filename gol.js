@@ -35,7 +35,10 @@ $(function () {
         keys = {
             space : true
         },
-        startedTimer = false;
+        startedTimer = false,
+        newRow = 0,
+        newCol = 0,
+        drawWithin = false,
         gameGrid = new Array(NUM_ROWS);
 
     var SNAKE_ID = 1; //to distinguish between different snakes
@@ -135,9 +138,7 @@ $(function () {
     $("#still-life-btn, #oscillator-btn, #spaceship-btn, #gen-int-btn").click(function () {
         var selector = $(this).attr("id");
         selector = "#" + selector.replace("btn", "select");
-        var pattern = $(selector).val(),
-            newRow = Math.floor(Math.random() * 191829) % NUM_ROWS,
-            newCol = Math.floor(Math.random() * 8103849204) % NUM_COLS;
+        var pattern = $(selector).val();
 
         if (pattern === "Slow"){
             GENERATION_INTERVAL = .5;
@@ -154,7 +155,7 @@ $(function () {
         selector = selector.replace("select", "num");
         selector = $(selector).val();
         for (var i = 0; i < selector; i++){
-            drawPattern(pattern, gameGrid, newRow, newCol);
+            drawPattern(pattern, gameGrid);
         }
         // drawPattern overwrites grid lines, therefore need to redraw them
         drawGridLines();
@@ -788,6 +789,7 @@ $(function () {
 						[row + 2, col + 1],
 						[row + 2, col + 2]];
 			var size = 6;
+
 			for (var i = 0; i < size; i += 1) {
 				drawPoint(grid, cells[i][0], cells[i][1]);
 			}
@@ -920,6 +922,7 @@ $(function () {
             var size = 8;
 
             for (var i = 0; i < size; i += 1) {
+
                 drawHorLine(grid, row + cells[i][0], col + cells[i][1]);
                 drawVerLine(grid, row + cells[i][1], col + cells[i][0]);
             }
@@ -979,7 +982,7 @@ $(function () {
     *           of three cells.
     *           
     */
-    function drawHorLine(grid, row, col) { 
+    function drawHorLine(grid, row, col) {
         for (var j = col; j <= col + 2; j += 1) {
                 drawPoint(grid, row, j);
             }
@@ -997,7 +1000,7 @@ $(function () {
     *           of three cells.
     *           
     */
-    function drawVerLine(grid, row, col) { 
+    function drawVerLine(grid, row, col) {
         for (var i = row; i <= row + 2; i += 1) {
                 drawPoint(grid, i, col);
             }
@@ -1012,11 +1015,17 @@ $(function () {
     *           
     */
     function drawBlock(grid, row, col) {
-        for (var i = row; i <= row + 1; i += 1) {
-                for (var j = col; j <= col + 1; j += 1) {
-                    drawPoint(grid, i, j);
-                }   
+        while (drawWithin && (row > 46)){ //sets range of drawing to be within bounds
+            row -= 1;
+        } 
+        while (drawWithin && (col > 70)){
+            col -= 1;
         }
+        for (var i = row; i <= row + 1; i += 1) {
+            for (var j = col; j <= col + 1; j += 1) {            
+                drawPoint(grid, i, j);
+            }   
+        }   
     }
 
 
@@ -1652,5 +1661,11 @@ $(function () {
             keys["space"] = true; //when the key is released it sets the value to true so that when it is
                                   //pressed again, it will return to false until released
         }
+    });
+
+    //toggles icon of checkmark or not for drawing within gridlines
+    $("#drawCheck, #drawCheckMark").click(function(){
+        $("#drawCheck, #drawCheckMark").toggle();
+        drawWithin = true;
     });
 });
