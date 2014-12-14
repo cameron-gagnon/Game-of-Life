@@ -1,4 +1,4 @@
-﻿body {
+body {
     position: relative;
     min-width: 1360px;
     background-color: black;
@@ -40,7 +40,7 @@
 	max-width: 780px;
 }
 
-form, select, button, input, p, #drawCheck {
+form, select, button, input, p {
 	background-color: black;
 	color: white;
 	border-radius: 15px;
@@ -166,6 +166,30 @@ p#gen-counter {
 	margin-top: 0px;
 }
 
-#drawCheckText {
-	width: 160px;
+p#drawCheckText {
+	width: 100%;
+	font-size: 18px;
+	text-align: center;
+	position: relative;
+}
+
+
+i#drawCheck, #drawCheckMark {
+    background-color: transparent;
+    cursor: pointer;
+    color:  white;
+    position: relative;
+    left: 50%;
+    margin-left: -9px;
+    display: inline-block;
+}
+
+i#drawCheckMark {
+    display: none;
+}
+
+#patternDraw {
+	padding-left: 0px;
+	padding-right: 0px;
+	width: 220px;
 }

@@ -35,7 +35,10 @@ $(function () {
         keys = {
             space : true
         },
-        startedTimer = false;
+        startedTimer = false,
+        newRow = 0,
+        newCol = 0,
+        drawWithin = false,
         gameGrid = new Array(NUM_ROWS);
 
     var SNAKE_ID = 1; //to distinguish between different snakes
@@ -135,9 +138,7 @@ $(function () {
     $("#still-life-btn, #oscillator-btn, #spaceship-btn, #gen-int-btn").click(function () {
         var selector = $(this).attr("id");
         selector = "#" + selector.replace("btn", "select");
-        var pattern = $(selector).val(),
-            newRow = Math.floor(Math.random() * 191829) % NUM_ROWS,
-            newCol = Math.floor(Math.random() * 8103849204) % NUM_COLS;
+        var pattern = $(selector).val();
 
         if (pattern === "Slow"){
             GENERATION_INTERVAL = .5;
@@ -154,7 +155,7 @@ $(function () {
         selector = selector.replace("select", "num");
         selector = $(selector).val();
         for (var i = 0; i < selector; i++){
-            drawPattern(pattern, gameGrid, newRow, newCol);
+            drawPattern(pattern, gameGrid);
         }
         // drawPattern overwrites grid lines, therefore need to redraw them
         drawGridLines();
@@ -776,10 +777,18 @@ $(function () {
 
     function drawStillLife(patternName, grid, row, col) {
 		if (patternName === "Block") {
+            if (drawWithin) {
+                col = randX(2);
+                row = randY(2);
+            }
 			drawBlock(grid, row, col);
 		}
 
 		if (patternName === "Beehive") {
+            if (drawWithin) {
+                col = randX(4);
+                row = randY(3);
+            }
             //array contains coordinates of the alive cells in the structure
 			var cells = [[row, col + 1],
 						[row, col + 2],
@@ -788,12 +797,17 @@ $(function () {
 						[row + 2, col + 1],
 						[row + 2, col + 2]];
 			var size = 6;
+
 			for (var i = 0; i < size; i += 1) {
 				drawPoint(grid, cells[i][0], cells[i][1]);
 			}
 		}
 
 		if (patternName === "Loaf") {
+            if (drawWithin) {
+                col = randX(4);
+                row = randY(4);
+            }
             //array contains coordinates of the alive cells in the structure
 			var cells = [[row, col + 1],
 						[row, col + 2],
@@ -809,6 +823,10 @@ $(function () {
 		}
 
 		if (patternName === "Boat") {
+            if (drawWithin) {
+                col = randX(3);
+                row = randY(3);
+            }
             //array contains coordinates of the alive cells in the structure
 			var cells = [[row, col],
 						[row, col + 1],
@@ -843,6 +861,10 @@ $(function () {
      */
     function drawExtra(patternName, grid, row, col){
         if (patternName === "Infected") {
+            if (drawWithin) {
+                col = randX(2);
+                row = randY(2);
+            }
             drawInfectedBlock(grid, row, col);
         }
 
@@ -886,20 +908,38 @@ $(function () {
      */
     function drawOscillator(patternName, grid, row, col) {
         if (patternName === "Blinker") {
+            if (drawWithin) {
+                col = randX(3);
+                row = randY(3);
+            }
             drawHorLine(grid, row + 1, col);
         }
 
         if (patternName === "Toad") {
+            if (drawWithin) {
+                col = randX(4);
+                row = randY(4);
+            }
             drawHorLine(grid, row + 1, col + 1);
             drawHorLine(grid, row + 2, col);
         }
 
         if (patternName === "Beacon") {
+            if (drawWithin) {
+                col = randX(4);
+                row = randY(4);
+            }
             drawBlock(grid, row, col);
             drawBlock(grid, row + 2, col + 2);
         }
 
         if (patternName === "Pulsar") {
+            if (drawWithin) {
+                col = randX(15);
+                row = randY(15);
+                col += 1;
+                row += 1;
+            }
             /* the pattern that consists only of horizontal 
              * and vertical lines is implemented
              *
@@ -920,6 +960,7 @@ $(function () {
             var size = 8;
 
             for (var i = 0; i < size; i += 1) {
+
                 drawHorLine(grid, row + cells[i][0], col + cells[i][1]);
                 drawVerLine(grid, row + cells[i][1], col + cells[i][0]);
             }
@@ -951,11 +992,19 @@ $(function () {
          * points and vertical&horizontal lines that they consist of
          */
         if (patternName === "Glider") {
+            if (drawWithin) {
+                col = randX(3);
+                row = randY(3);
+            }
             drawPoint(grid, row, col + 1);
             drawPoint(grid, row + 1, col + 2);
             drawHorLine(grid, row + 2, col);
         }
         if (patternName === "LWSS") {
+            if (drawWithin) {
+                col = randX(5);
+                row = randY(5);
+            }
             drawPoint(grid, row, col);
             drawPoint(grid, row + 2, col);
             drawPoint(grid, row, col + 3);
@@ -979,7 +1028,7 @@ $(function () {
     *           of three cells.
     *           
     */
-    function drawHorLine(grid, row, col) { 
+    function drawHorLine(grid, row, col) {
         for (var j = col; j <= col + 2; j += 1) {
                 drawPoint(grid, row, j);
             }
@@ -997,7 +1046,7 @@ $(function () {
     *           of three cells.
     *           
     */
-    function drawVerLine(grid, row, col) { 
+    function drawVerLine(grid, row, col) {
         for (var i = row; i <= row + 2; i += 1) {
                 drawPoint(grid, i, col);
             }
@@ -1013,10 +1062,10 @@ $(function () {
     */
     function drawBlock(grid, row, col) {
         for (var i = row; i <= row + 1; i += 1) {
-                for (var j = col; j <= col + 1; j += 1) {
-                    drawPoint(grid, i, j);
-                }   
-        }
+            for (var j = col; j <= col + 1; j += 1) {            
+                drawPoint(grid, i, j);
+            }   
+        }   
     }
 
 
@@ -1232,6 +1281,18 @@ $(function () {
             }
         }
     }
+
+    function randX(xSize) {
+        var x = Math.floor(Math.random() * 191829) % 
+                    (NUM_COLS - xSize + 1);
+        return x;
+    } 
+
+    function randY(ySize) {
+        var y = Math.floor(Math.random() * 191829) % 
+                    (NUM_ROWS - ySize + 1);
+        return y;
+    } 
 
 
 
@@ -1652,5 +1713,11 @@ $(function () {
             keys["space"] = true; //when the key is released it sets the value to true so that when it is
                                   //pressed again, it will return to false until released
         }
+    });
+
+    //toggles icon of checkmark or not for drawing within gridlines
+    $("#drawCheck, #drawCheckMark").click(function(){
+        $("#drawCheck, #drawCheckMark").toggle();
+        drawWithin = true;
     });
 });
