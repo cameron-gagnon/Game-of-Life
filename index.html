@@ -159,6 +159,12 @@
 
                 <div class="center-block main-canvas">
                     <canvas id="grid" height="480px" width="720px">Your browser does not support the HTML5 canvas tag.</canvas>
+                    <div class="row">
+                        <div>
+                            <p class="centered-el center-block" id="gen-counter"> Generation <span id="pound-sgn">#</span>: <span id="gen-num"> 0</span> </p>
+                        </div>
+
+                    </div>
                 </div>
 
                 <div class="right-column">
@@ -207,19 +213,17 @@
                                     <i class="fa fa-tree"></i>
                                 </button>
                                 <div class="play-pause-btn">
-                                    <i class="fa fa-pause fa-2x fa-inverse"></i>
-                                    <i class="fa fa-play fa-2x fa-inverse"></i>
+                                    <i class="fa fa-pause fa-2x fa-inverse" id="fa-play"></i>
+                                    <i class="fa fa-play fa-2x fa-inverse" id="fa-pause"></i>
                                 </div> 
                             </div>
                         </div>
 
-                        <div class="btn-margin">
-                            <div>
+                        <div id="songChoice">
+                            <div id="changeSong">
                                 <button id="change-song-btn">Change Songs</button>
                             </div>
-                        
-                        <div class="btn-margin">
-                            <div>
+                            <div id="songList">
                                 <form>
                                     <select id="change-song-select">
                                         <option value="audio" selected>Let it Snow</option>
@@ -231,7 +235,7 @@
                             </div>
                         </div>
 
-                    <div class="btn-margin">
+                    <div id="goHome">
 
                         <button class="reset" onclick="window.location='index.html';">
                             Go Home
@@ -240,12 +244,7 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div>
-                <p class="centered-el center-block" id="gen-counter"> Generation <span id="pound-sgn">#</span>: <span id="gen-num"> 0</span> </p>
-            </div>
-
-        </div>
+        
 
         <div id="splashScreen">
             <h3 id="splashText">Hey, Giver of Life! Interested in learning more about John Conway's Game of Life?
