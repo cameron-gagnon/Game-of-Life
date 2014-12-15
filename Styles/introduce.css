@@ -110,7 +110,6 @@ body {
       top: -200px;
       display: inline;
       left: 300px;
-      padding-right: 10px;
     }
     .top2{
       position: relative;
@@ -202,14 +201,14 @@ body {
       font-weight: bold;
       font-size: 120%;
       position: relative;
-      left: 490px;
+      left: 390px;
       top: -200px;
       display: inline;
       z-index: -1;
     }
     #oscilate{
       position:relative;
-      left:490px;
+      left:380px;
       top: -350px;
     }
 
@@ -224,3 +223,12 @@ body {
       font-weight: 500;
       font-family: "Lucida Sans Unicode"
     } 
+
+   #spaceship{
+    position:relative;
+      left:380px;
+      top: -450px;
+   }
+   #pad{
+    margin-right: 20px;
+   }
