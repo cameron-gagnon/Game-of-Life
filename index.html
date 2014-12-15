@@ -38,6 +38,13 @@
     <body class="container-fluid">
         <img id="img" src="Images/a-life.gif" alt="Game of Life" class="center-block">
         <audio id="music" src="Audio/let_it_snow.mp3" type="audio/mpeg"></audio>
+
+        <audio id="explosion_soundEft" src="explosion.mp3" style="display: none;"></audio>
+        <audio id="Wh_c" src="Audio/White_Christmas.mp3" type="audio/mpeg"></audio>
+        <audio id="TCS" src="Audio/The_Christmas_Song.mp3" type="audio/mpeg"></audio>
+        <audio id="WW" src="Audio/Winter_Wonderland.mp3" type="audio/mpeg"></audio>
+
+
         <div class="container-main">
         
             <div class="row">
@@ -116,7 +123,9 @@
                                 <form>
                                     <select id="gen-int-select">
                                         <option value="Fast">Fast</option>
-                                        <option value="Med">Med</option>
+
+                                        <option value="Med" selected="selected">Med</option>
+
                                         <option value="Slow">Slow</option>
                                     </select>
                                 </form>
@@ -150,12 +159,20 @@
 
                 <div class="center-block main-canvas">
                     <canvas id="grid" height="480px" width="720px">Your browser does not support the HTML5 canvas tag.</canvas>
+                    <div class="row">
+                        <div>
+                            <p class="centered-el center-block" id="gen-counter"> Generation <span id="pound-sgn">#</span>: <span id="gen-num"> 0</span> </p>
+                        </div>
+
+                    </div>
                 </div>
 
                 <div class="right-column">
                     <div id="button-wrapper-right">
                             <button class="btn-margin" id="draw-infected-btn">Draw Infected</button>
                                 <select class="dropDowns" id="draw-infected-num"></select>
+
+                                <input type="number" id="virusThrottle" min="-5" max="20" value="1"/>
                             <br>
                             <button class="btn-margin" id="draw-mine-btn">Draw Mine</button>
                                 <select class="dropDowns" id="draw-mine-num">
@@ -163,7 +180,8 @@
                                 <p id="explo-text">
                                     <i class="fa fa-warning"></i>
                                     range:
-                                    <input type="number" id="explo-range" min="1"/>
+                                    <input type="number" id="explo-range" min="1" value="15"/>
+
                                 </p>
                                 
                             <br>
@@ -175,6 +193,19 @@
                                 <select class="dropDowns" id="draw-snake-num">
                                 </select>
                             <br>
+
+                            <div id="sliderWrap">
+                                <div id="sliderText">
+                                    <p id="snakeHeader"> Snake Control </p>
+                                    <p class="slider">No Control</p>
+                                    <p class="slider">Control All</p>
+                                    <p class="slider slider1">Control One</p>
+                                </div>
+                                <div>
+                                    <input type="range" min="1" max="3" value="3" id="snakeSelect"/>
+                                </div>
+                            </div>
+
                         <div class="btn-margin">
                             <div>
                                 <button id="moveStyle">
@@ -182,11 +213,30 @@
                                     <i class="fa fa-tree"></i>
                                 </button>
                                 <div class="play-pause-btn">
-                                    <i class="fa fa-pause fa-2x fa-inverse"></i>
-                                    <i class="fa fa-play fa-2x fa-inverse"></i>
+                                    <i class="fa fa-pause fa-2x fa-inverse" id="fa-play"></i>
+                                    <i class="fa fa-play fa-2x fa-inverse" id="fa-pause"></i>
                                 </div> 
                             </div>
                         </div>
+
+                        <div id="songChoice">
+                            <div id="changeSong">
+                                <button id="change-song-btn">Change Songs</button>
+                            </div>
+                            <div id="songList">
+                                <form>
+                                    <select id="change-song-select">
+                                        <option value="audio" selected>Let it Snow</option>
+                                        <option value="White_Christmas" >White Christmas</option>
+                                        <option value="The_Christmas_Song" >The Christmas Song</option>
+                                        <option value="Winter_Wonderland" >Winter Wonderland</option>
+                                    </select>
+                                </form>
+                            </div>
+                        </div>
+
+                    <div id="goHome">
+
                         <button class="reset" onclick="window.location='index.html';">
                             Go Home
                         </button>
@@ -194,10 +244,14 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div>
-                <p class="centered-el center-block" id="gen-counter"> Generation <span id="pound-sgn">#</span>: <span id="gen-num"> 0</span> </p>
-            </div>
+        
+
+        <div id="splashScreen">
+            <h3 id="splashText">Hey, Giver of Life! Interested in learning more about John Conway's Game of Life?
+            <br>
+            Just check out <a href="introduce.html" id="introduceLink">this link!</a>
+            </h3>
+
         </div>
 
         <div id="splashScreen">

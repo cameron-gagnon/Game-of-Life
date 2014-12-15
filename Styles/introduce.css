@@ -66,6 +66,7 @@ body {
     60% 68.5%,
     40% 84%,50% 84%, 60% 84%, 70% 84%, 80% 84%,  
     13% 78%, 57% 92%;
+
 }
   	h1   {color:red;text-align:center;font-family:"Book Antiqua";}
   	h2   {color:orange; font-family:"Book Antiqua";}
@@ -195,10 +196,6 @@ body {
       position:relative;
       left: 90px;
     }
-    #pad{
-      position: relative;
-      margin-left: 10px;
-    }
     .name2{
       color: white; 
       font-family: "Book Antiqua";
@@ -215,4 +212,15 @@ body {
       left:490px;
       top: -350px;
     }
-    
+
+    #returnHome, #returnHome:hover{
+      position: absolute;
+      left: 20px;
+      top: 10px;
+      color: #0EB510;
+      font-size: 16px;
+      width: 150px;
+      text-decoration: none;
+      font-weight: 500;
+      font-family: "Lucida Sans Unicode"
+    } 

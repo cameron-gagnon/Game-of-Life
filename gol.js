@@ -6,7 +6,7 @@ $(function () {
     var CELL_SIZE = 10, // each cell will be 10 pixels x 10 pixels
         CELL_ALIVE_COLOR = "#FFFF00",
         CELL_DEAD_COLOR = "#e74c3c",
-        GENERATION_INTERVAL = .1,
+        GENERATION_INTERVAL = .2,
         CELL_INFECTED_COLOR = "#b8008a",
         CELL_MINE_COLOR = "#9898b1",
         CELL_MINE1_COLOR = "#01df01",
@@ -14,9 +14,11 @@ $(function () {
         CELL_EXPLOSION_COLOR = "#ff9900",
         CELL_EXPL_HOT_COLOR = "#f2f5a9",
         CELL_PACMAN_COLOR = "#ffee00",
-        CELL_SNAKE_COLOR = "#ffffcc"
+        CELL_SNAKE_COLOR = "#ffffcc",
+        CELL_SNAKE_CONTROL = "#8181f7",
         EXPLOSION_RANGE = 15,
         EXPLOSION_DELAY = 10,
+        VIRULENCE = 0,
         NUM_COLS = 72,
         NUM_ROWS = 48,
         MOUSE_IS_DOWN = false,
@@ -30,16 +32,27 @@ $(function () {
         GRID_LINES = "#2A2A2A",
         audio = new Audio('Audio/let_it_snow.mp3'),
         audio.loop = true,
+        explosion_soundEft;
+        Wh_c = new Audio('Audio/White_Christmas.mp3'),
+        TCS = new Audio('Audio/The_Christmas_Song.mp3'),
+        WW = new Audio('Audio/Winter_Wonderland.mp3'),
+        statue = 0,
         time = 0,
         generation = 0,
         SPACE = true,
         startedTimer = false,
+        keyW = false,
+        keyA = false,
+        keyS = false,
+        keyD = false,
         newRow = 0,
         newCol = 0,
+        snakeControlSelect = 3,
         drawWithin = false,
         gameGrid = new Array(NUM_ROWS);
 
     var SNAKE_ID = 1; //to distinguish between different snakes
+    var ID_IN_CONTROL = 0;
 
 
     // The Custom object used to represent a cell on the HTML canvas grid
@@ -361,6 +374,8 @@ $(function () {
                 //turn hot explosion particles into regular ones
                 //and regular ones to dead cells
                 if (grid[i][j].variation === "explosion") {
+                    explosion_soundEft = document.getElementById("explosion_soundEft");
+                    explosion_soundEft.play();
                     grid[i][j].ticker -= 1;
 
                     if (grid[i][j].fillStyle === CELL_EXPL_HOT_COLOR &&
@@ -396,7 +411,7 @@ $(function () {
                             grid[i][j].fillStyle = CELL_ALIVE_COLOR;
                         }
                         if (inf === 1) {
-                            if (rand <= 35) {
+                            if (rand <= 32 + VIRULENCE) {
                                 grid[i][j].variation = "infected";
                                 grid[i][j].fillStyle = CELL_INFECTED_COLOR;
                             }
@@ -405,7 +420,7 @@ $(function () {
                             }
                         }
                         if (inf === 2) {
-                            if (rand <= 68) {
+                            if (rand <= 65 + 2*VIRULENCE) {
                                 grid[i][j].variation = "infected";
                                 grid[i][j].fillStyle = CELL_INFECTED_COLOR;
                             }
@@ -414,7 +429,7 @@ $(function () {
                             }
                         }
                         if (inf === 3) {
-                            if (rand <= 98) {
+                            if (rand <= Math.min(98, 98 + VIRULENCE)) {
                                 grid[i][j].variation = "infected";
                                 grid[i][j].fillStyle = CELL_INFECTED_COLOR;
                             }
@@ -469,6 +484,9 @@ $(function () {
                                     grid[i2][j2].variation = "explosion";
                                     grid[i2][j2].dead = true;
                                     grid[i2][j2].fillStyle = CELL_EXPLOSION_COLOR;
+                                    if (grid[i2][j2].uniqID === ID_IN_CONTROL) {
+                                        ID_IN_CONTROL = 0;
+                                    }
                                     
                                     //program operates by going row by row
                                     //so adjust to the cells that were 
@@ -555,7 +573,7 @@ $(function () {
                         grid[i][j].dead = true;
                         grid[i][j].fillStyle = CELL_DEAD_COLOR;
                         grid[i][j].variation = "normal";
-                        grid[i][j].uniqID = 0;
+                        grid[i][j].uniqID = 0;                       
                     }
                 }
 
@@ -573,7 +591,41 @@ $(function () {
                         turnChance = Math.min(0.3, 0.13 + 
                             1.0 * (grid[i][j].ticker) / 100);
                     }
-                    if (Math.random() < turnChance) {
+                    if (snakeControlSelect === "2"){
+                        if (keyW && (dir === 0 || dir === 2)) {
+                            dir = 1;
+                            grid[i][j].direction = dir;
+                        }
+                        else if (keyA && (dir === 1 || dir === 3)) {
+                            dir = 2;
+                            grid[i][j].direction = dir;
+                        }
+                        else if (keyS && (dir === 2 || dir === 0)) {
+                            dir = 3;
+                            grid[i][j].direction = dir;
+                        }
+                        else if (keyD && (dir === 3 || dir === 1)) {
+                            dir = 0;
+                            grid[i][j].direction = dir;
+                        }
+                    } else if (grid[i][j].uniqID === ID_IN_CONTROL && (snakeControlSelect != "3")){
+						if (keyW && (dir === 0 || dir === 2)) {
+							dir = 1;
+							grid[i][j].direction = dir;
+						}
+						else if (keyA && (dir === 1 || dir === 3)) {
+							dir = 2;
+							grid[i][j].direction = dir;
+						}
+						else if (keyS && (dir === 2 || dir === 0)) {
+							dir = 3;
+							grid[i][j].direction = dir;
+						}
+						else if (keyD && (dir === 3 || dir === 1)) {
+							dir = 0;
+							grid[i][j].direction = dir;
+						}
+                    } else if (Math.random() < turnChance) {
                         var changeDir = Math.floor(Math.random() * 19185) % 2;
                         changeDir = changeDir * 2 - 1;
                         dir += changeDir;
@@ -624,6 +676,7 @@ $(function () {
                     //kill the snake if it reaches the border, 
                     //a mine, or another snake
                     else {
+                           
                         for (var i2 = 0; i2 < NUM_ROWS; i2 += 1) {
                             for (var j2 = 0; j2 < NUM_COLS; j2 += 1) {
                                 //determine which snake to kill
@@ -652,7 +705,6 @@ $(function () {
                     }
 
                 }
-
                 //adjust to row-by-row operation of the program
                 if (grid[i][j].variation === "snakeHead" &&
                     grid[i][j].direction > 4) {
@@ -664,12 +716,20 @@ $(function () {
                 if (grid[i][j].variation === "snakeDeath") {
                     grid[i][j].ticker -= 1;
                     if ((grid[i][j].ticker % 2) === 0) {
-                        grid[i][j].fillStyle = CELL_SNAKE_COLOR;
+                        if (grid[i][j].uniqID === ID_IN_CONTROL) {
+                            grid[i][j].fillStyle = CELL_SNAKE_CONTROL;
+                        }
+                        else {
+                            grid[i][j].fillStyle = CELL_SNAKE_COLOR;
+                        }
                     }
                     else {
                         grid[i][j].fillStyle = CELL_DEAD_COLOR;
                     }
                     if (grid[i][j].ticker === 0) {
+                        if (grid[i][j].uniqID === ID_IN_CONTROL) {
+                            ID_IN_CONTROL = 0;
+                        }
                         grid[i][j].dead = true;
                         grid[i][j].fillStyle = CELL_DEAD_COLOR;
                         grid[i][j].variation = "normal";
@@ -701,6 +761,10 @@ $(function () {
      */
     function evolveStep(grid) {
     		updateCells(grid);    //updates the grid!
+            keyW = false;
+            keyA = false;
+            keyS = false;
+            keyD = false;
     }
 
 
@@ -1145,6 +1209,9 @@ $(function () {
                         var rowp = row + i;
                         var colp = col + j;
                         if (validPosition(rowp, colp)) {
+                            if (grid[rowp][colp].uniqID === ID_IN_CONTROL) {
+                                ID_IN_CONTROL = 0;
+                            }
                             grid[rowp][colp].dead = true;
                             grid[rowp][colp].variation = "pacman";
                             grid[rowp][colp].fillStyle = CELL_PACMAN_COLOR;
@@ -1168,6 +1235,7 @@ $(function () {
                     }
                 }
             }
+
         }
         else {
             var pacm = [[0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0],
@@ -1191,6 +1259,9 @@ $(function () {
                         var rowp = row + i;
                         var colp = col + j;
                         if (validPosition(rowp, colp)) {
+                            if (grid[rowp][colp].uniqID === ID_IN_CONTROL) {
+                                ID_IN_CONTROL = 0;
+                            }
                             grid[rowp][colp].dead = true;
                             grid[rowp][colp].variation = "pacman";
                             grid[rowp][colp].fillStyle = CELL_PACMAN_COLOR;
@@ -1220,13 +1291,20 @@ $(function () {
 
     function drawSnake(grid, row, col) {
         if (validPosition(row, col)) {
+        	
             grid[row][col].dead = true;
             grid[row][col].variation = "snakeHead";
-            grid[row][col].fillStyle = CELL_SNAKE_COLOR;
             grid[row][col].ticker = 2;
-            var randDir = Math.floor(Math.random() * 191829) % 4;
-            grid[row][col].direction = randDir;
             grid[row][col].uniqID = SNAKE_ID;
+            if (snakeControlSelect === "1" && (ID_IN_CONTROL === 0)){
+        		grid[row][col].fillStyle = CELL_SNAKE_CONTROL;
+				grid[row][col].direction = 1;
+				ID_IN_CONTROL = SNAKE_ID;
+        	} else {
+				grid[row][col].fillStyle = CELL_SNAKE_COLOR;
+				var randDir = Math.floor(Math.random() * 191829) % 4;
+				grid[row][col].direction = randDir;
+        	}
             SNAKE_ID += 1;
         }
     }
@@ -1297,6 +1375,23 @@ $(function () {
     } 
 
 
+    //generate random number within the range of the grid according
+    //to the xSize passed in.
+    //xSize is the width of the pattern needed to be subtracted
+    //ySize is the height of the pattern needed to be subtracted
+    function randX(xSize) {
+        var x = Math.floor(Math.random() * 191829) % 
+                    (NUM_COLS - xSize + 1);
+        return x;
+    } 
+
+    function randY(ySize) {
+        var y = Math.floor(Math.random() * 191829) % 
+                    (NUM_ROWS - ySize + 1);
+        return y;
+    } 
+
+
 
     /*****************************************************************************
      *                               REACH PORTION                               *
@@ -1343,6 +1438,7 @@ $(function () {
     $("#next-gen").click(next_gen);
 
     $("#draw-infected-btn").click(function(){
+
         var selector = $(this).attr("id");
         selector = "#" + selector.replace("btn", "num");
         var pattern = $(selector).val();
@@ -1358,6 +1454,7 @@ $(function () {
         var pattern = $(selector).val();
         for(var i = 0; i < pattern; i++){
             drawPattern("Mine", gameGrid);
+
         }
         drawGridLines(gameGrid);
     });
@@ -1497,15 +1594,23 @@ $(function () {
     // Modifies: pretty much everything
     // Effects: lettin' it snow yo
     $("#moveStyle").click(function(){
+
+        //AUDIO COURTESY OF THIS YOUTUBE VIDEO AND ITS RESPECTIVE OWNERS
+        //https://www.youtube.com/watch?v=mN7LW0Y00kE
+
         audio.play();
         isRunning = false;
         $(this).prop('disabled', true);
         $(".fa-pause").css("display", "inline-block");
-        $("button, h2, canvas, #gen-counter, #explo-range, #drawCheckText").addClass('letItSnow');
+
+        $("button, h2, canvas, #gen-counter, #explo-range, #drawCheckText, #virusThrottle, \
+        	#snakeHeader, .slider").addClass('letItSnow');
+        $("#drawCheck, #drawCheckMark").css("color", "#66FF33");
         $("body").css({
             "background-color": "black",
-            "background-image": "url(Images/snowflake-background.gif)",
-            "background-size" : "100% 100%"
+            //BACKGROUND IMAGE COURTESY OF GOOGLE... THANKS GOOGLE! :D
+            "background-image": "url(Images/google_background.png)",
+            "background-size" : "100% 850px"
         });
         $("h2").css({
             "font-size": "38px", 
@@ -1538,21 +1643,88 @@ $(function () {
 
     //toggles the play pause buttons when buttons are clicked
     function togglePlay(audioObj){
-        if(!audio.paused){
+        if(!audioObj.paused){
             audioObj.pause();
             $(".fa-play, .fa-pause").toggle("swing").css("display", "inline-block");
         } else {
-            audio.play();
+            audioObj.play();
             $(".fa-play, .fa-pause").toggle("swing").css("display", "inline-block");
         }
     }
     
     // toggles play pause function for background music
     // when in "let it snow!" mode
-    $(".fa-play, .fa-pause").click(function(){
+    /*$(".fa-play, .fa-pause").click(function(){
         togglePlay(audio);
-    });
+    });*/
 
+
+    $("#change-song-btn, #fa-play, #fa-pause").click(audioControls);
+
+    function audioControls(){
+
+        var selector = $(this).attr("id");
+        if (selector === "fa-play" || selector === "fa-pause"){
+        	var pattern = $("#change-song-select").val();
+            if(pattern === "audio"){
+                Wh_c.pause();
+                TCS.pause();
+                WW.pause();
+                togglePlay(audio);
+            }
+            else if(pattern === "White_Christmas"){
+                audio.pause();
+                TCS.pause();
+                WW.pause();
+                togglePlay(Wh_c);
+            }
+            else if(pattern === "The_Christmas_Song"){
+                audio.pause();
+                Wh_c.pause();
+                WW.pause();
+                togglePlay(TCS);
+            }
+            else if(pattern === "Winter_Wonderland"){
+                audio.pause();
+                Wh_c.pause();
+                TCS.pause();
+                togglePlay(WW);
+            }
+        } else {
+
+            selector = "#" + selector.replace("btn", "select");
+            var pattern = $(selector).val();
+
+             if(pattern === "audio"){
+                audio.currentTime = 0;
+                Wh_c.pause();
+                TCS.pause();
+                WW.pause();
+                togglePlay(audio);
+            }
+            else if(pattern === "White_Christmas"){
+                Wh_c.currentTime = 0;
+                audio.pause();
+                TCS.pause();
+                WW.pause();
+                togglePlay(Wh_c);
+            }
+            else if(pattern === "The_Christmas_Song"){
+                TCS.currentTime = 0;
+                audio.pause();
+                Wh_c.pause();
+                WW.pause();
+                togglePlay(TCS);
+            }
+            else if(pattern === "Winter_Wonderland"){
+                WW.currentTime = 0;
+                audio.pause();
+                Wh_c.pause();
+                TCS.pause();
+                togglePlay(WW);
+            }
+        }
+    };
 
     //creates the set output to be used by startTimer to display the correct
     //amount of time a user has been running the game
@@ -1700,6 +1872,22 @@ $(function () {
             case 67: // key: C
                 clear_canvas();
                 break;
+
+            case 87: // key: W
+                keyW = true;
+                break;
+
+            case 65: // key: A
+                keyA = true;
+                break;
+
+            case 83: // key: S
+                keyS = true;
+                break;
+
+            case 68: // key: D
+                keyD = true;
+                break;
        
             default: return; // exit this handler for other keys
         }
@@ -1713,7 +1901,7 @@ $(function () {
     $(document).keyup(function(e) {
         if (e.keyCode === 32) {
             SPACE = true; //when the key is released it sets the value to true so that when it is
-                                  //pressed again, it will return to false until released
+                         //pressed again, it will return to false until released
         }
     });
 
@@ -1738,4 +1926,14 @@ $(function () {
             $('#helpBackground').fadeOut(500);
         });
     });
+    
+	$("#snakeSelect").change(function(){
+    	snakeControlSelect = $(this).val();
+    });
+
+	$("#virusThrottle").change(function(){
+        VIRULENCE = $(this).val();
+	});
+
 });
+ 
