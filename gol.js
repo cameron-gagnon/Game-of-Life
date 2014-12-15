@@ -32,6 +32,11 @@ $(function () {
         GRID_LINES = "#2A2A2A",
         audio = new Audio('Audio/let_it_snow.mp3'),
         audio.loop = true,
+        explosion_soundEft;
+        Wh_c = new Audio('Audio/White_Christmas.mp3'),
+        TCS = new Audio('Audio/The_Christmas_Song.mp3'),
+        WW = new Audio('Audio/Winter_Wonderland.mp3'),
+        statue = 0,
         time = 0,
         generation = 0,
         SPACE = true,
@@ -369,6 +374,8 @@ $(function () {
                 //turn hot explosion particles into regular ones
                 //and regular ones to dead cells
                 if (grid[i][j].variation === "explosion") {
+                    explosion_soundEft = document.getElementById("explosion_soundEft");
+                    explosion_soundEft.play();
                     grid[i][j].ticker -= 1;
 
                     if (grid[i][j].fillStyle === CELL_EXPL_HOT_COLOR &&
@@ -698,7 +705,6 @@ $(function () {
                     }
 
                 }
-
                 //adjust to row-by-row operation of the program
                 if (grid[i][j].variation === "snakeHead" &&
                     grid[i][j].direction > 4) {
@@ -1229,6 +1235,7 @@ $(function () {
                     }
                 }
             }
+
         }
         else {
             var pacm = [[0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0],
@@ -1292,7 +1299,7 @@ $(function () {
             if (snakeControlSelect === "1" && (ID_IN_CONTROL === 0)){
         		grid[row][col].fillStyle = CELL_SNAKE_CONTROL;
 				grid[row][col].direction = 1;
-				ID_IN_CONTROL = SNAKE_ID; 
+				ID_IN_CONTROL = SNAKE_ID;
         	} else {
 				grid[row][col].fillStyle = CELL_SNAKE_COLOR;
 				var randDir = Math.floor(Math.random() * 191829) % 4;
@@ -1349,6 +1356,18 @@ $(function () {
             }
         }
     }
+
+    function randX(xSize) {
+        var x = Math.floor(Math.random() * 191829) % 
+                    (NUM_COLS - xSize + 1);
+        return x;
+    } 
+
+    function randY(ySize) {
+        var y = Math.floor(Math.random() * 191829) % 
+                    (NUM_ROWS - ySize + 1);
+        return y;
+    } 
 
 
     //generate random number within the range of the grid according
@@ -1414,6 +1433,7 @@ $(function () {
     $("#next-gen").click(next_gen);
 
     $("#draw-infected-btn").click(function(){
+
         var selector = $(this).attr("id");
         selector = "#" + selector.replace("btn", "num");
         var pattern = $(selector).val();
@@ -1429,6 +1449,7 @@ $(function () {
         var pattern = $(selector).val();
         for(var i = 0; i < pattern; i++){
             drawPattern("Mine", gameGrid);
+
         }
         drawGridLines(gameGrid);
     });
@@ -1568,12 +1589,15 @@ $(function () {
     // Modifies: pretty much everything
     // Effects: lettin' it snow yo
     $("#moveStyle").click(function(){
+
         //AUDIO COURTESY OF THIS YOUTUBE VIDEO AND ITS RESPECTIVE OWNERS
         //https://www.youtube.com/watch?v=mN7LW0Y00kE
+
         audio.play();
         isRunning = false;
         $(this).prop('disabled', true);
         $(".fa-pause").css("display", "inline-block");
+
         $("button, h2, canvas, #gen-counter, #explo-range, #drawCheckText, #virusThrottle, \
         	#snakeHeader, .slider").addClass('letItSnow');
         $("#drawCheck, #drawCheckMark").css("color", "#66FF33");
@@ -1582,6 +1606,7 @@ $(function () {
             //BACKGROUND IMAGE COURTESY OF GOOGLE... THANKS GOOGLE! :D
             "background-image": "url(Images/google_background.png)",
             "background-size" : "100% 850px"
+
         });
         $("h2").css({
             "font-size": "38px", 
@@ -1629,6 +1654,29 @@ $(function () {
         togglePlay(audio);
     });
 
+
+    $("#change-song-btn").click(function(){
+
+        var selector = $(this).attr("id");
+        selector = "#" + selector.replace("btn", "select");
+        var pattern = $(selector).val();
+        if(pattern === "audio" && statue === 0){
+            audio.play();
+            statue = 1;
+        }
+        else if(pattern === "White_Christmas" && statue === 0){
+            Wh_c.play();
+            statue = 1;
+        }
+        else if(pattern === "The_Christmas_Song" && statue === 0){
+            TCS.play();
+            statue = 1;
+        }
+        else if(pattern === "Winter_Wonderland" && statue === 0){
+            WW.play();
+            statue = 1;
+        }
+    });
 
     //creates the set output to be used by startTimer to display the correct
     //amount of time a user has been running the game
@@ -1805,11 +1853,13 @@ $(function () {
     $(document).keyup(function(e) {
         if (e.keyCode === 32) {
             SPACE = true; //when the key is released it sets the value to true so that when it is
+
                                   //pressed again, it will return to false until released
         }
     });
 
     //toggles icon of checkmark or not for drawing within gridlines
+
     //sets drawWithin to true if the box is checked and sets it to false if 
     //not checked.
     $("#drawCheck, #drawCheckMark").click(function(){
