@@ -1,0 +1,139 @@
+img {
+    background-repeat: no-repeat;
+    background-position: right top;
+    background-color: #000000;
+}
+body {
+    background-color: #000000;
+    background-image: url("../Images/Conway.gif"), url("../Images/b2.gif"),url("../Images/infected.jpg"),url("../Images/pecman.jpg"),url("../Images/snake .png"),url("../Images/mine.png");
+    background-repeat: no-repeat;
+    background-size: 800px 600px, 557px 418px, 700px 400px, 200px 200px, 500px 200px, 200px 250px; 
+    background-position: right top, 50% 50%, 62% 68.5%, 40% 84%, 13% 78%, 57% 92%;
+}
+  	h1   {color:red;text-align:center;font-family:"Book Antiqua";}
+  	h2   {color:orange; font-family:"Book Antiqua";}
+  	h3   {color:#FF79AF; font-family:"Book Antiqua";}
+  	h4   {color:#FF9494; font-family:"Book Antiqua";}
+  	p    {color:#7C7C7C; font-family: "Lucida Sans Unicode";}
+    a:link {color: #7C7C7C;}
+    a:visited {color: white;}
+    a:hover {color: #A31947;}
+    a {font-family: "Georgia";}
+    div {
+    background-color: black;
+    width: 300px;
+    padding: 25px;
+    border: 25px #FF79AF;
+    margin: 25px;
+    }
+   
+    .right2 {
+    position: relative;
+    top: -200px;
+    left: 0px;
+    width: 200px;
+    background-color: #FFCCE0;
+    }
+    .right1 {
+    position: relative;
+    top: -100px;
+    left: 0px;
+    width: 200px;
+    background-color: #FFCCE0;
+    }
+    .left0 {
+    position: relative;
+    left: 0px;
+    width: 200px;
+    background-color: #FFCCE0;
+    }
+    .top1{
+      position: relative;
+      top: -250px;
+      display: inline;
+      left: 300px;
+    }
+    .top2{
+      position: relative;
+      top: -350px;
+      display: inline;
+      left: 300px;
+    }
+    .top3{
+      position: relative;
+      top: -450px;
+      display: inline;
+      left: 300px;
+    }
+    .top4{
+      position: relative;
+      top: -350px;
+      display: inline;
+    }
+    .li{
+      display: inline;
+    }
+   .right3 {
+    position: relative;
+
+    left: 600px;
+    width: 500px;
+    background-color: #FFCCE0;
+    }
+    .right4 {
+    position: relative;
+    left: 10px;
+    width: 200px;
+    background-color: #FFCCE0;
+    }
+    .right5 {
+    position: relative;
+    top: 0px;
+    left: 800px;
+    width: 300px;
+    background-color: #FFCCE0;
+    }
+    
+    
+    li {
+      display: inline;
+      color:#FF79AF; 
+      font-family:"Book Antiqua";
+      list-style-type: none;
+      padding-right: 150px;
+    }
+    #names {
+      color:#FF9494; 
+      font-family: "Book Antiqua";
+      font-weight: bold;
+      font-size: 270%
+      position: relative;
+      left: 30px;
+    }
+    #names1 {
+      color:#FF9494; 
+      font-family: "Book Antiqua";
+      font-weight: bold;
+      font-size: 270%
+      position: relative;
+      left: 70px;
+    }
+    ul li p {
+      display: inline;
+    }
+    #image1{
+      position:relative;
+      left: 70px;
+    }
+    #image2{
+      position:relative;
+      left: 70px;
+    }
+    #image3{
+      position:relative;
+      left: 90px;
+    }
+    #image4{
+      position:relative;
+      left: 90px;
+    }
