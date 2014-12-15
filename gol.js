@@ -32,9 +32,7 @@ $(function () {
         audio.loop = true,
         time = 0,
         generation = 0,
-        keys = {
-            space : true
-        },
+        SPACE = true,
         startedTimer = false,
         newRow = 0,
         newCol = 0,
@@ -1030,9 +1028,8 @@ $(function () {
     */
     function drawHorLine(grid, row, col) {
         for (var j = col; j <= col + 2; j += 1) {
-                drawPoint(grid, row, j);
-            }
-
+            drawPoint(grid, row, j);
+        }
     }
 
     /*
@@ -1048,8 +1045,8 @@ $(function () {
     */
     function drawVerLine(grid, row, col) {
         for (var i = row; i <= row + 2; i += 1) {
-                drawPoint(grid, i, col);
-            }
+            drawPoint(grid, i, col);
+        }
     }
 
     /*
@@ -1078,9 +1075,9 @@ $(function () {
     */
     function drawInfectedBlock(grid, row, col) {
         for (var i = row; i <= row + 1; i += 1) {
-                for (var j = col; j <= col + 1; j += 1) {
-                    drawInfectedPoint(grid, i, j);
-                }   
+            for (var j = col; j <= col + 1; j += 1) {
+                drawInfectedPoint(grid, i, j);
+            }   
         }
     }
     
@@ -1282,6 +1279,11 @@ $(function () {
         }
     }
 
+
+    //generate random number within the range of the grid according
+    //to the xSize passed in.
+    //xSize is the width of the pattern needed to be subtracted
+    //ySize is the height of the pattern needed to be subtracted
     function randX(xSize) {
         var x = Math.floor(Math.random() * 191829) % 
                     (NUM_COLS - xSize + 1);
@@ -1503,7 +1505,7 @@ $(function () {
         $("body").css({
             "background-color": "black",
             "background-image": "url(Images/snowflake-background.gif)",
-            "background-size" : "100vw 100vh"
+            "background-size" : "100% 100%"
         });
         $("h2").css({
             "font-size": "38px", 
@@ -1663,7 +1665,7 @@ $(function () {
     $(document).keydown(function(e) {
         switch(e.which) {
             case 32: //spacebar 
-                if(!keys["space"]){
+                if(!SPACE){
                     //if the space is false, that means it is currently being pressed and no further action
                     //should result
                 } else if(!isRunning){
@@ -1672,15 +1674,15 @@ $(function () {
                     if (!startedTimer){
                         startTimer();
                     }
-                    keys["space"] = false; //sets to false because key has been pressed and not released
+                    SPACE = false; //sets to false because key has been pressed and not released
                 } else {
                     isRunning = false; 
-                    keys["space"] = false; //sets to false because key has been pressed and not released
+                    SPACE = false; //sets to false because key has been pressed and not released
                 }
                 break;
 
             case 37: // left arrowkey
-                alert("You cannot change the future of past cells! Your existence depends on it.");
+                isRunning = false;
                 break;
 
             case 38: // up arrowkey
@@ -1710,14 +1712,30 @@ $(function () {
     //does not result in running the counter at a more than normal time
     $(document).keyup(function(e) {
         if (e.keyCode === 32) {
-            keys["space"] = true; //when the key is released it sets the value to true so that when it is
+            SPACE = true; //when the key is released it sets the value to true so that when it is
                                   //pressed again, it will return to false until released
         }
     });
 
     //toggles icon of checkmark or not for drawing within gridlines
+    //sets drawWithin to true if the box is checked and sets it to false if 
+    //not checked.
     $("#drawCheck, #drawCheckMark").click(function(){
         $("#drawCheck, #drawCheckMark").toggle();
-        drawWithin = true;
+        if (!drawWithin){
+            drawWithin = true;
+        } else {
+            drawWithin = false;
+        }
+    });
+
+    $(document).ready(function() {
+        $("#splashScreen").fadeIn(1000);
+        $('#helpBackground').fadeIn(900);
+
+        $('#splashScreen, #helpBackground').click(function() {
+            $("#splashScreen").fadeOut(500);
+            $('#helpBackground').fadeOut(500);
+        });
     });
 });
