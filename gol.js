@@ -404,7 +404,7 @@ $(function () {
                             grid[i][j].fillStyle = CELL_ALIVE_COLOR;
                         }
                         if (inf === 1) {
-                            if (rand <= 35 + VIRULENCE) {
+                            if (rand <= 32 + VIRULENCE) {
                                 grid[i][j].variation = "infected";
                                 grid[i][j].fillStyle = CELL_INFECTED_COLOR;
                             }
@@ -413,7 +413,7 @@ $(function () {
                             }
                         }
                         if (inf === 2) {
-                            if (rand <= 68 + VIRULENCE) {
+                            if (rand <= 65 + 2*VIRULENCE) {
                                 grid[i][j].variation = "infected";
                                 grid[i][j].fillStyle = CELL_INFECTED_COLOR;
                             }
@@ -422,7 +422,7 @@ $(function () {
                             }
                         }
                         if (inf === 3) {
-                            if (rand <= 98) {
+                            if (rand <= Math.min(98, 98 + VIRULENCE)) {
                                 grid[i][j].variation = "infected";
                                 grid[i][j].fillStyle = CELL_INFECTED_COLOR;
                             }
