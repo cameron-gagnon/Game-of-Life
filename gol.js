@@ -1639,44 +1639,88 @@ $(function () {
 
     //toggles the play pause buttons when buttons are clicked
     function togglePlay(audioObj){
-        if(!audio.paused){
+        if(!audioObj.paused){
             audioObj.pause();
             $(".fa-play, .fa-pause").toggle("swing").css("display", "inline-block");
         } else {
-            audio.play();
+            audioObj.play();
             $(".fa-play, .fa-pause").toggle("swing").css("display", "inline-block");
         }
     }
     
     // toggles play pause function for background music
     // when in "let it snow!" mode
-    $(".fa-play, .fa-pause").click(function(){
+    /*$(".fa-play, .fa-pause").click(function(){
         togglePlay(audio);
-    });
+    });*/
 
 
-    $("#change-song-btn").click(function(){
+    $("#change-song-btn, #fa-play, #fa-pause").click(audioControls);
+
+    function audioControls(){
 
         var selector = $(this).attr("id");
-        selector = "#" + selector.replace("btn", "select");
-        var pattern = $(selector).val();
-        if(pattern === "audio" && statue === 0){
-            audio.play();
-            statue = 1;
+        if (selector === "fa-play" || selector === "fa-pause"){
+        	var pattern = $("#change-song-select").val();
+            if(pattern === "audio"){
+                Wh_c.pause();
+                TCS.pause();
+                WW.pause();
+                togglePlay(audio);
+            }
+            else if(pattern === "White_Christmas"){
+                audio.pause();
+                TCS.pause();
+                WW.pause();
+                togglePlay(Wh_c);
+            }
+            else if(pattern === "The_Christmas_Song"){
+                audio.pause();
+                Wh_c.pause();
+                WW.pause();
+                togglePlay(TCS);
+            }
+            else if(pattern === "Winter_Wonderland"){
+                audio.pause();
+                Wh_c.pause();
+                TCS.pause();
+                togglePlay(WW);
+            }
+        } else {
+
+            selector = "#" + selector.replace("btn", "select");
+            var pattern = $(selector).val();
+
+             if(pattern === "audio"){
+                audio.currentTime = 0;
+                Wh_c.pause();
+                TCS.pause();
+                WW.pause();
+                togglePlay(audio);
+            }
+            else if(pattern === "White_Christmas"){
+                Wh_c.currentTime = 0;
+                audio.pause();
+                TCS.pause();
+                WW.pause();
+                togglePlay(Wh_c);
+            }
+            else if(pattern === "The_Christmas_Song"){
+                TCS.currentTime = 0;
+                audio.pause();
+                Wh_c.pause();
+                WW.pause();
+                togglePlay(TCS);
+            }
+            else if(pattern === "Winter_Wonderland"){
+                WW.currentTime = 0;
+                audio.pause();
+                Wh_c.pause();
+                TCS.pause();
+                togglePlay(WW);
+            }
         }
-        else if(pattern === "White_Christmas" && statue === 0){
-            Wh_c.play();
-            statue = 1;
-        }
-        else if(pattern === "The_Christmas_Song" && statue === 0){
-            TCS.play();
-            statue = 1;
-        }
-        else if(pattern === "Winter_Wonderland" && statue === 0){
-            WW.play();
-            statue = 1;
-        }
-    });
+    };
 
     //creates the set output to be used by startTimer to display the correct
     //amount of time a user has been running the game
