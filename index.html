@@ -116,7 +116,7 @@
                                 <form>
                                     <select id="gen-int-select">
                                         <option value="Fast">Fast</option>
-                                        <option value="Med">Med</option>
+                                        <option value="Med" selected="selected">Med</option>
                                         <option value="Slow">Slow</option>
                                     </select>
                                 </form>
@@ -156,6 +156,7 @@
                     <div id="button-wrapper-right">
                             <button class="btn-margin" id="draw-infected-btn">Draw Infected</button>
                                 <select class="dropDowns" id="draw-infected-num"></select>
+                                <input type="number" id="virusThrottle" min="1" max="20" value="1"/>
                             <br>
                             <button class="btn-margin" id="draw-mine-btn">Draw Mine</button>
                                 <select class="dropDowns" id="draw-mine-num">
@@ -163,7 +164,7 @@
                                 <p id="explo-text">
                                     <i class="fa fa-warning"></i>
                                     range:
-                                    <input type="number" id="explo-range" min="1"/>
+                                    <input type="number" id="explo-range" min="1" value="15"/>
                                 </p>
                                 
                             <br>
@@ -175,6 +176,17 @@
                                 <select class="dropDowns" id="draw-snake-num">
                                 </select>
                             <br>
+                            <div id="sliderWrap">
+                                <div id="sliderText">
+                                    <p id="snakeHeader"> Snake Control </p>
+                                    <p class="slider">No Control</p>
+                                    <p class="slider">Control All</p>
+                                    <p class="slider slider1">Control One</p>
+                                </div>
+                                <div>
+                                    <input type="range" min="1" max="3" value="3" id="snakeSelect"/>
+                                </div>
+                            </div>
                         <div class="btn-margin">
                             <div>
                                 <button id="moveStyle">
@@ -201,7 +213,7 @@
         </div>
 
         <div id="splashScreen">
-            <h3>Hey giver of life! Interested in learning more about John Conway's Game of Life?
+            <h3 id="splashText">Hey, Giver of Life! Interested in learning more about John Conway's Game of Life?
             <br>
             Just check out <a href="introduce.html" id="introduceLink">this link!</a>
             </h3>
