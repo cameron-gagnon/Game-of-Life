@@ -1283,7 +1283,7 @@ $(function () {
             if (snakeControlSelect === "1" && (ID_IN_CONTROL === 0)){
         		grid[row][col].fillStyle = CELL_SNAKE_CONTROL;
 				grid[row][col].direction = 1;
-				ID_IN_CONTROL = SNAKE_ID;
+				ID_IN_CONTROL = SNAKE_ID; 
         	} else {
 				grid[row][col].fillStyle = CELL_SNAKE_COLOR;
 				var randDir = Math.floor(Math.random() * 191829) % 4;
