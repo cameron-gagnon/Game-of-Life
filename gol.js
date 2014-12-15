@@ -34,6 +34,10 @@ $(function () {
         generation = 0,
         SPACE = true,
         startedTimer = false,
+        keyW = false,
+        keyA = false,
+        keyS = false,
+        keyD = false,
         newRow = 0,
         newCol = 0,
         drawWithin = false,
@@ -573,7 +577,25 @@ $(function () {
                         turnChance = Math.min(0.3, 0.13 + 
                             1.0 * (grid[i][j].ticker) / 100);
                     }
-                    if (Math.random() < turnChance) {
+
+                    if (keyW & (dir === 0 || dir === 2)) {
+                        dir = 1;
+                        grid[i][j].direction = dir;
+                    }
+                    else if (keyA & (dir === 1 || dir === 3)) {
+                        dir = 2;
+                        grid[i][j].direction = dir;
+                    }
+                    else if (keyS & (dir === 2 || dir === 0)) {
+                        dir = 3;
+                        grid[i][j].direction = dir;
+                    }
+                    else if (keyD & (dir === 3 || dir === 1)) {
+                        dir = 0;
+                        grid[i][j].direction = dir;
+                    }
+
+                    else if (Math.random() < turnChance) {
                         var changeDir = Math.floor(Math.random() * 19185) % 2;
                         changeDir = changeDir * 2 - 1;
                         dir += changeDir;
@@ -701,6 +723,10 @@ $(function () {
      */
     function evolveStep(grid) {
     		updateCells(grid);    //updates the grid!
+            keyW = false;
+            keyA = false;
+            keyS = false;
+            keyD = false;
     }
 
 
@@ -1699,6 +1725,22 @@ $(function () {
 
             case 67: // key: C
                 clear_canvas();
+                break;
+
+            case 87: // key: W
+                keyW = true;
+                break;
+
+            case 65: // key: A
+                keyA = true;
+                break;
+
+            case 83: // key: S
+                keyS = true;
+                break;
+
+            case 68: // key: D
+                keyD = true;
                 break;
        
             default: return; // exit this handler for other keys
