@@ -15,7 +15,7 @@ $(function () {
         CELL_EXPL_HOT_COLOR = "#f2f5a9",
         CELL_PACMAN_COLOR = "#ffee00",
         CELL_SNAKE_COLOR = "#ffffcc",
-        CELL_SNAKE_CONTROL = "#0066FF",
+        CELL_SNAKE_CONTROL = "#8181f7",
         EXPLOSION_RANGE = 15,
         EXPLOSION_DELAY = 10,
         VIRULENCE = 0,
@@ -43,11 +43,11 @@ $(function () {
         newRow = 0,
         newCol = 0,
         snakeControlSelect = 3,
-        alreadyInControl = false,
         drawWithin = false,
         gameGrid = new Array(NUM_ROWS);
 
     var SNAKE_ID = 1; //to distinguish between different snakes
+    var ID_IN_CONTROL = 0;
 
 
     // The Custom object used to represent a cell on the HTML canvas grid
@@ -80,9 +80,6 @@ $(function () {
 
         //for snake cells is assigned according to SNAKE_ID
         this.uniqID = 0;
-		
-		//used for controlling a single snake
-        this.userControl = false;
     }
     
 
@@ -383,10 +380,6 @@ $(function () {
                     if (grid[i][j].ticker === 0) {
                         grid[i][j].variation = "normal";
                         grid[i][j].fillStyle = CELL_DEAD_COLOR;
-                        if (grid[i][j].usercontrol){
-                        	alreadyInControl = false;
-                        	grid[i][j].userControl = false;
-                        }
                     }
                 }
 
@@ -483,8 +476,6 @@ $(function () {
                                         !(i === i2 && j === j2))) {
                                     grid[i2][j2].variation = "explosion";
                                     grid[i2][j2].dead = true;
-                                    alreadyInControl = false;  //!!!!!!!!!!!!!!!!!!
-                                    grid[i2][j2].userControl = false; //!!!!!!!!!!!!!!!!!
                                     grid[i2][j2].fillStyle = CELL_EXPLOSION_COLOR;
                                     
                                     //program operates by going row by row
@@ -607,7 +598,7 @@ $(function () {
                             dir = 0;
                             grid[i][j].direction = dir;
                         }
-                    } else if (alreadyInControl && grid[i][j].userControl && (snakeControlSelect != "3")){
+                    } else if (grid[i][j].uniqID === ID_IN_CONTROL && (snakeControlSelect != "3")){
 						if (keyW && (dir === 0 || dir === 2)) {
 							dir = 1;
 							grid[i][j].direction = dir;
@@ -659,8 +650,6 @@ $(function () {
                                 grid[i][j].ticker;
                         grid[rowDir(i,dir)][colDir(j,dir)].fillStyle = 
                                 grid[i][j].fillStyle;
-    					grid[rowDir(i,dir)][colDir(j,dir)].userControl = grid[i][j].userControl; //!!!
-    					grid[i][j].userControl = false; //!!!!!!
                         //determine if anything was eaten
                         if (!grid[rowDir(i,dir)][colDir(j,dir)].dead) {
                             grid[rowDir(i,dir)][colDir(j,dir)].ticker += 1;
@@ -677,6 +666,7 @@ $(function () {
                     //kill the snake if it reaches the border, 
                     //a mine, or another snake
                     else {
+                           
                         for (var i2 = 0; i2 < NUM_ROWS; i2 += 1) {
                             for (var j2 = 0; j2 < NUM_COLS; j2 += 1) {
                                 //determine which snake to kill
@@ -717,20 +707,24 @@ $(function () {
                 if (grid[i][j].variation === "snakeDeath") {
                     grid[i][j].ticker -= 1;
                     if ((grid[i][j].ticker % 2) === 0) {
-                        grid[i][j].fillStyle = CELL_SNAKE_COLOR;
+                        if (grid[i][j].uniqID === ID_IN_CONTROL) {
+                            grid[i][j].fillStyle = CELL_SNAKE_CONTROL;
+                        }
+                        else {
+                            grid[i][j].fillStyle = CELL_SNAKE_COLOR;
+                        }
                     }
                     else {
                         grid[i][j].fillStyle = CELL_DEAD_COLOR;
                     }
                     if (grid[i][j].ticker === 0) {
+                        if (grid[i][j].uniqID === ID_IN_CONTROL) {
+                            ID_IN_CONTROL = 0;
+                        }
                         grid[i][j].dead = true;
                         grid[i][j].fillStyle = CELL_DEAD_COLOR;
                         grid[i][j].variation = "normal";
                         grid[i][j].uniqID = 0;
-                        if(grid[i][j].userControl){      //!!!!!!!!!!!!!!!!!
-                        	alreadyInControl = false; 	 //!!!!!!!!!!!!!!!!
-                        	grid[i][j].userControl = false; //!!!!!!!!!!!!!!!!
-                        }
                     }
                 }
 
@@ -1286,18 +1280,16 @@ $(function () {
             grid[row][col].variation = "snakeHead";
             grid[row][col].ticker = 2;
             grid[row][col].uniqID = SNAKE_ID;
-            SNAKE_ID += 1;
-            if (snakeControlSelect === "1" && (!alreadyInControl)){
+            if (snakeControlSelect === "1" && (ID_IN_CONTROL === 0)){
         		grid[row][col].fillStyle = CELL_SNAKE_CONTROL;
 				grid[row][col].direction = 1;
-				grid[row][col].userControl = true;
-				alreadyInControl = true;
+				ID_IN_CONTROL = SNAKE_ID;
         	} else {
 				grid[row][col].fillStyle = CELL_SNAKE_COLOR;
 				var randDir = Math.floor(Math.random() * 191829) % 4;
 				grid[row][col].direction = randDir;
-				grid[row][col].usercontrol = false;
         	}
+            SNAKE_ID += 1;
         }
     }
 
@@ -1397,7 +1389,6 @@ $(function () {
         drawGridLines();
         generation = 0;
         document.getElementById("gen-num").innerHTML = generation;
-        alreadyInControl = false;
     }
     $("#clear-canvas").click(clear_canvas);
 
