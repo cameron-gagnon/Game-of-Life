@@ -477,6 +477,9 @@ $(function () {
                                     grid[i2][j2].variation = "explosion";
                                     grid[i2][j2].dead = true;
                                     grid[i2][j2].fillStyle = CELL_EXPLOSION_COLOR;
+                                    if (grid[i2][j2].uniqID === ID_IN_CONTROL) {
+                                        ID_IN_CONTROL = 0;
+                                    }
                                     
                                     //program operates by going row by row
                                     //so adjust to the cells that were 
@@ -1200,6 +1203,9 @@ $(function () {
                         var rowp = row + i;
                         var colp = col + j;
                         if (validPosition(rowp, colp)) {
+                            if (grid[rowp][colp].uniqID === ID_IN_CONTROL) {
+                                ID_IN_CONTROL = 0;
+                            }
                             grid[rowp][colp].dead = true;
                             grid[rowp][colp].variation = "pacman";
                             grid[rowp][colp].fillStyle = CELL_PACMAN_COLOR;
@@ -1246,6 +1252,9 @@ $(function () {
                         var rowp = row + i;
                         var colp = col + j;
                         if (validPosition(rowp, colp)) {
+                            if (grid[rowp][colp].uniqID === ID_IN_CONTROL) {
+                                ID_IN_CONTROL = 0;
+                            }
                             grid[rowp][colp].dead = true;
                             grid[rowp][colp].variation = "pacman";
                             grid[rowp][colp].fillStyle = CELL_PACMAN_COLOR;
