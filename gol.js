@@ -404,7 +404,7 @@ $(function () {
                             grid[i][j].fillStyle = CELL_ALIVE_COLOR;
                         }
                         if (inf === 1) {
-                            if (rand <= 35 + VIRULENCE) {
+                            if (rand <= 32 + VIRULENCE) {
                                 grid[i][j].variation = "infected";
                                 grid[i][j].fillStyle = CELL_INFECTED_COLOR;
                             }
@@ -413,7 +413,7 @@ $(function () {
                             }
                         }
                         if (inf === 2) {
-                            if (rand <= 68 + VIRULENCE) {
+                            if (rand <= 65 + 2*VIRULENCE) {
                                 grid[i][j].variation = "infected";
                                 grid[i][j].fillStyle = CELL_INFECTED_COLOR;
                             }
@@ -422,7 +422,7 @@ $(function () {
                             }
                         }
                         if (inf === 3) {
-                            if (rand <= 98) {
+                            if (rand <= Math.min(98, 98 + VIRULENCE)) {
                                 grid[i][j].variation = "infected";
                                 grid[i][j].fillStyle = CELL_INFECTED_COLOR;
                             }
@@ -477,6 +477,9 @@ $(function () {
                                     grid[i2][j2].variation = "explosion";
                                     grid[i2][j2].dead = true;
                                     grid[i2][j2].fillStyle = CELL_EXPLOSION_COLOR;
+                                    if (grid[i2][j2].uniqID === ID_IN_CONTROL) {
+                                        ID_IN_CONTROL = 0;
+                                    }
                                     
                                     //program operates by going row by row
                                     //so adjust to the cells that were 
@@ -1200,6 +1203,9 @@ $(function () {
                         var rowp = row + i;
                         var colp = col + j;
                         if (validPosition(rowp, colp)) {
+                            if (grid[rowp][colp].uniqID === ID_IN_CONTROL) {
+                                ID_IN_CONTROL = 0;
+                            }
                             grid[rowp][colp].dead = true;
                             grid[rowp][colp].variation = "pacman";
                             grid[rowp][colp].fillStyle = CELL_PACMAN_COLOR;
@@ -1246,6 +1252,9 @@ $(function () {
                         var rowp = row + i;
                         var colp = col + j;
                         if (validPosition(rowp, colp)) {
+                            if (grid[rowp][colp].uniqID === ID_IN_CONTROL) {
+                                ID_IN_CONTROL = 0;
+                            }
                             grid[rowp][colp].dead = true;
                             grid[rowp][colp].variation = "pacman";
                             grid[rowp][colp].fillStyle = CELL_PACMAN_COLOR;
