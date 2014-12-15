@@ -6,7 +6,7 @@ $(function () {
     var CELL_SIZE = 10, // each cell will be 10 pixels x 10 pixels
         CELL_ALIVE_COLOR = "#FFFF00",
         CELL_DEAD_COLOR = "#e74c3c",
-        GENERATION_INTERVAL = .1,
+        GENERATION_INTERVAL = .2,
         CELL_INFECTED_COLOR = "#b8008a",
         CELL_MINE_COLOR = "#9898b1",
         CELL_MINE1_COLOR = "#01df01",
@@ -14,9 +14,11 @@ $(function () {
         CELL_EXPLOSION_COLOR = "#ff9900",
         CELL_EXPL_HOT_COLOR = "#f2f5a9",
         CELL_PACMAN_COLOR = "#ffee00",
-        CELL_SNAKE_COLOR = "#ffffcc"
+        CELL_SNAKE_COLOR = "#ffffcc",
+        CELL_SNAKE_CONTROL = "#0066FF",
         EXPLOSION_RANGE = 15,
         EXPLOSION_DELAY = 10,
+        VIRULENCE = 0,
         NUM_COLS = 72,
         NUM_ROWS = 48,
         MOUSE_IS_DOWN = false,
@@ -40,6 +42,8 @@ $(function () {
         keyD = false,
         newRow = 0,
         newCol = 0,
+        snakeControlSelect = 3,
+        alreadyInControl = false,
         drawWithin = false,
         gameGrid = new Array(NUM_ROWS);
 
@@ -76,6 +80,9 @@ $(function () {
 
         //for snake cells is assigned according to SNAKE_ID
         this.uniqID = 0;
+		
+		//used for controlling a single snake
+        this.userControl = false;
     }
     
 
@@ -376,6 +383,10 @@ $(function () {
                     if (grid[i][j].ticker === 0) {
                         grid[i][j].variation = "normal";
                         grid[i][j].fillStyle = CELL_DEAD_COLOR;
+                        if (grid[i][j].usercontrol){
+                        	alreadyInControl = false;
+                        	grid[i][j].userControl = false;
+                        }
                     }
                 }
 
@@ -400,7 +411,7 @@ $(function () {
                             grid[i][j].fillStyle = CELL_ALIVE_COLOR;
                         }
                         if (inf === 1) {
-                            if (rand <= 35) {
+                            if (rand <= 35 + VIRULENCE) {
                                 grid[i][j].variation = "infected";
                                 grid[i][j].fillStyle = CELL_INFECTED_COLOR;
                             }
@@ -409,7 +420,7 @@ $(function () {
                             }
                         }
                         if (inf === 2) {
-                            if (rand <= 68) {
+                            if (rand <= 68 + VIRULENCE) {
                                 grid[i][j].variation = "infected";
                                 grid[i][j].fillStyle = CELL_INFECTED_COLOR;
                             }
@@ -472,6 +483,8 @@ $(function () {
                                         !(i === i2 && j === j2))) {
                                     grid[i2][j2].variation = "explosion";
                                     grid[i2][j2].dead = true;
+                                    alreadyInControl = false;  //!!!!!!!!!!!!!!!!!!
+                                    grid[i2][j2].userControl = false; //!!!!!!!!!!!!!!!!!
                                     grid[i2][j2].fillStyle = CELL_EXPLOSION_COLOR;
                                     
                                     //program operates by going row by row
@@ -559,7 +572,7 @@ $(function () {
                         grid[i][j].dead = true;
                         grid[i][j].fillStyle = CELL_DEAD_COLOR;
                         grid[i][j].variation = "normal";
-                        grid[i][j].uniqID = 0;
+                        grid[i][j].uniqID = 0;                       
                     }
                 }
 
@@ -577,25 +590,41 @@ $(function () {
                         turnChance = Math.min(0.3, 0.13 + 
                             1.0 * (grid[i][j].ticker) / 100);
                     }
-
-                    if (keyW & (dir === 0 || dir === 2)) {
-                        dir = 1;
-                        grid[i][j].direction = dir;
-                    }
-                    else if (keyA & (dir === 1 || dir === 3)) {
-                        dir = 2;
-                        grid[i][j].direction = dir;
-                    }
-                    else if (keyS & (dir === 2 || dir === 0)) {
-                        dir = 3;
-                        grid[i][j].direction = dir;
-                    }
-                    else if (keyD & (dir === 3 || dir === 1)) {
-                        dir = 0;
-                        grid[i][j].direction = dir;
-                    }
-
-                    else if (Math.random() < turnChance) {
+                    if (snakeControlSelect === "2"){
+                        if (keyW && (dir === 0 || dir === 2)) {
+                            dir = 1;
+                            grid[i][j].direction = dir;
+                        }
+                        else if (keyA && (dir === 1 || dir === 3)) {
+                            dir = 2;
+                            grid[i][j].direction = dir;
+                        }
+                        else if (keyS && (dir === 2 || dir === 0)) {
+                            dir = 3;
+                            grid[i][j].direction = dir;
+                        }
+                        else if (keyD && (dir === 3 || dir === 1)) {
+                            dir = 0;
+                            grid[i][j].direction = dir;
+                        }
+                    } else if (alreadyInControl && grid[i][j].userControl && (snakeControlSelect != "3")){
+						if (keyW && (dir === 0 || dir === 2)) {
+							dir = 1;
+							grid[i][j].direction = dir;
+						}
+						else if (keyA && (dir === 1 || dir === 3)) {
+							dir = 2;
+							grid[i][j].direction = dir;
+						}
+						else if (keyS && (dir === 2 || dir === 0)) {
+							dir = 3;
+							grid[i][j].direction = dir;
+						}
+						else if (keyD && (dir === 3 || dir === 1)) {
+							dir = 0;
+							grid[i][j].direction = dir;
+						}
+                    } else if (Math.random() < turnChance) {
                         var changeDir = Math.floor(Math.random() * 19185) % 2;
                         changeDir = changeDir * 2 - 1;
                         dir += changeDir;
@@ -630,6 +659,8 @@ $(function () {
                                 grid[i][j].ticker;
                         grid[rowDir(i,dir)][colDir(j,dir)].fillStyle = 
                                 grid[i][j].fillStyle;
+    					grid[rowDir(i,dir)][colDir(j,dir)].userControl = grid[i][j].userControl; //!!!
+    					grid[i][j].userControl = false; //!!!!!!
                         //determine if anything was eaten
                         if (!grid[rowDir(i,dir)][colDir(j,dir)].dead) {
                             grid[rowDir(i,dir)][colDir(j,dir)].ticker += 1;
@@ -696,6 +727,10 @@ $(function () {
                         grid[i][j].fillStyle = CELL_DEAD_COLOR;
                         grid[i][j].variation = "normal";
                         grid[i][j].uniqID = 0;
+                        if(grid[i][j].userControl){      //!!!!!!!!!!!!!!!!!
+                        	alreadyInControl = false; 	 //!!!!!!!!!!!!!!!!
+                        	grid[i][j].userControl = false; //!!!!!!!!!!!!!!!!
+                        }
                     }
                 }
 
@@ -1246,14 +1281,23 @@ $(function () {
 
     function drawSnake(grid, row, col) {
         if (validPosition(row, col)) {
+        	
             grid[row][col].dead = true;
             grid[row][col].variation = "snakeHead";
-            grid[row][col].fillStyle = CELL_SNAKE_COLOR;
             grid[row][col].ticker = 2;
-            var randDir = Math.floor(Math.random() * 191829) % 4;
-            grid[row][col].direction = randDir;
             grid[row][col].uniqID = SNAKE_ID;
             SNAKE_ID += 1;
+            if (snakeControlSelect === "1" && (!alreadyInControl)){
+        		grid[row][col].fillStyle = CELL_SNAKE_CONTROL;
+				grid[row][col].direction = 1;
+				grid[row][col].userControl = true;
+				alreadyInControl = true;
+        	} else {
+				grid[row][col].fillStyle = CELL_SNAKE_COLOR;
+				var randDir = Math.floor(Math.random() * 191829) % 4;
+				grid[row][col].direction = randDir;
+				grid[row][col].usercontrol = false;
+        	}
         }
     }
 
@@ -1353,6 +1397,7 @@ $(function () {
         drawGridLines();
         generation = 0;
         document.getElementById("gen-num").innerHTML = generation;
+        alreadyInControl = false;
     }
     $("#clear-canvas").click(clear_canvas);
 
@@ -1523,15 +1568,20 @@ $(function () {
     // Modifies: pretty much everything
     // Effects: lettin' it snow yo
     $("#moveStyle").click(function(){
+        //AUDIO COURTESY OF THIS YOUTUBE VIDEO AND ITS RESPECTIVE OWNERS
+        //https://www.youtube.com/watch?v=mN7LW0Y00kE
         audio.play();
         isRunning = false;
         $(this).prop('disabled', true);
         $(".fa-pause").css("display", "inline-block");
-        $("button, h2, canvas, #gen-counter, #explo-range, #drawCheckText").addClass('letItSnow');
+        $("button, h2, canvas, #gen-counter, #explo-range, #drawCheckText, #virusThrottle, \
+        	#snakeHeader, .slider").addClass('letItSnow');
+        $("#drawCheck, #drawCheckMark").css("color", "#66FF33");
         $("body").css({
             "background-color": "black",
-            "background-image": "url(Images/snowflake-background.gif)",
-            "background-size" : "100% 100%"
+            //BACKGROUND IMAGE COURTESY OF GOOGLE... THANKS GOOGLE! :D
+            "background-image": "url(Images/google_background.png)",
+            "background-size" : "100% 850px"
         });
         $("h2").css({
             "font-size": "38px", 
@@ -1780,4 +1830,14 @@ $(function () {
             $('#helpBackground').fadeOut(500);
         });
     });
+    
+	$("#snakeSelect").change(function(){
+    	snakeControlSelect = $(this).val();
+    });
+
+	$("#virusThrottle").change(function(){
+        VIRULENCE = $(this).val();
+	});
+
 });
+ 
