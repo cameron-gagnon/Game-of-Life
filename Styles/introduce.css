@@ -5,10 +5,68 @@ img {
 }
 body {
     background-color: #000000;
-    background-image: url("../Images/Conway.gif"), url("../Images/b2.gif"),url("../Images/infected.jpg"),url("../Images/pecman.jpg"),url("../Images/snake .png"),url("../Images/mine.png");
+    background-image: url("../Images/Conway.gif"), 
+    url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),
+    
+    
+
+    url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),
+    url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),
+    
+
+    url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),
+    url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),
+    url("../Images/b2.gif"),url("../Images/b2.gif"),
+
+    url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),
+    
+
+    url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),
+    url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),url("../Images/b2.gif"),
+    url("../Images/b2.gif"),url("../Images/b2.gif"),
+
+ 
+
+    url("../Images/infected.jpg"),
+    url("../Images/pecman.jpg"),url("../Images/pecman.jpg"),url("../Images/pecman.jpg"),url("../Images/pecman.jpg"),url("../Images/pecman.jpg"),
+    url("../Images/snake .png"),url("../Images/mine.png");
     background-repeat: no-repeat;
-    background-size: 800px 600px, 557px 418px, 700px 400px, 200px 200px, 500px 200px, 200px 250px; 
-    background-position: right top, 50% 50%, 62% 68.5%, 40% 84%, 13% 78%, 57% 92%;
+    background-size: 800px 600px, 
+
+    80px 30px,80px 30px,80px 30px,80px 30px,
+    
+
+
+    80px 30px,80px 30px,80px 30px,80px 30px,80px 30px, 
+    80px 30px,80px 30px,80px 30px,80px 30px,80px 30px, 
+    
+
+
+    80px 30px,80px 30px,80px 30px,80px 30px,80px 30px, 
+    80px 30px,80px 30px,80px 30px,80px 30px,80px 30px, 
+    80px 30px,80px 30px,
+
+
+    80px 30px,80px 30px,80px 30px,80px 30px, 
+    
+
+    80px 30px,80px 30px,80px 30px,80px 30px,80px 30px, 
+    80px 30px,80px 30px,80px 30px,80px 30px,80px 30px, 
+    80px 30px,80px 30px,
+
+    700px 400px, 
+    100px 100px, 100px 100px, 100px 100px, 100px 100px, 100px 100px, 
+    500px 200px, 200px 250px; 
+    background-position: right top, 
+    3% 50%,31% 50%,59% 50%,87% 50%,
+    3% 51%,10% 51%,17% 51%,31% 51%,38% 51%,45% 51%,59% 51%,87% 51%,94% 51%,101% 51%,
+    3% 49%,10% 49%,17% 49%,31% 49%,38% 49%,45% 49%,59% 49%,66% 49%,73% 49%,87% 49%,94% 49%,101% 49%,
+    3% 52%,31% 52%,59% 52%,101% 52%,
+    3% 53%,10% 53%,17% 53%,31% 53%,38% 53%,45% 53%,59% 53%,66% 53%,73% 53%,87% 53%,94% 53%,101% 53%,
+    60% 68.5%,
+    40% 84%,50% 84%, 60% 84%, 70% 84%, 80% 84%,  
+    13% 78%, 57% 92%;
+
 }
   	h1   {color:red;text-align:center;font-family:"Book Antiqua";}
   	h2   {color:orange; font-family:"Book Antiqua";}
@@ -49,7 +107,7 @@ body {
     }
     .top1{
       position: relative;
-      top: -250px;
+      top: -200px;
       display: inline;
       left: 300px;
     }
@@ -137,6 +195,22 @@ body {
       position:relative;
       left: 90px;
     }
+    .name2{
+      color: white; 
+      font-family: "Book Antiqua";
+      font-weight: bold;
+      font-size: 120%;
+      position: relative;
+      left: 390px;
+      top: -200px;
+      display: inline;
+      z-index: -1;
+    }
+    #oscilate{
+      position:relative;
+      left:380px;
+      top: -350px;
+    }
 
     #returnHome, #returnHome:hover{
       position: absolute;
@@ -148,4 +222,13 @@ body {
       text-decoration: none;
       font-weight: 500;
       font-family: "Lucida Sans Unicode"
-    }
+    } 
+
+   #spaceship{
+    position:relative;
+      left:380px;
+      top: -450px;
+   }
+   #pad{
+    margin-right: 20px;
+   }

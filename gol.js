@@ -1357,6 +1357,11 @@ $(function () {
         }
     }
 
+
+    //generate random number within the range of the grid according
+    //to the xSize passed in.
+    //xSize is the width of the pattern needed to be subtracted
+    //ySize is the height of the pattern needed to be subtracted
     function randX(xSize) {
         var x = Math.floor(Math.random() * 191829) % 
                     (NUM_COLS - xSize + 1);
@@ -1606,7 +1611,6 @@ $(function () {
             //BACKGROUND IMAGE COURTESY OF GOOGLE... THANKS GOOGLE! :D
             "background-image": "url(Images/google_background.png)",
             "background-size" : "100% 850px"
-
         });
         $("h2").css({
             "font-size": "38px", 
@@ -1890,13 +1894,11 @@ $(function () {
     $(document).keyup(function(e) {
         if (e.keyCode === 32) {
             SPACE = true; //when the key is released it sets the value to true so that when it is
-
-                                  //pressed again, it will return to false until released
+                         //pressed again, it will return to false until released
         }
     });
 
     //toggles icon of checkmark or not for drawing within gridlines
-
     //sets drawWithin to true if the box is checked and sets it to false if 
     //not checked.
     $("#drawCheck, #drawCheckMark").click(function(){
