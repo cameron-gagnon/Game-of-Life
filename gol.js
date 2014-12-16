@@ -48,7 +48,7 @@ $(function () {
         newRow = 0,
         newCol = 0,
         snakeControlSelect = 3,
-        drawWithin = false,
+        drawWithin = true,
         gameGrid = new Array(NUM_ROWS);
 
     var SNAKE_ID = 1; //to distinguish between different snakes
@@ -1620,7 +1620,8 @@ $(function () {
             "background-color": XMAS_GREEN
         });
         $("#explo-range").addClass('letItSnow');
-        $(".reset").show();
+        $("#goHome").show();
+        $("#changeSong, #songList, .reset").css("display", "inline-block");
 
         CELL_SNAKE_COLOR = "black";
         CELL_ALIVE_COLOR = XMAS_GREEN;
@@ -1647,18 +1648,10 @@ $(function () {
             $(".fa-play, .fa-pause").toggle("swing").css("display", "inline-block");
         }
     }
-    
-    // toggles play pause function for background music
-    // when in "let it snow!" mode
-    /*$(".fa-play, .fa-pause").click(function(){
-        togglePlay(audio);
-    });*/
-
 
     $("#change-song-btn, #fa-play, #fa-pause").click(audioControls);
 
     function audioControls(){
-
         var selector = $(this).attr("id");
         if (selector === "fa-play" || selector === "fa-pause"){
         	var pattern = $("#change-song-select").val();
