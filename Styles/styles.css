@@ -72,15 +72,17 @@ form, select, button, input, p {
 #explo-range {
 	width: 42px;
 	position: relative;
-	left: 12px;
+	left: 4px;
+	top: -2px;
 	border-radius: 10px;
 	border-width: 1px;
 	text-align: center;
+	color: #FF9900;
 }
 
 .letItSnow {
 	background-color: #66FF33;
-	color: #FF0000;
+	color: #FF0000 !important; /* makes snake control red text when added */
 	font-size: 14px;
 	font-weight: bold;
 }
@@ -156,12 +158,13 @@ p#gen-counter {
 
 #explo-text {
 	background-color: black;
-	color: white;
+	color: #FF9900;
 	font-size: 16px;
-	width: 120px;
+	width: 80px;
 	border-radius: 10px;
 	text-align: center;
 	margin-bottom: 0px;
+	float: left;
 }
 
 .fa-warning {
@@ -211,8 +214,8 @@ i#drawCheck {
 	left: 50%;
 	margin-left: -450px;
 	color: #FFFFFF;
-	background-color: black;
 	display: none;
+	background-color: rgba(0, 0, 0, 0.05);
 }
 
 #helpBackground {
@@ -257,6 +260,7 @@ i#drawCheck {
 .slider{
 	float: left;
 	padding-left: 5px;
+	color: #8181F7;
 }
 
 p#snakeHeader {
@@ -265,6 +269,7 @@ p#snakeHeader {
     font-weight: 600;
     position: relative;
     padding-left: 15px;
+	color: #8181F7;
 }
 
 #virusThrottle{
@@ -284,11 +289,11 @@ select#draw-infected-num {
     top: -3px;
 }
 
-p.slider1.slider {
+.slider1.slider {
     width: 85px;
 }
 
-p.slider1 {
+.slider1 {
     width: 85px;
 }
 
@@ -300,10 +305,7 @@ div#songChoice {
     float: left;
 }
 
-div {}
-
 div#songList {
-    /* float:  right; */
     width: 80px;
     display: none;
 }
@@ -320,4 +322,26 @@ div#goHome {
 
 #change-song-select{
 	width: 100px;
+}
+
+span#infectedColor {
+	color: #B8008A;
+}
+
+span#mineColor {
+	color: #FF9900;
+}
+
+#snakeColor {
+	color: #8181F7;
+}
+p#helpMe {
+	position: relative;
+	left: 93px;
+	text-decoration: underline;
+	display: inline-block;
+	height: 20px;
+	width: 40px;
+	padding-left: 5px;
+	cursor: pointer;
 }
