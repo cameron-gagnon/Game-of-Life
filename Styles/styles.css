@@ -1,6 +1,6 @@
 @font-face{
-	font-family: Dotmatrix;
-	src: url("Dotmatrix.ttf");
+	font-family: "Dotmatrix";
+	src: url("../Styles/dot_matrix/DOTMATRI.ttf") format("truetype");
 }
 
 body {
@@ -125,7 +125,7 @@ button.reset {
 }
 
 p#gen-counter {
-	font-size: 16px;
+	font-size: 20px;
 	width: 550px;
 }
 
