@@ -153,7 +153,9 @@
                             <div class="col-md-6">
                                 <button id="stop-game">Stop</button>                            
                             </div>
+                            <p id="helpMe"> Help </p>
                         </div>
+
                     </div>
                 </div>
 
@@ -177,12 +179,13 @@
                             <button class="btn-margin" id="draw-mine-btn">Draw Mine</button>
                                 <select class="dropDowns" id="draw-mine-num">
                                 </select>
-                                <p id="explo-text">
-                                    <i class="fa fa-warning"></i>
+                                <div>
+                                    <p id="explo-text">
+                                        <i class="fa fa-warning"></i>
                                     range:
-                                    <input type="number" id="explo-range" min="1" value="15"/>
-
-                                </p>
+                                    </p>
+                                    <input type="number" id="explo-range" min="1" value="15">
+                                </div>
                                 
                             <br>
                             <button class="btn-margin" id="draw-pacman-btn">Draw Pacman</button>
@@ -251,14 +254,8 @@
             <br>
             Just check out <a href="introduce.html" id="introduceLink">this link!</a>
             </h3>
-
-        </div>
-
-        <div id="splashScreen">
-            <h3>Hey giver of life! Interested in learning more about John Conway's Game of Life?
-            <br>
-            Just check out <a href="introduce.html" id="introduceLink">this link!</a>
-            </h3>
+            <img id="splashText" src="Images/keyboard_info.png"/>
+            <h3 id="splashText"> You may also change the<span id="infectedColor"> virulence of Infected cells</span>, <span id="mineColor">blast radius of Mines</span>, and <span id="snakeColor">control of Snakes.</span></h3>
         </div>
         <div id="helpBackground"></div>
 	</body>
