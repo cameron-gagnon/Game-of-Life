@@ -1604,7 +1604,7 @@ $(function () {
         $(".fa-pause").css("display", "inline-block");
 
         $("button, h2, canvas, #gen-counter, #explo-range, #drawCheckText, #virusThrottle, \
-        	#snakeHeader, .slider").addClass('letItSnow');
+        	#snakeHeader, #snakeColor, .slider, #helpMe").addClass('letItSnow');
         $("#drawCheck, #drawCheckMark").css("color", "#66FF33");
         $("body").css({
             "background-color": "black",
@@ -1910,15 +1910,18 @@ $(function () {
         }
     });
 
-    $(document).ready(function() {
+    $(document).ready(showSplashScreen);
+    $("#helpMe").click(showSplashScreen);
+
+    function showSplashScreen(){
         $("#splashScreen").fadeIn(1000);
         $('#helpBackground').fadeIn(900);
 
         $('#splashScreen, #helpBackground').click(function() {
-            $("#splashScreen").fadeOut(500);
-            $('#helpBackground').fadeOut(500);
+        $("#splashScreen").fadeOut(500);
+        $('#helpBackground').fadeOut(500);
         });
-    });
+    };
     
 	$("#snakeSelect").change(function(){
     	snakeControlSelect = $(this).val();
